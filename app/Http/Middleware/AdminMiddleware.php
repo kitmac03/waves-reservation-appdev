@@ -28,6 +28,7 @@ class AdminMiddleware
                 Log::info('Authenticated admin user found:', ['name' => $user->name]);
             } else {
                 Log::warning('Admin user not found with ID: ' . $userId);
+                return redirect()->route('login');
             }
         } else {
             return redirect()->route('login');  // Redirect if not an admin or manager
