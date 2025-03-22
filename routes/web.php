@@ -31,11 +31,17 @@ Route::post('/dashboard', [ReservationController::class, 'store'])
 Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
 ->middleware(AdminMiddleware::class)->name('admin/dashboard');
 
-// Route::get('admin/cottages', [AmenitiesController::class, 'create'])
-// ->middleware(AdminMiddleware::class)->name('admin/cottages');
+Route::get('admin/cottages', [AmenitiesController::class, 'view_cottages'])
+->middleware(AdminMiddleware::class)->name('admin/cottages');
 
-// Route::post('admin/cottages', [AmenitiesController::class, 'store'])
-//     ->name('admin/cottages');
+Route::post('admin/cottages', [AmenitiesController::class, 'add_cottage'])
+    ->name('admin/cottages');
+
+Route::get('admin/tables', [AmenitiesController::class, 'view_tables'])
+->middleware(AdminMiddleware::class)->name('admin/cottages');
+    
+Route::post('admin/tables', [AmenitiesController::class, 'add_table'])
+    ->name('admin/tables');
 
 Route::get('admin/create-account', [AdminDashboardController::class, 'create_admin'])
 ->middleware(ManagerMiddleware::class)->name('admin/create-account');

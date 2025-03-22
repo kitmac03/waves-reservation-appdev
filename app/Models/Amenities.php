@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Amenities extends Model
 {
+    protected $table = 'amenities'; 
 
     protected $fillable = [
-        'customer_id', 
-        'date', 
-        'startTime', 
-        'endTime', 
-        'status'
+        'name',
+        'price',
+        'type',
+        'added_by',
     ];
 }
