@@ -38,7 +38,7 @@ class AdminDashboardController extends Controller
 
         // Auth::login($admin);
 
-        // return redirect()->route('dashboard');
+        // return redirect()->route('admin/dashboard');
     }
 
     protected function validator(array $data)
@@ -50,5 +50,10 @@ class AdminDashboardController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'max:255'],
         ]);
+    }
+
+    public function create_admin()
+    {
+        return view('admin.manager.create_admin');
     }
 }
