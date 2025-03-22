@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ManagerMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\RegisteredUserController;
@@ -30,11 +31,14 @@ Route::post('/dashboard', [ReservationController::class, 'store'])
 Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
 ->middleware(AdminMiddleware::class)->name('admin/dashboard');
 
-Route::post('admin/dashboard', [AdminDashboardController::class, 'store'])
-->name('admin/dashboard');
+// Route::get('admin/cottages', [AmenitiesController::class, 'create'])
+// ->middleware(AdminMiddleware::class)->name('admin/cottages');
 
-Route::get('admin/cottages', [AmenitiesController::class, 'create'])
-->middleware(AdminMiddleware::class)->name('admin/cottages');
+// Route::post('admin/cottages', [AmenitiesController::class, 'store'])
+//     ->name('admin/cottages');
 
-Route::post('admin/cottages', [AmenitiesController::class, 'store'])
-    ->name('admin/cottages');
+Route::get('admin/create-account', [AdminDashboardController::class, 'create_admin'])
+->middleware(ManagerMiddleware::class)->name('admin/create-account');
+
+Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
+->name('admin/create-account');
