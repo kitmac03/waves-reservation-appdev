@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
-use App\Http\Controllers\RegisteredUserController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\AmenitiesController;
+use App\Http\Controllers\Customer\RegisteredUserController;
+use App\Http\Controllers\Customer\ReservationController;
+use App\Http\Controllers\Admin\AmenitiesController;
 
 Route::get('/', [UserAuthController::class, 'home'])
     ->name('home');
@@ -22,10 +22,10 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
-Route::get('/dashboard', [ReservationController::class, 'create'])
-->middleware('auth')->name('dashboard');
+Route::get('customer/dashboard', [ReservationController::class, 'create'])
+->middleware('auth')->name('customer/dashboard');
 
-Route::post('/dashboard', [ReservationController::class, 'store'])
+Route::post('customer/dashboard', [ReservationController::class, 'store'])
 ->middleware('auth');
 
 Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
@@ -38,7 +38,7 @@ Route::post('admin/cottages', [AmenitiesController::class, 'add_cottage'])
     ->name('admin/cottages');
 
 Route::get('admin/tables', [AmenitiesController::class, 'view_tables'])
-->middleware(ManagerMiddleware::class)->name('admin/cottages');
+->middleware(ManagerMiddleware::class)->name('admin/tables');
     
 Route::post('admin/tables', [AmenitiesController::class, 'add_table'])
     ->name('admin/tables');

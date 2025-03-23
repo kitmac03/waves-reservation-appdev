@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Customer;
 
+use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +11,7 @@ class ReservationController extends Controller
 {
     public function create()
     {
-        return view('dashboard');
+        return view('customer.dashboard');
     }
 
     public function store(Request $request)
@@ -26,7 +27,7 @@ class ReservationController extends Controller
         ]);
 
         // Redirect back or return success message
-        return redirect()->route('dashboard')->with('success', 'Reservation created successfully!');
+        return redirect()->route('customer/dashboard')->with('success', 'Reservation created successfully!');
     }
 
     protected function validator(array $data)

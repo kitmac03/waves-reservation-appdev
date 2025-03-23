@@ -36,7 +36,7 @@ class UserAuthController extends Controller
     
         // If not found, check in the Customers table
         if ($this->attemptLogin(Customer::class, $request)) {
-            return redirect()->intended('/dashboard'); // Redirect to the customer dashboard
+            return redirect()->intended('customer/dashboard'); // Redirect to the customer dashboard
         }
     
         return back()->withErrors([
