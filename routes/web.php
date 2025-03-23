@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -48,3 +49,9 @@ Route::get('admin/create-account', [AdminDashboardController::class, 'create_adm
 
 Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
 ->name('admin/create-account');
+
+Route::get('customer/profile', [ProfileController::class, 'view_profile'])
+->middleware('auth')->name('customer/profile');
+
+// Route::post('customer/profile', [ProfileController::class, 'edit_profile'])
+// ->middleware('auth')->name('customer/profile');
