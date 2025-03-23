@@ -55,7 +55,7 @@
 <body>
     <div class="container">
         <h2>Create a Reservation</h2>
-        <form action="/dashboard" method="POST">
+        <form action="{{ route('customer/dashboard') }}" method="POST">
             <!-- CSRF token for security (if using Laravel or similar backend) -->
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             
