@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ManagerProfileController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
@@ -50,8 +51,44 @@ Route::get('admin/create-account', [AdminDashboardController::class, 'create_adm
 Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
 ->name('admin/create-account');
 
+Route::get('admin/reservation-list', [ManagerProfileController::class, 'view_reservation_list'])
+->middleware(ManagerMiddleware::class)->name('admin/reservation-list');
+
+// Route::post('admin/reservation-list', [AdminDashboardController::class, 'store'])
+// ->name('admin/create-account');
+
+Route::get('admin/all-reservations', [ManagerProfileController::class, 'view_all_reservations'])
+->middleware(ManagerMiddleware::class)->name('admin/all-reservations');
+
+// Route::post('admin/reservation-list', [AdminDashboardController::class, 'store'])
+// ->name('admin/create-account');
+
+Route::get('admin/manager-profile', [ManagerProfileController::class, 'view_profile'])
+->middleware(ManagerMiddleware::class)->name('admin/manager-profile');
+
+// Route::post('admin/manager-profile', [ManagerProfileController::class, 'store'])
+// ->name('admin/manager-profile');
+
+Route::get('admin/vendors-list', [ManagerProfileController::class, 'view_vendors_list'])
+->middleware(ManagerMiddleware::class)->name('admin/vendors-list');
+
+// Route::post('admin/vendors-list', [ManagerProfileController::class, 'view_vendors_list'])
+// ->middleware(ManagerMiddleware::class)->name('admin/vendors-list');
+
+Route::get('admin/delete-requests', [ManagerProfileController::class, 'view_del_req'])
+->middleware(ManagerMiddleware::class)->name('admin/delete-requests');
+
+// Route::post('admin/delete-requests', [ManagerProfileController::class, 'view_del_req'])
+// ->middleware(ManagerMiddleware::class)->name('admin/delete-requests');
+
 Route::get('customer/profile', [ProfileController::class, 'view_profile'])
 ->middleware('auth')->name('customer/profile');
+
+// Route::post('customer/profile', [ProfileController::class, 'edit_profile'])
+// ->middleware('auth')->name('customer/profile');
+
+Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
+->middleware('auth')->name('customer/reservation-records');
 
 // Route::post('customer/profile', [ProfileController::class, 'edit_profile'])
 // ->middleware('auth')->name('customer/profile');
