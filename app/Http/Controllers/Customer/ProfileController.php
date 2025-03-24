@@ -11,4 +11,9 @@ class ProfileController extends Controller
     {
         return view('customer.profile');
     }
+
+    public function view_reservations()
+    {
+        return view('customer.reservation_records');
+    }
 }
