@@ -12,13 +12,21 @@ use Illuminate\Support\Facades\Auth;
 class AmenitiesController extends Controller
 {
     public function view_cottages()
-    {   
+    {
         // Retrieve all cottages from the database
         $cottages = Amenities::where('type', 'cottage')->get();
 
-        // Pass cottages data to the Blade view
-        return view('admin.manager.amenities.cottages', compact('cottages'));
+        $userId = Auth::id();
+        $user = \App\Models\Admin::find($userId);
+
+        // Check the user's role
+        if ($user->role == 'manager') {
+            return view('admin.manager.amenities.cottages', compact('cottages'));
+        } else if ($user->role == 'vendor') {
+            return view('admin.vendor.amenities.cottages', compact('cottages'));
+        }
     }
+
 
     public function add_cottage(Request $request)
     {
@@ -70,7 +78,16 @@ class AmenitiesController extends Controller
 
     public function view_tables()
     {
-        return view('admin.manager.amenities.tables');
+        $tables = Amenities::where('type', 'table')->get();
+
+        $userId = Auth::id();
+        $user = \App\Models\Admin::find($userId);
+
+        if ($user->role == 'manager') {
+            return view('admin.manager.amenities.tables', compact('tables'));
+        } else if ($user->role == 'vendor') {
+            return view('admin.vendor.amenities.tables', compact('tables'));
+        }
     }
 
     public function add_table(Request $request)
