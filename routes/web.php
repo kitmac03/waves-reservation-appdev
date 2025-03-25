@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ManagerProfileController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
+use App\Http\Middleware\VendorMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\Customer\RegisteredUserController;
@@ -31,7 +32,7 @@ Route::post('customer/dashboard', [ReservationController::class, 'store'])
 ->middleware('auth')->name('reservation.store');;
 
 Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
-->middleware(AdminMiddleware::class)->name('admin/dashboard');
+->middleware(AdminMiddleware::class)->name('admin.dashboard');
 
 Route::middleware([ManagerMiddleware::class])->group(function () {
     Route::get('admin/cottages', [AmenitiesController::class, 'view_cottages'])->name('admin.cottages');
@@ -40,20 +41,21 @@ Route::middleware([ManagerMiddleware::class])->group(function () {
     Route::patch('admin/cottages/{id}/archive', [AmenitiesController::class, 'archive_cottage'])->name('cottages.archive');
 });
 
-Route::get('admin/tables', [AmenitiesController::class, 'view_tables'])
-->middleware(ManagerMiddleware::class)->name('admin/tables');
-    
-Route::post('admin/tables', [AmenitiesController::class, 'add_table'])
-    ->name('admin/tables');
+Route::middleware([ManagerMiddleware::class])->group(function () {
+    Route::get('admin/tables', [AmenitiesController::class, 'view_tables'])->name('admin.tables');
+    Route::post('admin/tables', [AmenitiesController::class, 'add_table'])->name('tables.store');
+    // Route::get('admin/tables/{id}/edit', [AmenitiesController::class, 'edit_table'])->name('tables.edit');
+    // Route::patch('admin/tables/{id}/archive', [AmenitiesController:: class, 'archive_table'])->name('tables.archive');
+});
 
 Route::get('admin/create-account', [AdminDashboardController::class, 'create_admin'])
-->middleware(ManagerMiddleware::class)->name('admin/create-account');
+->middleware(ManagerMiddleware::class)->name('admin.create-account');
 
 Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
 ->name('admin/create-account');
 
 Route::get('admin/reservation-list', [ManagerProfileController::class, 'view_reservation_list'])
-->middleware(ManagerMiddleware::class)->name('admin/reservation-list');
+->middleware(ManagerMiddleware::class)->name('admin.reservation-list');
 
 // Route::post('admin/reservation-list', [AdminDashboardController::class, 'store'])
 // ->name('admin/create-account');
@@ -81,6 +83,12 @@ Route::get('admin/delete-requests', [ManagerProfileController::class, 'view_del_
 
 // Route::post('admin/delete-requests', [ManagerProfileController::class, 'view_del_req'])
 // ->middleware(ManagerMiddleware::class)->name('admin/delete-requests');
+
+Route::get('admin/vendor/cottages', [AmenitiesController::class, 'view_cottages'])
+->middleware(VendorMiddleware::class)->name('admin.vendor.cottages');
+
+Route::get('admin/vendor/tables', [AmenitiesController::class, 'view_tables'])
+->middleware(VendorMiddleware::class)->name('admin.vendor.tables');
 
 Route::get('customer/profile', [ProfileController::class, 'view_profile'])
 ->middleware('auth')->name('customer/profile');
