@@ -28,7 +28,7 @@ Route::get('customer/dashboard', [ReservationController::class, 'create'])
 ->middleware('auth')->name('customer/dashboard');
 
 Route::post('customer/dashboard', [ReservationController::class, 'store'])
-->middleware('auth');
+->middleware('auth')->name('reservation.store');;
 
 Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
 ->middleware(AdminMiddleware::class)->name('admin/dashboard');
