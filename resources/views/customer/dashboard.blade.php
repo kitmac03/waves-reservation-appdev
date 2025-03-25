@@ -55,22 +55,42 @@
 <body>
     <div class="container">
         <h2>Create a Reservation</h2>
-        <form action="{{ route('customer/dashboard') }}" method="POST">
-            <!-- CSRF token for security (if using Laravel or similar backend) -->
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            
+        @if(session('success'))
+        <div style="color: green;">{{ session('success') }}</div>
+        @endif
+        <form action="{{ route('reservation.store') }}" method="POST">
+            @csrf
+        
             <!-- Date picker -->
             <label for="date">Reservation Date</label>
             <input type="date" id="date" name="date" required>
-            
+        
             <!-- Start time picker -->
             <label for="startTime">Start Time</label>
             <input type="time" id="startTime" name="startTime" required>
-            
+        
             <!-- End time picker -->
             <label for="endTime">End Time</label>
             <input type="time" id="endTime" name="endTime" required>
-            
+        
+            <!-- Cottage Selection -->
+            <label for="cottage">Cottage</label>
+            <select name="cottage" id="cottage">
+                <option value="">Select a Cottage</option>
+                @foreach ($cottages as $cottage)
+                    <option value="{{ $cottage->id }}">{{ $cottage->name }} - ₱{{ number_format($cottage->price, 2) }}</option>
+                @endforeach
+            </select>
+        
+            <!-- Table Selection -->
+            <label for="tables">Tables</label>
+            <select name="tables" id="tables">
+                <option value="">Select a Table</option>
+                @foreach ($tables as $table)
+                    <option value="{{ $table->id }}">{{ $table->name }} - ₱{{ number_format($table->price, 2) }}</option>
+                @endforeach
+            </select>
+        
             <!-- Submit button -->
             <button type="submit">Submit Reservation</button>
         </form>

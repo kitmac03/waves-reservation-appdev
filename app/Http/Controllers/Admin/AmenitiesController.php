@@ -5,15 +5,67 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Amenities;
+use App\Models\Amenities; // Using Amenities model
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class AmenitiesController extends Controller
 {
     public function view_cottages()
+    {   
+        // Retrieve all cottages from the database
+        $cottages = Amenities::where('type', 'cottage')->get();
+
+        // Pass cottages data to the Blade view
+        return view('admin.manager.amenities.cottages', compact('cottages'));
+    }
+
+    public function add_cottage(Request $request)
     {
-        return view('admin.manager.amenities.cottages');
+        // Log the incoming request data for debugging
+        Log::debug('Incoming request data:', $request->all());
+
+        // Set type as 'cottage' by default
+        $type = 'cottage';
+        $userId = Auth::id(); // Ensure admin is authenticated
+
+        Log::debug('Admin ID:', [$userId]);
+
+        $validator = $this->validator(array_merge($request->all(), ['type' => $type, 'added_by' => $userId]));
+
+        if ($validator->fails()) {
+            Log::error('Validation failed:', $validator->errors()->all());
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Insert into database
+        $amenities = Amenities::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'type' => $type,
+            'added_by' => $userId,
+        ]);
+
+        return redirect()->back()->with('success', 'Cottage added successfully!');
+    }
+
+    public function edit_cottage($id)
+    {
+        $cottage = Amenities::findOrFail($id);
+        return view('admin.manager.amenities.edit_cottage', compact('cottage'));
+    }
+
+    public function archive_cottage($id)
+    {
+        $cottage = Amenities::findOrFail($id);
+        $cottage->update(['status' => 'archived']); // Assuming you have a 'status' column
+
+        return redirect()->back()->with('success', 'Cottage archived successfully!');
+    }
+
+    public function create_cottage()
+    {
+        return view('admin.manager.amenities.create_cottage'); // Ensure this view exists
     }
 
     public function view_tables()
@@ -21,75 +73,42 @@ class AmenitiesController extends Controller
         return view('admin.manager.amenities.tables');
     }
 
-
-    public function add_cottage(Request $request)
-    {
-        // Log the incoming request data for debugging
-        Log::debug('Incoming request data:', $request->all());
-    
-        // If 'type' is not provided, set it to 'cottage'
-        $type = $request->type ?? 'cottage';
-        $userId = Auth::id();
-
-        Log::debug('Admin ID:', [$userId]);
-    
-        $validator = $this->validator(array_merge($request->all(), ['type' => $type], ['added_by' => $userId]));
-        
-        // Check if validation fails
-        if ($validator->fails()) {
-            // Log validation errors and return them to the user
-            Log::error('Validation failed:', $validator->errors()->all());
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-    
-        // Create the new amenity record
-        $amenities = Amenities::create([
-            'name' => $request->name,
-            'price' => $request->price,
-            'type' => $type,
-            'added_by' => $userId,  // Ensure this is a valid ID
-        ]);
-    
-    }
-    
     public function add_table(Request $request)
     {
-        // Log the incoming request data for debugging
         Log::debug('Incoming request data:', $request->all());
-    
-        // If 'type' is not provided, set it to 'cottage'
-        $type = $request->type ?? 'table';
+
+        // Set type as 'table' by default
+        $type = 'table';
         $userId = Auth::id();
 
         Log::debug('Admin ID:', [$userId]);
-    
-        $validator = $this->validator(array_merge($request->all(), ['type' => $type], ['added_by' => $userId]));
-        
-        // Check if validation fails
+
+        $validator = $this->validator(array_merge($request->all(), ['type' => $type, 'added_by' => $userId]));
+
         if ($validator->fails()) {
-            // Log validation errors and return them to the user
             Log::error('Validation failed:', $validator->errors()->all());
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
-        // Create the new amenity record
+
+        // Insert into database
         $amenities = Amenities::create([
             'name' => $request->name,
             'price' => $request->price,
             'type' => $type,
-            'added_by' => $userId,  // Ensure this is a valid ID
+            'added_by' => $userId,
         ]);
-    
+
+        return redirect()->back()->with('success', 'Table added successfully!');
     }
 
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'decimal:2', 'max:9999'],
+            'price' => ['required', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/'], // Fix decimal validation
             'type' => ['required', 'string', 'max:255'],
-            'added_by' => ['required', 'integer', 'max:255'],
-
+            'added_by' => ['required', 'integer'],
         ]);
     }
+
 }

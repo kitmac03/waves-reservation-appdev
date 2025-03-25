@@ -33,11 +33,12 @@ Route::post('customer/dashboard', [ReservationController::class, 'store'])
 Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
 ->middleware(AdminMiddleware::class)->name('admin/dashboard');
 
-Route::get('admin/cottages', [AmenitiesController::class, 'view_cottages'])
-->middleware(ManagerMiddleware::class)->name('admin/cottages');
-
-Route::post('admin/cottages', [AmenitiesController::class, 'add_cottage'])
-    ->name('admin/cottages');
+Route::middleware([ManagerMiddleware::class])->group(function () {
+    Route::get('admin/cottages', [AmenitiesController::class, 'view_cottages'])->name('admin.cottages');
+    Route::post('admin/cottages', [AmenitiesController::class, 'add_cottage'])->name('cottages.store');
+    Route::get('admin/cottages/{id}/edit', [AmenitiesController::class, 'edit_cottage'])->name('cottages.edit');
+    Route::patch('admin/cottages/{id}/archive', [AmenitiesController::class, 'archive_cottage'])->name('cottages.archive');
+});
 
 Route::get('admin/tables', [AmenitiesController::class, 'view_tables'])
 ->middleware(ManagerMiddleware::class)->name('admin/tables');
