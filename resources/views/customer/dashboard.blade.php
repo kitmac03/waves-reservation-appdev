@@ -58,7 +58,7 @@
         @if(session('success'))
         <div style="color: green;">{{ session('success') }}</div>
         @endif
-        <form action="{{ route('reservation.store') }}" method="POST">
+        <form action="{{ route('reservation.store') }}" method="POST" onsubmit="return validateSelection()">
             @csrf
         
             <!-- Date picker -->
@@ -78,7 +78,9 @@
             <select name="cottage" id="cottage">
                 <option value="">Select a Cottage</option>
                 @foreach ($cottages as $cottage)
-                    <option value="{{ $cottage->id }}">{{ $cottage->name }} - ₱{{ number_format($cottage->price, 2) }}</option>
+                    @if ($cottage->is_active)  <!-- Show only active cottages -->
+                        <option value="{{ $cottage->id }}">{{ $cottage->name }} - ₱{{ number_format($cottage->price, 2) }}</option>
+                    @endif
                 @endforeach
             </select>
         
@@ -87,7 +89,9 @@
             <select name="tables" id="tables">
                 <option value="">Select a Table</option>
                 @foreach ($tables as $table)
-                    <option value="{{ $table->id }}">{{ $table->name }} - ₱{{ number_format($table->price, 2) }}</option>
+                    @if ($table->is_active)  <!-- Show only active tables -->
+                        <option value="{{ $table->id }}">{{ $table->name }} - ₱{{ number_format($table->price, 2) }}</option>
+                    @endif
                 @endforeach
             </select>
         
@@ -95,5 +99,48 @@
             <button type="submit">Submit Reservation</button>
         </form>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date().toISOString().split('T')[0];
+            document.getElementById("date").setAttribute("min", today);
+            document.getElementById("date").value = today;
+        });
+    
+        document.getElementById("startTime").addEventListener("change", function () {
+            let startTime = this.value;
+            document.getElementById("endTime").setAttribute("min", startTime);
+        });
+    
+        // Ensure only one selection is possible
+        document.getElementById("cottage").addEventListener("change", function () {
+            let tableSelect = document.getElementById("tables");
+            if (this.value) {
+                tableSelect.disabled = true;  // Disable tables if a cottage is selected
+            } else {
+                tableSelect.disabled = false; // Enable tables if no cottage is selected
+            }
+        });
+    
+        document.getElementById("tables").addEventListener("change", function () {
+            let cottageSelect = document.getElementById("cottage");
+            if (this.value) {
+                cottageSelect.disabled = true;  // Disable cottages if a table is selected
+            } else {
+                cottageSelect.disabled = false; // Enable cottages if no table is selected
+            }
+        });
+    
+        function validateSelection() {
+            let cottage = document.getElementById("cottage").value;
+            let table = document.getElementById("tables").value;
+    
+            if (!cottage && !table) {
+                alert("Please select either a Cottage or a Table before submitting.");
+                return false;
+            }
+    
+            return true;
+        }
+    </script>
 </body>
 </html>
