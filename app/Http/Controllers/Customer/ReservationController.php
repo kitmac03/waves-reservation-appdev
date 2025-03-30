@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\ReservedAmenity;
 use App\Models\Amenities;
+use App\Models\Bill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth; // Import Auth facade
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -25,12 +26,10 @@ class ReservationController extends Controller
 
     public function store(Request $request)
     {
-        // Ensure user is logged in
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Please log in to make a reservation.');
         }
 
-        // Validate request
         $validator = Validator::make($request->all(), [
             'date' => 'required|date',
             'startTime' => 'required|date_format:H:i',
@@ -43,33 +42,55 @@ class ReservationController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Ensure only one type is selected
-        if ($request->filled('cottage') && $request->filled('tables')) {
-            return back()->with('error', 'You can only select either a Cottage or a Table.')->withInput();
-        }
-
-        // Extract only time (H:i:s) from input
         $startTime = Carbon::parse($request->startTime)->format('H:i:s');
         $endTime = Carbon::parse($request->endTime)->format('H:i:s');
 
-        // Create reservation
         $reservation = Reservation::create([
             'id' => Str::uuid(),
-            'customer_id' => Auth::id(), // Use Auth::id() instead of auth()->id()
+            'customer_id' => Auth::id(),
             'date' => $request->date,
             'startTime' => $startTime,
             'endTime' => $endTime,
             'status' => 'pending',
         ]);
 
-        // Save the selected amenity (either cottage or table)
-        if ($request->filled('cottage') || $request->filled('tables')) {
+        // Save selected cottage if present
+        if ($request->filled('cottage')) {
             ReservedAmenity::create([
-                'res_num' => $reservation->id, // Use reservation ID
-                'amenity_id' => $request->cottage ?? $request->tables,
+                'res_num' => $reservation->id,
+                'amenity_id' => $request->cottage,
             ]);
         }
 
-        return redirect()->route('customer.dashboard')->with('success', 'Reservation created successfully!');
+        // Save selected table if present
+        if ($request->filled('tables')) {
+            ReservedAmenity::create([
+                'res_num' => $reservation->id,
+                'amenity_id' => $request->tables,
+            ]);
+        }
+
+        // Calculate total price of reserved items
+        $total = 0;
+        
+        if ($request->filled('cottage')) {
+            $amenity = Amenities::find($request->cottage);
+            $total += $amenity->price;
+        }
+        if ($request->filled('tables')) {
+            $amenity = Amenities::find($request->tables);
+            $total += $amenity->price;
+        }
+
+        // Create the bill
+        Bill::create([
+            'id' => Str::uuid(),
+            'res_num' => $reservation->id,
+            'grand_total' => $total,
+            'date' => Carbon::now(),
+            'status' => 'unpaid',
+        ]);
+
+        return redirect()->route('customer.downpayment.show', $reservation);
     }
 }

@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ManagerProfileController;
+use App\Http\Controllers\Admin\AmenitiesController;
+use App\Http\Controllers\vendor\ReservationRecordController;
+use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
-use App\Http\Controllers\Admin\AmenitiesController;
+use App\Http\Controllers\Customer\DownpaymentController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\Customer\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +24,8 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 
 // 🏡 Customer Routes
 Route::middleware('auth')->group(function () {
+    Route::get('customer/profile', [ProfileController::class, 'view_profile'])
+    ->name('customer.profile');
     Route::get('customer/dashboard', [ReservationController::class, 'create'])
     ->name('customer.dashboard');
     Route::post('customer/dashboard/store', [ReservationController::class, 'store'])
@@ -28,11 +33,16 @@ Route::middleware('auth')->group(function () {
     ->name('reservation.store');
     Route::post('customer/dashboard/reserve', [ReservationController::class, 'store'])
     ->name('customer.reserve');
-
-    Route::get('customer/profile', [ProfileController::class, 'view_profile'])
-    ->name('customer.profile');
-    Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
+    Route::get('customer/reservation-records', [ProfileController::class, 'view_reservation'])
     ->name('customer.reservation.records');
+});
+
+// Downpayment routes
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    Route::get('/downpayment/{reservation}', [DownpaymentController::class, 'show'])
+    ->name('downpayment.show');
+    Route::post('/downpayment/{reservation}', [DownpaymentController::class, 'store'])
+    ->name('downpayment.store');
 });
 
 //  Admin Routes
@@ -60,6 +70,9 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.cottages');
     Route::get('admin/vendor/tables', [AmenitiesController::class, 'view_tables'])
     ->name('admin.vendor.tables');
+    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_reservation'])
+    ->name('admin.vendor.reservation');
+    Route::get('/api/events', [ReservationRecordController::class, 'getEvents']);
 });
 
 //  Amenities Routes (Manager Only)

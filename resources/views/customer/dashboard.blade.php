@@ -111,25 +111,6 @@
             document.getElementById("endTime").setAttribute("min", startTime);
         });
     
-        // Ensure only one selection is possible
-        document.getElementById("cottage").addEventListener("change", function () {
-            let tableSelect = document.getElementById("tables");
-            if (this.value) {
-                tableSelect.disabled = true;  // Disable tables if a cottage is selected
-            } else {
-                tableSelect.disabled = false; // Enable tables if no cottage is selected
-            }
-        });
-    
-        document.getElementById("tables").addEventListener("change", function () {
-            let cottageSelect = document.getElementById("cottage");
-            if (this.value) {
-                cottageSelect.disabled = true;  // Disable cottages if a table is selected
-            } else {
-                cottageSelect.disabled = false; // Enable cottages if no table is selected
-            }
-        });
-    
         function validateSelection() {
             let cottage = document.getElementById("cottage").value;
             let table = document.getElementById("tables").value;
