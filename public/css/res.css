@@ -1,0 +1,181 @@
+* {
+    margin: 0;
+    padding: 0px;
+    box-sizing: border-box;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  body {
+    width: 1240px;
+    height: 1024px;
+    background: linear-gradient(270deg, rgba(249, 255, 223, 0.7) 0%, rgba(42, 100, 104, 0.7) 100%),
+                url('/images/Nature.png') no-repeat center center;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between; /* Ensures spacing between logo & nav */
+    align-items: center;
+    padding: 20px 0;
+    background: linear-gradient(90deg, #7CB9BC 0%, #FEF5DB 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%; /* Ensures full width */
+    height: 80px;
+    position: fixed; /* Makes the header stay at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
+.title {
+    font-family: 'Jaldi', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.12em;
+    color: #002147;
+}
+
+.title span {
+    font-family: 'Allura', cursive;
+    font-size: 25px;
+    font-weight: 100;
+    color: #000;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 22px;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    font-family: 'Jaldi', sans-serif;
+    font-weight: 500;
+}
+
+nav i {
+    font-family: 'Jaldi', sans-serif;
+    font-size: 32px;
+    cursor: pointer;
+    color: #002147;
+}
+
+/* Booking Section */
+.booking {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    width: 80%;
+    margin-top: 50px;
+    padding: 30px 0;
+}
+
+.booking-form {
+    background: #fff;
+    font-family: 'Poppins',sans-serif;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 400px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.booking-form h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #1A1A1A;
+}
+
+.booking-form p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.booking-form input,
+.booking-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #B6B6B6;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+/* Submit Button */
+.booking-form button {
+    width: 100%;
+    padding: 12px;
+    background: #FFD700;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.booking-form button:hover {
+    background: #FFC107;
+}
+
+.booking-form label{
+    font-family: 'Poppins', 'sans-serif';
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Image Carousel */
+.image-carousel {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.image-carousel img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.image-carousel button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #000;
+}

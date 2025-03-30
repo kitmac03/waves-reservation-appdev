@@ -8,19 +8,22 @@ use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
+use App\Http\Controllers\Customer\DashboardController;
+use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\Customer\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
 use App\Http\Middleware\VendorMiddleware;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 //  Home & Authentication Routes
 Route::get('/', [UserAuthController::class, 'home'])->name('home');
 Route::get('/login', [UserAuthController::class, 'create'])->name('login');
 Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
 
 // 🏡 Customer Routes
 Route::middleware('auth')->group(function () {
@@ -28,12 +31,16 @@ Route::middleware('auth')->group(function () {
     ->name('customer.profile');
     Route::get('customer/dashboard', [ReservationController::class, 'create'])
     ->name('customer.dashboard');
-    Route::post('customer/dashboard/store', [ReservationController::class, 'store'])
+    Route::get('customer/reservation', [ReservationController::class, 'create'])
+    ->name('customer.reservation');
+    Route::post('customer/reservation/store', [ReservationController::class, 'store'])
     ->middleware('auth')
     ->name('reservation.store');
-    Route::post('customer/dashboard/reserve', [ReservationController::class, 'store'])
+    Route::post('customer/reseration/reserve', [ReservationController::class, 'store'])
     ->name('customer.reserve');
-    Route::get('customer/reservation-records', [ProfileController::class, 'view_reservation'])
+    Route::get('customer/profile', [ProfileController::class, 'view_profile'])
+    ->name('customer.profile');
+    Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
     ->name('customer.reservation.records');
 });
 

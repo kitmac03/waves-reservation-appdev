@@ -21,7 +21,7 @@ class ReservationController extends Controller
         $cottages = Amenities::where('type', 'cottage')->where('is_active', 1)->get();
         $tables = Amenities::where('type', 'table')->where('is_active', 1)->get();
 
-        return view('customer.dashboard', compact('cottages', 'tables'));
+        return view('customer.reservation', compact('cottages', 'tables'));
     }
 
     public function store(Request $request)

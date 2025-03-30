@@ -23,15 +23,12 @@ class RegisteredUserController extends Controller
 
         $customer = Customer::create([
             'name' => $request->name,
-            'number' => $request->number,  // Store the contact number
+            'number' => $request->number,
             'email' => $request->email,
             'password' => Hash::make($request->password),  // Hash the password
         ]);
 
-        // Optionally, log the user in after registration
-        Auth::login($customer);
-
-        // return redirect()->route('dashboard');
+        return redirect()->route('login');
     }
 
     protected function validator(array $data)
