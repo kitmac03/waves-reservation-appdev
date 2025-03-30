@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\ReservedAmenity;
 use App\Models\Amenities;
+use App\Models\Bill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth; // Import Auth facade
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -69,6 +70,27 @@ class ReservationController extends Controller
             ]);
         }
 
-        return redirect()->route('customer.reservation')->with('success', 'Reservation created successfully!');
+        // Calculate total price of reserved items
+        $total = 0;
+        
+        if ($request->filled('cottage')) {
+            $amenity = Amenities::find($request->cottage);
+            $total += $amenity->price;
+        }
+        if ($request->filled('tables')) {
+            $amenity = Amenities::find($request->tables);
+            $total += $amenity->price;
+        }
+
+        // Create the bill
+        Bill::create([
+            'id' => Str::uuid(),
+            'res_num' => $reservation->id,
+            'grand_total' => $total,
+            'date' => Carbon::now(),
+            'status' => 'unpaid',
+        ]);
+
+        return redirect()->route('customer.downpayment.show', $reservation);
     }
 }

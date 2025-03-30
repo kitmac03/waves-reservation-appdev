@@ -37,14 +37,34 @@
             <select id="table">
                 <option>Select</option>
             </select>
-            <button>Proceed to down payment</button>
-        </div>
-        <div class="image-carousel">
-            <button class="prev">&#10094;</button>
-            <!-- Correct path to image in the public/images folder -->
-            <img src="{{ asset('images/beach.png') }}" alt="Beach View">
-            <button class="next">&#10095;</button>
-        </div>
-    </section>
+        
+            <!-- Submit button -->
+            <button type="submit">Submit Reservation</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date().toISOString().split('T')[0];
+            document.getElementById("date").setAttribute("min", today);
+            document.getElementById("date").value = today;
+        });
+    
+        document.getElementById("startTime").addEventListener("change", function () {
+            let startTime = this.value;
+            document.getElementById("endTime").setAttribute("min", startTime);
+        });
+    
+        function validateSelection() {
+            let cottage = document.getElementById("cottage").value;
+            let table = document.getElementById("tables").value;
+    
+            if (!cottage && !table) {
+                alert("Please select either a Cottage or a Table before submitting.");
+                return false;
+            }
+    
+            return true;
+        }
+    </script>
 </body>
 </html>

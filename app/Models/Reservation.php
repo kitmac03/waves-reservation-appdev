@@ -31,4 +31,18 @@ class Reservation extends Model
             }
         });
     }
+
+    public function reservedAmenities()
+    {
+        return $this->hasMany(ReservedAmenity::class, 'res_num');
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'res_num', 'id');
+    }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
 }
