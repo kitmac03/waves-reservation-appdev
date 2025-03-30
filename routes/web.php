@@ -8,8 +8,6 @@ use App\Http\Controllers\Customer\DashboardController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
-use App\Http\Controllers\Customer\DashboardController;
-use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\Customer\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
