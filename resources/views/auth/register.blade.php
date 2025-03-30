@@ -1,36 +1,27 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Register</title>
+    <title>Sign Up - Waves Beach Resort</title>
+    <link rel="stylesheet" href="{{ asset('css/signup.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Actor&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <h1>Register</h1>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" name="name" required>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" name="email" required>
-        </div>
-        <div>
-            <label for="number">Contact Number:</label>
-            <input type="tel" name="number" pattern="[0-9]{11}" required placeholder="09811385056">
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" required>
-        </div>
-        <div>
-            <label for="password_confirmation">Confirm Password:</label>
-            <input type="password" name="password_confirmation" required>
-        </div>
-        <button type="submit">Register</button>
-    </form>
+    <div class="container">
+        <h1 class="title">WAVES</h1>
+        <h2 class="subtitle">Beach Resort</h2>
+        <form method="POST" action="{{ route('cust.register') }}">
+            @csrf  <!-- Include CSRF token for security -->
+            <div>
+                <input type="text" name="name" placeholder="Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="number" placeholder="Contact Number" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p class="login-text">Already have an account? <a href="{{ route('login') }}" class="login-link">Login</a></p>
+    </div>
 </body>
-
 </html>
