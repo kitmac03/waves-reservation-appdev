@@ -19,7 +19,7 @@ Route::get('/', [UserAuthController::class, 'home'])->name('home');
 Route::get('/login', [UserAuthController::class, 'create'])->name('login');
 Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
 
 // 🏡 Customer Routes
 Route::middleware('auth')->group(function () {
