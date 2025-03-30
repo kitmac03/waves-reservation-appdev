@@ -17,4 +17,16 @@ class ReservedAmenity extends Model
     ];
 
     public $timestamps = false;
+
+    // Relationship to Amenity
+    public function amenity()
+    {
+        return $this->belongsTo(Amenities::class, 'amenity_id');
+    }
+
+    // Relationship to Reservation
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class, 'res_num');
+    }
 }
