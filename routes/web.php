@@ -27,8 +27,8 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust
 Route::middleware('auth')->group(function () {
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
     ->name('customer.profile');
-    Route::get('customer/dashboard', [ReservationController::class, 'create'])
-    ->name('customer.dashboard');
+    // Route::get('customer/dashboard', [ReservationController::class, 'create'])
+    // ->name('customer.dashboard');
     Route::get('customer/reservation', [ReservationController::class, 'create'])
     ->name('customer.reservation');
     Route::post('customer/reservation/store', [ReservationController::class, 'store'])
@@ -38,6 +38,10 @@ Route::middleware('auth')->group(function () {
     ->name('customer.reserve');
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
     ->name('customer.profile');
+    Route::get('customer/profile/{id}/edit', [ProfileController::class, 'edit_profile'])
+    ->name('profile.edit');
+    Route::patch('customer/profile/{id}/update', [ProfileController::class, 'update_profile'])
+    ->name('profile.update');
     Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
     ->name('customer.reservation.records');
 });

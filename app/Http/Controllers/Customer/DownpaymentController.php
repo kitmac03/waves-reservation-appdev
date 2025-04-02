@@ -59,6 +59,6 @@ class DownpaymentController extends Controller
             'verified_by' => null,
         ]);
 
-        return redirect()->route('customer.dashboard')->with('success', 'Downpayment submitted successfully!');
+        return redirect()->route('customer.reservation')->with('success', 'Downpayment submitted successfully!');
     }
 }
