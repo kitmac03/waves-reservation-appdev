@@ -56,7 +56,7 @@ class PaymentController extends Controller
             }
 
             // Update Reservation Status
-            if ($reservation->status === 'pending' && $newBalance >= $downPaymentAmount) {
+            if ($reservation->status === 'pending' && $newBalance > 0) {
                 $reservation->update(['status' => 'verified']);
             }
 

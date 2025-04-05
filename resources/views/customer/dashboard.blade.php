@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Reservation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Add some styling for better presentation -->
     <style>
         body {
@@ -50,6 +53,46 @@
         button:hover {
             background-color: #45a049;
         }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            width: 100%;
+            border: 1px solid #ccc;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+            z-index: 1;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .dropdown-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .dropdown-content input[type="checkbox"] {
+            margin-right: 6px;
+        }
     </style>
 </head>
 <body>
@@ -73,27 +116,45 @@
             <label for="endTime">End Time</label>
             <input type="time" id="endTime" name="endTime" required>
         
-            <!-- Cottage Selection -->
-            <label for="cottage">Cottage</label>
-            <select name="cottage" id="cottage">
-                <option value="">Select a Cottage</option>
-                @foreach ($cottages as $cottage)
-                    @if ($cottage->is_active)  <!-- Show only active cottages -->
-                        <option value="{{ $cottage->id }}">{{ $cottage->name }} - ₱{{ number_format($cottage->price, 2) }}</option>
-                    @endif
-                @endforeach
-            </select>
-        
-            <!-- Table Selection -->
-            <label for="tables">Tables</label>
-            <select name="tables" id="tables">
-                <option value="">Select a Table</option>
-                @foreach ($tables as $table)
-                    @if ($table->is_active)  <!-- Show only active tables -->
-                        <option value="{{ $table->id }}">{{ $table->name }} - ₱{{ number_format($table->price, 2) }}</option>
-                    @endif
-                @endforeach
-            </select>
+            <!-- Cottages Dropdown -->
+            <label for="cottagesDropdown" class="form-label">Cottages</label>
+            <div class="dropdown mb-3">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="cottagesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Select Cottages
+                </button>
+                <ul class="dropdown-menu w-100 px-3" aria-labelledby="cottagesDropdown" style="max-height: 200px;">
+                    @foreach ($cottages as $cottage)
+                        @if ($cottage->is_active)
+                            <li class="form-check">
+                                <input class="form-check-input p-2" type="checkbox" name="cottages[]" value="{{ $cottage->id }}" id="cottage-{{ $cottage->id }}">
+                                <label class="form-check-label ps-3 pt-1" for="cottage-{{ $cottage->id }}">
+                                    {{ $cottage->name }} - ₱{{ number_format($cottage->price, 2) }}
+                                </label>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+
+            <!-- Tables Dropdown -->
+            <label for="tablesDropdown" class="form-label">Tables</label>
+            <div class="dropdown mb-3">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="tablesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Select Tables
+                </button>
+                <ul class="dropdown-menu w-100 px-3" aria-labelledby="tablesDropdown" style="max-height: 300px; overflow-y: auto;">
+                    @foreach ($tables as $table)
+                        @if ($table->is_active)
+                            <li class="form-check">
+                                <input class="form-check-input p-2" type="checkbox" name="tables[]" value="{{ $table->id }}" id="table-{{ $table->id }}">
+                                <label class="form-check-label ps-3 pt-1" for="table-{{ $table->id }}">
+                                    {{ $table->name }} - ₱{{ number_format($table->price, 2) }}
+                                </label>
+                            </li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
         
             <!-- Submit button -->
             <button type="submit">Submit Reservation</button>
@@ -110,18 +171,19 @@
             let startTime = this.value;
             document.getElementById("endTime").setAttribute("min", startTime);
         });
-    
         function validateSelection() {
-            let cottage = document.getElementById("cottage").value;
-            let table = document.getElementById("tables").value;
-    
-            if (!cottage && !table) {
-                alert("Please select either a Cottage or a Table before submitting.");
+            const cottageChecked = document.querySelectorAll('input[name="cottages[]"]:checked').length > 0;
+            const tableChecked = document.querySelectorAll('input[name="tables[]"]:checked').length > 0;
+
+            if (!cottageChecked && !tableChecked) {
+                alert("Please select at least one Cottage or Table before submitting.");
                 return false;
             }
-    
+
             return true;
         }
+</script>
+
     </script>
 </body>
 </html>
