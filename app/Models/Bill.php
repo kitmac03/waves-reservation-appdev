@@ -30,4 +30,10 @@ class Bill extends Model
     {
         return $this->belongsTo(Reservation::class, 'res_num');
     }
+
+    public function balance()
+    {
+        return $this->hasOne(Balance::class, 'bill_id');
+    }
+    
 }
