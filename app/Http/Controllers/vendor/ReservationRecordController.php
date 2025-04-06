@@ -79,6 +79,7 @@ class ReservationRecordController extends Controller
                         'total' => $reservation->bills->first()?->grand_total ?? 0,
                         'paid_amount' => $paidAmount,  
                         'downpayment' => ($reservation->bills->first()?->grand_total ?? 0) * 0.5,
+                        'downpayment_status' => $reservation->downPayment->status ?? null,
                         'downpayment_image' => $reservation->downPayment?->img_proof ? asset('storage/' . $reservation->downPayment->img_proof) : null,
                         'ref_num' => $reservation->downPayment?->ref_num ?? 'N/A',
                     ]

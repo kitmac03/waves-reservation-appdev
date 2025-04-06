@@ -130,12 +130,19 @@
             <!-- Modal Header -->
             <div class="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Verify Downpayment</h2>
-                <button id="closeVerifyModal" class="text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1">Close</button>
+                <div>
+                    <span id="dpStatus" class="text-sm font-bold px-2 py-1 rounded-md"></span>
+                    <button id="closeVerifyModal" class="text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1">Close</button>
+                </div>
+ 
             </div>
             
             <!-- Modal Content -->
             <div class="py-4 text-gray-600">
-                <form id="verifyDownpaymentForm" action="{{ route('admin.vendor.process-payment') }}" method="POST">
+                <form id="verifyDownpaymentForm" 
+                action="{{ route('admin.vendor.process-payment') }}" 
+                data-default-action="{{ route('admin.vendor.process-payment') }}" 
+                method="POST">
                     @csrf
                     <input type="hidden" id="reservationId" name="reservation_id">
                     <input type="hidden" id="billId" name="bill_id">
@@ -166,9 +173,11 @@
                             <span class="font-bold"><span id="balanceAmount"></span></span>
                         </div>
                     </div>
-                
                     <!-- Image -->
                     <div class="mb-4">
+                        <p id="pendingMessage" class="text-yellow-600 pb-2 hidden">Please verify the payment</p>
+                        <p id="invalidMessage" class="text-red-600 pb-2 hidden">Contact the customer to send clear photo for proof of payment</p>
+
                         <img id="verifyImage" src="" alt="Downpayment Image" class="rounded-md hidden">
                         <p id="noDownpaymentMessage" class="text-red-600 hidden">No downpayment submitted</p>
                     </div>
@@ -209,6 +218,52 @@
     </div>
     
     <script>
+    // Invalid Button
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('verifyDownpaymentForm');
+        const invalidBtn = document.getElementById('submitInvalidBtn');
+        const paymentInput = document.getElementById('payment_amount');
+        const statusField = document.getElementById('status');
+
+        const defaultAction = form.dataset.defaultAction;
+
+        // Handle "Invalid" button click
+        invalidBtn.addEventListener('click', function (e) {
+            console.log("Invalid button clicked");
+            e.preventDefault();
+
+            // Set status to invalid
+            statusField.value = 'invalid';
+
+            // Remove required attribute for invalid submissions
+            paymentInput.removeAttribute('required');
+
+            // Set form action to invalid-payment route
+            form.action = this.dataset.action;
+
+            // Submit form
+            form.submit();
+        });
+
+        // Re-enable required and reset action on valid submission
+        form.addEventListener('submit', function () {
+            // Only if not submitting as "invalid"
+            if (statusField.value !== 'invalid') {
+                paymentInput.setAttribute('required', 'required');
+                form.action = defaultAction; // reset to original action
+            }
+        });
+
+        //Reset form status/action if modal closes 
+        const closeBtn = document.getElementById('closeVerifyModalBtn'); // update ID if needed
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                statusField.value = 'verified';
+                form.action = defaultAction;
+                paymentInput.setAttribute('required', 'required');
+            });
+        }
+    });
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize FullCalendar with proper headers
         var calendarEl = document.getElementById('calendar');
@@ -321,6 +376,29 @@
             document.getElementById('modalPhoneNumber').textContent = eventProps.phone_number || "N/A";
             document.getElementById('verifyReferenceNumber').textContent = eventProps.ref_num || "N/A";
 
+            // Status display
+            const downpaymentStatusEl = document.getElementById('dpStatus');
+            const downpaymentStatus = eventProps.downpayment_status || "pending";
+            const pendingMessage = document.getElementById('pendingMessage');
+            const invalidMessage = document.getElementById('invalidMessage');
+
+            downpaymentStatusEl.textContent = downpaymentStatus.charAt(0).toUpperCase() + downpaymentStatus.slice(1);
+            downpaymentStatusEl.className = `text-sm font-bold px-2 py-1 rounded-md ${
+                downpaymentStatus === "verified" ? "bg-green-500 text-white" :
+                downpaymentStatus === "invalid" ? "bg-red-500 text-white" :
+                "bg-gray-500 text-white"
+            }`;
+            
+            // Show/hide messages based on status
+            pendingMessage.classList.add('hidden');
+            invalidMessage.classList.add('hidden');
+
+            if (downpaymentStatus === 'pending') {
+                pendingMessage.classList.remove('hidden');
+            } else if (downpaymentStatus === 'invalid') {
+                invalidMessage.classList.remove('hidden');
+            }
+
             // Populate amenities
             const verifyAmenitiesList = document.getElementById('verifyAmenities');
             verifyAmenitiesList.innerHTML = "";
@@ -365,36 +443,6 @@
             }
             // Open verify modal
             document.getElementById('verifyModalBackdrop').classList.remove("opacity-0", "pointer-events-none");
-        });
-        // Invalid Button
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('verifyDownpaymentForm');
-            const invalidBtn = document.getElementById('submitInvalidBtn');
-            const paymentInput = document.getElementById('payment_amount');
-            const statusField = document.getElementById('status');
-
-            invalidBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // Remove required validation
-                paymentInput.removeAttribute('required');
-
-                // Set status to invalid
-                statusField.value = 'invalid';
-
-                // Change the form action to the invalid-payment route
-                form.action = invalidBtn.dataset.action;
-
-                // Submit form
-                form.submit();
-            });
-
-            // Re-enable validation on normal submission
-            form.addEventListener('submit', function () {
-                if (statusField.value !== 'invalid') {
-                    paymentInput.setAttribute('required', 'required');
-                }
-            });
         });
 
         // Get the image element that opens the fullscreen modal
