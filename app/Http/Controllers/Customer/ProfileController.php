@@ -11,13 +11,19 @@ class ProfileController extends Controller
 {
     public function view_profile()
     {
-        $customer = auth()->user(); // Get the currently logged-in customer
+        $customer = auth()->user();
         return view('customer.profile', compact('customer'));
-    }    
+    }
 
     public function view_reservations()
     {
-        return view('customer.reservation_records');
+        $customer = auth()->user();
+    
+        $pendingReservations = $customer->reservations()->where('status', 'pending')->with('reservedAmenities.amenity')->get();
+        $cancelledReservations = $customer->reservations()->where('status', 'cancelled')->with('reservedAmenities.amenity')->get();
+        $completedReservations = $customer->reservations()->where('status', 'completed')->with('reservedAmenities.amenity')->get();
+    
+        return view('customer.reservation_records', compact('customer', 'pendingReservations', 'cancelledReservations', 'completedReservations'));
     }
 
     public function edit_profile($id)

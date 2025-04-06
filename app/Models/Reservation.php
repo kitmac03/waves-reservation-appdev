@@ -10,10 +10,10 @@ class Reservation extends Model
     public $incrementing = false; // Disable auto-incrementing IDs (since UUIDs aren't integers)
     protected $keyType = 'string'; // Set key type as string
     protected $fillable = [
-        'customer_id', 
-        'date', 
-        'startTime', 
-        'endTime', 
+        'customer_id',
+        'date',
+        'startTime',
+        'endTime',
         'status'
     ];
 
@@ -45,4 +45,11 @@ class Reservation extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
+
+    // In the Reservation model
+    public function amenities()
+    {
+        return $this->belongsToMany(Amenities::class, 'reserved_amenities', 'res_num', 'amenity_id');
+    }
+
 }

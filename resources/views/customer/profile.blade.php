@@ -13,7 +13,7 @@
     <div class="container">
         <aside class="sidebar">
             <div class="back-button">
-                <i class="fas fa-arrow-left"></i> Back to main
+                <i class="fas fa-chevron-left"></i> Back to main
             </div>
             <div class="customer-profile">
                 <!-- Profile Icon and Name (Side by side) -->
@@ -21,8 +21,8 @@
                 <span class="customer-name">{{ $customer->name }}</span>
             </div>
             <nav class="menu">
-                <a href="#" class="active"><i class="fas fa-user"></i> Profile</a>
-                <a href="#"><i class="fas fa-calendar-check"></i> Reservations</a>
+                <a href="{{ route('customer.profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
+                <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i> Reservations</a>
             </nav>
             <button class="logout"><i class="fas fa-sign-out-alt"></i> Log Out</button>
         </aside>

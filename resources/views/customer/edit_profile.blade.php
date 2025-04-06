@@ -24,11 +24,11 @@
             </div>
 
             <div class="menu">
-                <a href="#" class="active">
+                <a href="{{ route('customer.profile') }}" class="active">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
-                <a href="#">
+                <a href="{{ route('customer.reservation.records') }}">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Reservation</span>
                 </a>
