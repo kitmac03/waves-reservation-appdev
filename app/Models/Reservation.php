@@ -94,6 +94,6 @@ class Reservation extends Model
 
     public function downPayment()
     {
-        return $this->hasOne(DownPayment::class, 'res_num', 'id');
+        return $this->hasOne(DownPayment::class, 'res_num', 'id')->latestOfMany('date');
     }
 }

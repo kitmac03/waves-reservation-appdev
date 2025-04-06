@@ -56,7 +56,7 @@ class PaymentController extends Controller
             }
 
             // Update Reservation Status
-            if ($reservation->status === 'pending' && $newBalance >= $downPaymentAmount) {
+            if ($reservation->status === 'pending' && $newBalance > 0) {
                 $reservation->update(['status' => 'verified']);
             }
 
@@ -78,7 +78,7 @@ class PaymentController extends Controller
 
     public function invalidPayment(Request $request)
     {
-        \Log::info('📢 INVALID PAYMENT REQUEST DATA', $request->all());
+        \Log::info('INVALID PAYMENT REQUEST DATA', $request->all());
         
         $validated = $request->validate([
             'reservation_id' => 'required|exists:reservations,id',
