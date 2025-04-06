@@ -78,11 +78,9 @@ class PaymentController extends Controller
 
     public function invalidPayment(Request $request)
     {
-        \Log::info('INVALID PAYMENT REQUEST DATA', $request->all());
-        
         $validated = $request->validate([
             'reservation_id' => 'required|exists:reservations,id',
-            'dp_id' => 'required|exists:down_payments,id', // Make sure this matches your table name
+            'dp_id' => 'required|exists:down_payment,id', 
             'bill_id' => 'required|exists:bills,id',
             'status' => 'required|in:invalid',
         ]);
@@ -92,11 +90,12 @@ class PaymentController extends Controller
             
             // Update downpayment status
             $downpayment = DownPayment::findOrFail($request->dp_id);
-            $downpayment->update(['status' => 'invalid']);
+            $downpayment->update([
+                'status' => 'invalid',
+                'verified_by' => Auth::id()
+            ]);
 
             DB::commit();
-            
-            \Log::info("Downpayment marked as invalid for reservation ID: {$request->reservation_id}");
             
             return redirect()->back()
                 ->with('error', 'Payment marked as invalid.')
@@ -104,7 +103,6 @@ class PaymentController extends Controller
     
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error("Failed to mark payment as invalid: " . $e->getMessage());
             
             return redirect()->back()
                 ->with('error', 'Failed to mark payment as invalid. Please try again.');

@@ -18,7 +18,9 @@
       "total": 5000,
       "paid_amount": 3500,
       "downpayment": 2500,
-      "downpayment_image": "http://yourdomain.com/storage/proofs/paymentproof.jpg"
+      "downpayment_status": invalid,
+      "downpayment_image": "http://yourdomain.com/storage/proofs/paymentproof.jpg",
+      "ref_num": 1234567890
     }
   }
 ]
