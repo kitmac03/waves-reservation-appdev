@@ -1,12 +1,276 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>RESERVATION RECORDS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAVES Beach Resort</title>
+    <link rel="stylesheet" href="{{ asset('css/reservation_records.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <h1>RESERVATION RECORDS</h1>
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="back-button">
+            <i class="fas fa-chevron-left"></i>
+            <span>Back to main</span>
+        </div>
+
+        <div class="customer-profile">
+            <i class="fas fa-user-circle profile-icon"></i>
+            <div class="customer-name">{{ $customer->name }}</div>
+        </div>
+
+        <div class="menu">
+            <a href="{{ route('customer.profile') }}">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="{{ route('customer.reservation.records') }}" class="active">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Reservation</span>
+            </a>
+
+        </div>
+
+        <button class="logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+        </button>
+    </div>
+
+    <div class="content">
+        <h2>Your Reservations</h2>
+        <div class="status-bar">
+            <span style="color: green;">● Verified</span>
+            <span style="color: orange;">● Pending</span>
+            <span style="color: red;">● Cancelled</span>
+            <span style="color: gray;">● Past</span>
+        </div>
+        <div class="reservations">
+            <div class="reservation-column">
+                <h4>Cancelled</h4>
+                @foreach($cancelledReservations as $reservation)
+                    <div class="reservation-item" style="border-left: 5px solid red;">
+                        <strong>#{{ $reservation->id }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="reservation-column">
+                <h4>Current</h4>
+                @foreach($pendingReservations as $reservation)
+                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
+                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+                        style="border-left: 5px solid orange; cursor: pointer;">
+                        <strong>#{{ $reservation->id }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="reservation-column">
+                <h4>Past</h4>
+                @foreach($completedReservations as $reservation)
+                    <div class="reservation-item" style="border-left: 5px solid gray;">
+                        <strong>#{{ $reservation->id }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <section class="reservation-details hidden">
+        <div class="reservation-container">
+            <button class="ellipsis-btn">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <button class="close-btn">&times;</button>
+            <div class="menu">
+                <!-- Add any necessary menu items here -->
+            </div>
+            <div class="dropdown-menu hidden">
+                <button class="edit-reservation">Edit Reservation</button>
+                <hr>
+                <button class="cancel-reservation">Cancel Reservation</button>
+            </div>
+            <div class="downpayment-content">
+                <div class="reservation-summary">
+                    <div class="placeholder-box"></div> <!-- Placeholder for dynamic data -->
+                </div>
+
+                <div class="r-details">
+                    <p>
+                        <strong>#<span class="reservation-id"></span></strong>
+                        <span class="verified {{ $reservation->status === 'verified' ? 'verified' : 'pending' }}">
+                            {{ $reservation->status }}
+                        </span>
+                    </p>
+
+                    <p><span class="reservation-date"></span></p>
+                    <p><span class="reservation-start"></span></p>
+                    <!-- Add dynamic cottage and table details -->
+                    <p><span class="cottage-type"></span> - <strong><span class="cottage-price"></span></strong></p>
+                    <p><span class="table-type"></span> - <strong><span class="table-price"></span></strong></p>
+                    <hr>
+                    <p><strong>Total: <span class="total-price"></span></strong></p>
+                    <p><strong>Down Payment: <span class="down-payment"></span></strong></p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+<!-- Edit Reservation Modal -->
+<div class="edit hidden">
+    <div class="edit-content">
+        <span class="close-modal">&times;</span>
+        <h2>EDIT RESERVATION DETAILS</h2>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" placeholder="DD/MM/YYYY">
+
+        <label for="time">Time:</label>
+        <input type="time" id="time" placeholder="00:00:00">
+
+        <label for="cottage">Cottage:</label>
+        <select id="cottage">
+            <option>Select</option>
+        </select>
+
+        <label for="table">Table:</label>
+        <select id="table">
+            <option>Select</option>
+        </select>
+
+        <div class="buttons">
+            <button class="cancel">Cancel</button>
+            <button class="submit">Submit for Verification</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const reservationItems = document.querySelectorAll(".reservation-item");
+
+        reservationItems.forEach(item => {
+            item.addEventListener("click", function () {
+                const reservationId = item.getAttribute("data-id");
+                const reservationDate = item.getAttribute("data-date");
+                const reservationStart = item.getAttribute("data-start");
+                const reservationEnd = item.getAttribute("data-end");
+
+                // Populate the reservation details modal with the selected reservation data
+                document.querySelector(".reservation-id").textContent = reservationId;
+                document.querySelector(".reservation-date").textContent = reservationDate;
+                document.querySelector(".reservation-start").textContent = reservationStart;
+
+                // Fetch the reservations with their amenities data passed by the controller
+                const amenities = @json($pendingReservations); // Pass dynamic data from Laravel to JavaScript
+
+                // Find the selected reservation data based on reservationId
+                const selectedReservation = amenities.find(reservation => reservation.id == reservationId);
+
+                // Initialize the variables to store cottage and table information
+                let cottageType = '';
+                let cottagePrice = '';
+                let tableType = '';
+                let tablePrice = '';
+
+                selectedReservation.reserved_amenities.forEach(amenity => {
+                    if (amenity.amenity.type === 'cottage') {
+                        cottageType = amenity.amenity.name;
+                        cottagePrice = amenity.amenity.price;
+                    }
+                    if (amenity.amenity.type === 'table') {
+                        tableType = amenity.amenity.name;
+                        tablePrice = amenity.amenity.price;
+                    }
+                });
+
+                // Populate the modal with the fetched amenities data
+                document.querySelector(".cottage-type").textContent = cottageType;
+                document.querySelector(".cottage-price").textContent = cottagePrice;
+                document.querySelector(".table-type").textContent = tableType;
+                document.querySelector(".table-price").textContent = tablePrice;
+
+                // Calculate total and down payment (replace with real data)
+                const totalPrice = parseFloat(cottagePrice) + parseFloat(tablePrice);
+                const downPayment = totalPrice / 2; // REPLACE THIS WITH DOWNPAYMENT LOGIC. TO BE CHANGED SOON
+
+                document.querySelector(".total-price").textContent = totalPrice;
+                document.querySelector(".down-payment").textContent = downPayment;
+
+                // Show the modal
+                document.querySelector(".reservation-details").classList.remove("hidden");
+            });
+        });
+
+        // Open the dropdown menu when the 3-dotted icon is clicked
+        const ellipsisButtons = document.querySelectorAll(".ellipsis-btn");
+
+        ellipsisButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                const dropdownMenu = event.target.closest(".reservation-container").querySelector(".dropdown-menu");
+
+                // Toggle the visibility of the dropdown menu
+                dropdownMenu.classList.toggle("hidden");
+
+                // Prevent event propagation to avoid triggering other click events
+                event.stopPropagation();
+            });
+        });
+
+        // Open the edit modal when the "Edit Reservation" button is clicked
+        const editButtons = document.querySelectorAll(".edit-reservation");
+
+        editButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                // Show the edit modal
+                document.querySelector(".edit").classList.remove("hidden");
+
+                // Populate the edit modal with the reservation data (you can add more logic for this if necessary)
+                const selectedReservation = {}; // Get the selected reservation data (from the click event or state)
+
+                document.querySelector("#date").value = selectedReservation.date || ''; // Set the date field
+                document.querySelector("#time").value = selectedReservation.time || ''; // Set the time field
+                // Populate the cottage and table select options dynamically if needed
+            });
+        });
+
+        // Close the reservation details modal
+        const closeDetails = document.querySelector(".close-btn");
+        closeDetails.addEventListener("click", function () {
+            document.querySelector(".reservation-details").classList.add("hidden");
+        });
+
+        // Close the edit modal when the close button is clicked
+        const closeModal = document.querySelector(".close-modal");
+        closeModal.addEventListener("click", function () {
+            document.querySelector(".edit").classList.add("hidden");
+        });
+
+        // Close the modal if clicked outside
+        window.addEventListener("click", function (event) {
+            const editModal = document.querySelector(".edit");
+            if (event.target === editModal) {
+                editModal.classList.add("hidden");
+            }
+        });
+    });
+
+
+</script>
 </body>
 
 </html>

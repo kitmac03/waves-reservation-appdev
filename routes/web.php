@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ManagerProfileController;
 use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\vendor\ReservationRecordController;
-use App\Http\Controllers\Customer\DashboardController;
+use App\Http\Controllers\Vendor\PaymentController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
@@ -23,7 +23,7 @@ Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
 
-// 🏡 Customer Routes
+// Customer Routes
 Route::middleware('auth')->group(function () {
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
     ->name('customer.profile');
@@ -34,10 +34,14 @@ Route::middleware('auth')->group(function () {
     Route::post('customer/reservation/store', [ReservationController::class, 'store'])
     ->middleware('auth')
     ->name('reservation.store');
-    Route::post('customer/reseration/reserve', [ReservationController::class, 'store'])
+    Route::post('customer/dashboard/reserve', [ReservationController::class, 'store'])
     ->name('customer.reserve');
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
     ->name('customer.profile');
+    Route::get('customer/profile/{id}/edit', [ProfileController::class, 'edit_profile'])
+    ->name('profile.edit');
+    Route::patch('customer/profile/{id}/update', [ProfileController::class, 'update_profile'])
+    ->name('profile.update');
     Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
     ->name('customer.reservation.records');
 });
@@ -78,6 +82,10 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_reservation'])
     ->name('admin.vendor.reservation');
     Route::get('/api/events', [ReservationRecordController::class, 'getEvents']);
+    Route::post('/admin/vendor/process-payment', [PaymentController::class, 'processPayment'])
+    ->name('admin.vendor.process-payment');
+    Route::post('/admin/vendor/invalid-payment', [PaymentController::class, 'invalidPayment'])
+    ->name('admin.vendor.invalid-payment');
 });
 
 //  Amenities Routes (Manager Only)
