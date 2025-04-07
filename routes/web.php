@@ -27,8 +27,8 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust
 Route::middleware('auth')->group(function () {
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
     ->name('customer.profile');
-    // Route::get('customer/dashboard', [ReservationController::class, 'create'])
-    // ->name('customer.dashboard');
+    Route::get('customer/dashboard', [ReservationController::class, 'create'])
+    ->name('customer.dashboard');
     Route::get('customer/reservation', [ReservationController::class, 'create'])
     ->name('customer.reservation');
     Route::post('customer/reservation/store', [ReservationController::class, 'store'])
