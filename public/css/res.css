@@ -1,14 +1,14 @@
 * {
     margin: 0;
-    padding: 0px;
+    padding-top: 80x;
     box-sizing: border-box;
     position: relative;
     font-family: 'Poppins', sans-serif;
   }
   
   body {
-    width: 1240px;
-    height: 1024px;
+    width:100vw;
+    height: 100vh;
     background: linear-gradient(270deg, rgba(249, 255, 223, 0.7) 0%, rgba(42, 100, 104, 0.7) 100%),
                 url('/images/Nature.png') no-repeat center center;
     background-position: center;
@@ -16,6 +16,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 80px;
 }
 
 header {
@@ -30,8 +31,9 @@ header {
     position: fixed; /* Makes the header stay at the top */
     top: 0;
     left: 0;
+    width: 100%;
     z-index: 1000;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Logo */
@@ -67,7 +69,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 30px;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 nav a {
@@ -89,10 +91,13 @@ nav i {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    text-align: center;
+    text-align: left;
     width: 80%;
     margin-top: 50px;
     padding: 30px 0;
+    gap: 30px;
+    
+    
 }
 
 .booking-form {
@@ -101,22 +106,24 @@ nav i {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 400px;
+    width: 45%;
+    max-width: 400px;
+    height: auto;
     text-align: center;
     flex-shrink: 0;
 }
 
 .booking-form h2 {
     font-family: 'Poppins', sans-serif;
-    font-size: 26px;
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
-    color: #1A1A1A;
+    color: #002147;
 }
 
 .booking-form p {
     font-family: 'Poppins', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     color: #000;
     margin-bottom: 20px;
 }
@@ -125,29 +132,117 @@ nav i {
 .booking-form input,
 .booking-form select {
     width: 100%;
+    height: 35px;
     padding: 10px;
     border: 1px solid #B6B6B6;
     border-radius: 5px;
     margin: 10px 0;
     font-family: 'Poppins', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-/* Submit Button */
-.booking-form button {
+.booking-form label {
+    font-weight: bold;
+    text-align: left;
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+}
+.date-time-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     width: 100%;
-    padding: 12px;
+}
+
+.start-end-time-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.start-end-time-container div {
+    flex: 1;
+}
+.date-time-container label{
+    font-weight: bold;
+    text-align: left;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+    
+}
+.date-time-container input[type="date"],
+.date-time-container input[type="time"]{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #B6B6B6;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+}
+
+/* Align Cottage and Table in One Row */
+.cottage-table-container {
+    display: flex;
+    justify-content: space-between; /* Spaces the elements */
+    gap: 10px; /* Adds spacing */
+    width: 100%; /* Ensure it takes full width */
+}
+
+/* Set equal width for both select elements */
+.cottage-table-container div {
+    flex: 1; /* Makes them take equal space */
+}
+
+.cottage-table-container select {
+    width: 100%; /* Make them responsive */
+    height: 35px;
+    padding: 5px;
+    border: 1px solid #B6B6B6;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.cottage-table-container label {
+    font-weight: bold;
+    text-align: left;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+
+/* Submit Button */
+.payment-button {
+    width: 100%;            
+    height: 35px;
+    padding: 15px;
     background: #FFD700;
     border: none;
     border-radius: 5px;
     font-family: 'Poppins', sans-serif;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
-.booking-form button:hover {
+.payment-button:hover {
     background: #FFC107;
+}
+.button-wrapper {
+    display: flex;
+    justify-content: center;  
+    align-items: center;     
+    width: 100%;           
 }
 
 .booking-form label{
@@ -157,19 +252,22 @@ nav i {
     font-weight: bold;
     margin-top: 10px;
 }
-
-/* Image Carousel */
 .image-carousel {
     display: flex;
+    justify-content: center;
     align-items: center;
     margin-top: 30px;
+    width: 50%; /* Ensures image stays on the right */
+    max-width: 500px;
+    position: relative;
 }
 
 .image-carousel img {
-    width: 100%;
+    width: 80%;
     max-width: 500px;
     height: auto;
     border-radius: 10px;
+    object-fit: contain;
 }
 
 .image-carousel button {
@@ -178,4 +276,46 @@ nav i {
     font-size: 30px;
     cursor: pointer;
     color: #000;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
+.image-carousel .prev {
+    left: -40px; /* Position left arrow */
+}
+
+.image-carousel .next {
+    right: -40px; /* Position right arrow */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1001;
+    width: 150px;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f1f1f1;
+}
+
+

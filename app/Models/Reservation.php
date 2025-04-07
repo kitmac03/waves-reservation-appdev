@@ -87,11 +87,17 @@ class Reservation extends Model
         return $this->hasMany(Bill::class, 'res_num', 'id');
     }
 
+
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    public function amenities()
+    {
+        return $this->belongsToMany(Amenities::class, 'reserved_amenities', 'res_num', 'amenity_id');
+    }
+    
     public function downPayment()
     {
         return $this->hasOne(DownPayment::class, 'res_num', 'id')->latestOfMany('date');
