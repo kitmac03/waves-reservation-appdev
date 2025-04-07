@@ -55,31 +55,50 @@ class ReservationController extends Controller
         ]);
 
         // Save selected cottage if present
-        if ($request->filled('cottage')) {
-            ReservedAmenity::create([
-                'res_num' => $reservation->id,
-                'amenity_id' => $request->cottage,
-            ]);
+        if ($request->has('cottages')) {
+            foreach ($request->cottages as $cottageId) {
+                if (!empty($cottageId)) {
+                    ReservedAmenity::create([
+                        'res_num' => $reservation->id,
+                        'amenity_id' => $cottageId,
+                    ]);
+                }
+            }
         }
 
         // Save selected table if present
-        if ($request->filled('tables')) {
-            ReservedAmenity::create([
-                'res_num' => $reservation->id,
-                'amenity_id' => $request->tables,
-            ]);
+        if ($request->has('tables')) {
+            foreach ($request->input('tables') as $tableId) {
+                if (!empty($cottageId)) {
+                    ReservedAmenity::create([
+                        'res_num' => $reservation->id,
+                        'amenity_id' => $tableId,
+                    ]);
+                }
+            }
         }
 
-        // Calculate total price of reserved items
+
         $total = 0;
-        
-        if ($request->filled('cottage')) {
-            $amenity = Amenities::find($request->cottage);
-            $total += $amenity->price;
+
+        // Sum selected cottages
+        if ($request->filled('cottages')) {
+            foreach ($request->cottages as $cottageId) {
+                $amenity = Amenities::find($cottageId);
+                if ($amenity) {
+                    $total += $amenity->price;
+                }
+            }
         }
+
+        // Sum selected tables
         if ($request->filled('tables')) {
-            $amenity = Amenities::find($request->tables);
-            $total += $amenity->price;
+            foreach ($request->tables as $tableId) {
+                $amenity = Amenities::find($tableId);
+                if ($amenity) {
+                    $total += $amenity->price;
+                }
+            }
         }
 
         // Create the bill
