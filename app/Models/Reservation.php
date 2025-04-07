@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str; // for generating UUIDs
 use Carbon\Carbon; // for date comparison
+use Carbon\Carbon; // for date comparison
 
 class Reservation extends Model
 {
@@ -77,6 +78,52 @@ class Reservation extends Model
     }
 
     // Your existing relationships...
+
+        // Add the automatic status update logic
+        static::retrieved(function ($reservation) {
+            if ($reservation->shouldBeCompleted()) {
+                $reservation->markAsCompleted();
+            }
+        });
+    }
+
+    /**
+     * Determine if the reservation should be marked as completed
+     */
+    public function shouldBeCompleted(): bool
+    {
+        // Combine date and endTime to get the full end datetime
+        $reservationEnd = Carbon::parse($this->date.' '.$this->endTime);
+        
+        return $reservationEnd->isPast() 
+            && $this->areBillsPaid() 
+            && $this->status !== 'completed';
+    }
+
+    /**
+     * Check if all bills are paid
+     */
+    protected function areBillsPaid(): bool
+    {
+        if ($this->bills->isEmpty()) {
+            return false; // or true, depending on your business logic
+        }
+
+        return $this->bills->every(function ($bill) {
+            return $bill->status === 'paid';
+        });
+    }
+
+    /**
+     * Mark the reservation as completed
+     */
+    public function markAsCompleted(): void
+    {
+        $this->status = 'completed';
+        $this->save();
+    }
+
+    // Your existing relationships...
     public function reservedAmenities()
     {
         return $this->hasMany(ReservedAmenity::class, 'res_num');
@@ -86,6 +133,7 @@ class Reservation extends Model
     {
         return $this->hasMany(Bill::class, 'res_num', 'id');
     }
+
 
     public function customer()
     {
