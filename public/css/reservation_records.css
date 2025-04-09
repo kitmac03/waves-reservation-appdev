@@ -1,21 +1,18 @@
-* {
+/* * {
     margin: 0;
     padding: 0px;
     box-sizing: border-box;
     position: relative;
     font-family: 'Poppins', sans-serif;
-  }
+  } */
   
   body {
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(270deg, rgba(249, 255, 223, 0.7) 0%, rgba(42, 100, 104, 0.7) 100%);
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #dae4f2, #dbeaf2); /* Light sky gradient */
 }
+
 
 .container {
     display: flex;
@@ -25,7 +22,7 @@
 
 /* Sidebar */
 .sidebar {
-    width: 270px;
+    width: 240px;
     background: #f7f6f6;
     padding: 20px;
     display: flex;
@@ -135,17 +132,27 @@
 }
 
 .reservation-column {
-    width: 270px;
+    width: 200px;
     min-height: 400px;
+    border: 2px;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    background: white; 
+}
+
+/* .reservation-column {
+    width: 200px;
+    min-height: 250px;
     border: 2px solid rgb(134, 128, 128);
     border-radius: 10px;
     padding: 10px;
     text-align: center;
     background: #fff; 
-}
+} */
 
 .reservation-item {
-    background: rgb(225, 225, 254);
+    background: rgb(206, 206, 232);
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;

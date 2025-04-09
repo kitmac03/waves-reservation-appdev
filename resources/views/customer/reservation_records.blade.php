@@ -6,11 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WAVES Beach Resort</title>
     <link rel="stylesheet" href="{{ asset('css/reservation_records.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
 </head>
 
 <div class="container">
@@ -62,7 +58,17 @@
                     </div>
                 @endforeach
             </div>
-
+            <div class="reservation-column">
+                <h4>Invalid</h4>
+                @foreach($invalidReservations as $reservation)
+                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
+                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+                        style="border-left: 5px solid orange; cursor: pointer;">
+                        <strong>#{{ $reservation->id }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
+            </div>
             <div class="reservation-column">
                 <h4>Current</h4>
                 @foreach($pendingReservations as $reservation)
@@ -84,7 +90,6 @@
                     </div>
                 @endforeach
             </div>
-
         </div>
     </div>
 </div>

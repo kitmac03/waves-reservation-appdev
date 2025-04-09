@@ -22,8 +22,9 @@ class ProfileController extends Controller
         $pendingReservations = $customer->reservations()->where('status', 'pending')->with('reservedAmenities.amenity')->get();
         $cancelledReservations = $customer->reservations()->where('status', 'cancelled')->with('reservedAmenities.amenity')->get();
         $completedReservations = $customer->reservations()->where('status', 'completed')->with('reservedAmenities.amenity')->get();
+        $invalidReservations = $customer->reservations()->where('status', 'invalid')->with('reservedAmenities.amenity')->get();
     
-        return view('customer.reservation_records', compact('customer', 'pendingReservations', 'cancelledReservations', 'completedReservations'));
+        return view('customer.reservation_records', compact('customer', 'pendingReservations', 'cancelledReservations', 'completedReservations', 'invalidReservations'));
     }
 
     public function edit_profile($id)
