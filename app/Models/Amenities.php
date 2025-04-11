@@ -17,6 +17,6 @@ class Amenities extends Model
         'added_by',
     ];
     protected $casts = [
-        'is_active' => 'boolean', // Ensure boolean type
+        'is_active' => 'boolean',
     ];
 }

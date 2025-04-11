@@ -79,8 +79,10 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.cottages');
     Route::get('admin/vendor/tables', [AmenitiesController::class, 'view_tables'])
     ->name('admin.vendor.tables');
-    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_reservation'])
-    ->name('admin.vendor.reservation');
+    Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
+    ->name('admin.vendor.reservation_calendar');
+    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])
+    ->name('admin.vendor.reservation_records');
     Route::get('/api/events', [ReservationRecordController::class, 'getEvents']);
     Route::post('/admin/vendor/process-payment', [PaymentController::class, 'processPayment'])
     ->name('admin.vendor.process-payment');

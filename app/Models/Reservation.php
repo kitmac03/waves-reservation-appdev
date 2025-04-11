@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str; // for generating UUIDs
-use Carbon\Carbon; // for date comparison
+use Illuminate\Support\Str; 
+use Carbon\Carbon; 
 
 class Reservation extends Model
 {
-    public $incrementing = false; // Disable auto-incrementing IDs (since UUIDs aren't integers)
-    protected $keyType = 'string'; // Set key type as string
+    public $incrementing = false;
+    protected $keyType = 'string'; 
     protected $fillable = [
         'customer_id', 
         'date', 
@@ -18,11 +18,9 @@ class Reservation extends Model
         'status'
     ];
 
-    // Automatically generate a UUID for the ID when creating a new reservation
     protected static function booted()
     {
         static::creating(function ($reservation) {
-            // Generate UUID for the primary key
             if (empty($reservation->id)) {
                 $reservation->id = (string) Str::uuid();
             }
@@ -31,35 +29,34 @@ class Reservation extends Model
                 $reservation->status = 'pending';
             }
         });
-
-        // Add the automatic status update logic
+        /**
+         * added automatic invalid for reservation base on reservation past date and no downpayment
+         */
         static::retrieved(function ($reservation) {
-            if ($reservation->shouldBeCompleted()) {
+            if ($reservation->isPastDate() && !$reservation->hasDownpayment()) {
+                $reservation->markAsInvalid();
+            }
+            elseif ($reservation->isPastDate() && $reservation->areBillsPaid()) {
                 $reservation->markAsCompleted();
             }
         });
     }
-
-    /**
-     * Determine if the reservation should be marked as completed
-     */
-    public function shouldBeCompleted(): bool
+    
+    public function isPastDate(): bool
     {
-        // Combine date and endTime to get the full end datetime
         $reservationEnd = Carbon::parse($this->date.' '.$this->endTime);
-        
-        return $reservationEnd->isPast() 
-            && $this->areBillsPaid() 
-            && $this->status !== 'completed';
+        return $reservationEnd->isPast();
     }
 
-    /**
-     * Check if all bills are paid
-     */
+    protected function hasDownpayment(): bool
+    {
+        return $this->downPayment()->exists(); 
+    }
+
     protected function areBillsPaid(): bool
     {
         if ($this->bills->isEmpty()) {
-            return false; // or true, depending on your business logic
+            return false;
         }
 
         return $this->bills->every(function ($bill) {
@@ -67,16 +64,19 @@ class Reservation extends Model
         });
     }
 
-    /**
-     * Mark the reservation as completed
-     */
+
     public function markAsCompleted(): void
     {
         $this->status = 'completed';
         $this->save();
     }
 
-    // Your existing relationships...
+    public function markAsInvalid(): void
+    {
+        $this->status = 'invalid';
+        $this->save();
+    }
+
     public function reservedAmenities()
     {
         return $this->hasMany(ReservedAmenity::class, 'res_num');
@@ -84,22 +84,17 @@ class Reservation extends Model
 
     public function bills()
     {
-        return $this->hasMany(Bill::class, 'res_num', 'id');
+        return $this->hasmany(Bill::class, 'res_num', 'id');
     }
-
 
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function amenities()
-    {
-        return $this->belongsToMany(Amenities::class, 'reserved_amenities', 'res_num', 'amenity_id');
-    }
-    
     public function downPayment()
     {
         return $this->hasOne(DownPayment::class, 'res_num', 'id')->latestOfMany('date');
     }
+
 }

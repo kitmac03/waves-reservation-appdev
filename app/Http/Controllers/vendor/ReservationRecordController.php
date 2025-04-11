@@ -3,33 +3,73 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
 use App\Models\Reservation;
+use App\Models\Admin;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationRecordController extends Controller
 {
+    public function view_history()
+    {
+        $vendor = auth('admin')->user();
+        // this will show all the reservation
+        $reservations = Reservation::with(['customer', 'reservedAmenities.amenity', 'bills', 'downPayment'])
+            ->get();
+    
+        $reservations->each(function ($reservation) {
+            $bill = $reservation->bills->firstWhere('res_num', $reservation->id);
+            
+            $grandTotal = optional($bill)->grand_total ?? 0;
+    
+            $paidAmount = 0;
+    
+            if ($bill && $bill->balance) {
+                $paidAmount = $bill->balance->balance;
+            }
+    
+            $balance = $grandTotal - $paidAmount;
+    
+            $reservation->paidAmount = $paidAmount;
+            $reservation->grandTotal = $grandTotal;
+            $reservation->balance = $balance;
+        });
+    
+        // Filter reservations by status
+        $pendingReservations = $reservations->where('status', 'pending');
+        $cancelledReservations = $reservations->where('status', 'cancelled');
+        $completedReservations = $reservations->where('status', 'completed');
+        $verifiedReservations = $reservations->where('status', 'verified');
+        $invalidReservations = $reservations->where('status', 'invalid');
+    
+        // Combine pending and verified reservations for current
+        $currentReservations  = $pendingReservations->merge($verifiedReservations);
+    
+        return view('admin.vendor.reservation_records', compact(
+            'pendingReservations', 'cancelledReservations', 'completedReservations',
+            'verifiedReservations', 'invalidReservations', 'currentReservations'
+        ));
+    }
+
     public function view_reservation()
     {
         $userId = Auth::id();
-        $user = \App\Models\Admin::find($userId);
+        $vendor = Admin::find($userId);
         
-        if ($user && $user->role === 'vendor') {
-            return view('admin.vendor.reservation_records');
+        if ($vendor && $vendor->role === 'vendor') {
+            return view('admin.vendor.reservation_calendar');
         }
     
-        // Redirect unauthorized users to dashboard or login
+       
         return redirect()->route('login')->with('error', 'Unauthorized access.');
     }
 
     public function getEvents()
     {
         try {
+             // will only show reservation in calendar that has downpayment
             $reservations = Reservation::with(['customer', 'reservedAmenities.amenity', 'bills', 'downPayment'])
-                ->whereHas('downPayment', function ($query) {
-                    $query->whereNotNull('img_proof');
-                })
+                ->has('downPayment')
                 ->get();
     
             $events = $reservations->map(function ($reservation) {
@@ -43,13 +83,11 @@ class ReservationRecordController extends Controller
                 $status = strtolower($reservation->status);
                 $color = $statusColors[$status] ?? ['bg' => '#3b82f6', 'border' => '#1e40af'];
     
-                // Retrieve the paid amount (balance) from the related bill or downPayment
+                
                 $paidAmount = 0;
     
                 if ($reservation->bills->first() && $reservation->bills->first()->balance) {
-                    $paidAmount = $reservation->bills->first()->balance->balance; // Get balance from bill
-                } elseif ($reservation->downPayment && $reservation->downPayment->balance) {
-                    $paidAmount = $reservation->downPayment->balance->balance; // Get balance from downPayment
+                    $paidAmount = $reservation->bills->first()->balance->balance;
                 }
     
                 return [
@@ -57,6 +95,7 @@ class ReservationRecordController extends Controller
                     'title' => $reservation->customer->name ?? 'No Name',
                     'start' => $reservation->date,
                     'end' => $reservation->date,
+                    'status' => $reservation->status,
                     'backgroundColor' => $color['bg'],
                     'borderColor' => $color['border'],
                     'extendedProps' => [
@@ -92,4 +131,5 @@ class ReservationRecordController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
 }

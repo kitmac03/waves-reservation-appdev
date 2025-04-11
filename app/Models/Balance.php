@@ -9,10 +9,8 @@ class Balance extends Model
 {
     use HasFactory;
 
-    // Table name
     protected $table = 'balance';
 
-    // Fillable fields (to avoid mass-assignment issues)
     protected $fillable = [
         'bill_id',
         'dp_id',
@@ -21,7 +19,6 @@ class Balance extends Model
         'received_by'
     ];
 
-    // Define the relationships (optional based on your schema)
     public function bill()
     {
         return $this->belongsTo(Bill::class);
