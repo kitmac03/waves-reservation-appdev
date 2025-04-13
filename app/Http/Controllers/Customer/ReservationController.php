@@ -15,11 +15,39 @@ use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
         // Fetch only active cottages and tables
         $cottages = Amenities::where('type', 'cottage')->where('is_active', 1)->get();
         $tables = Amenities::where('type', 'table')->where('is_active', 1)->get();
+
+        // If date is selected, filter out the reserved amenities for that date
+        if ($request->has('date')) {
+            $date = $request->date;
+
+            // Get all reserved amenities for the selected date
+            $reservedCottages = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
+                ->where('reservations.date', $date)
+                ->where('reservations.status', '!=', 'cancelled') // Make sure we are only considering active reservations
+                ->whereHas('amenity', function ($query) {
+                    $query->where('type', 'cottage');
+                })
+                ->pluck('reserved_amenity.amenity_id')
+                ->toArray();
+
+            $reservedTables = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
+                ->where('reservations.date', $date)
+                ->where('reservations.status', '!=', 'cancelled')
+                ->whereHas('amenity', function ($query) {
+                    $query->where('type', 'table');
+                })
+                ->pluck('reserved_amenity.amenity_id')
+                ->toArray();
+
+            // Filter out the reserved cottages and tables from the available list
+            $cottages = $cottages->whereNotIn('id', $reservedCottages);
+            $tables = $tables->whereNotIn('id', $reservedTables);
+        }
 
         return view('customer.reservation', compact('cottages', 'tables'));
     }
@@ -112,4 +140,36 @@ class ReservationController extends Controller
 
         return redirect()->route('customer.downpayment.show', $reservation);
     }
+
+    public function checkAvailability(Request $request)
+    {
+        $date = $request->query('date');
+
+        // Fetch the reserved cottages and tables for the selected date
+        $reservedCottages = ReservedAmenity::whereHas('reservation', function ($query) use ($date) {
+            $query->where('date', $date)->where('status', '!=', 'cancelled');
+        })->pluck('amenity_id')->toArray();
+
+        $reservedTables = ReservedAmenity::whereHas('reservation', function ($query) use ($date) {
+            $query->where('date', $date)->where('status', '!=', 'cancelled');
+        })->pluck('amenity_id')->toArray();
+
+        // Fetch available cottages and tables
+        $availableCottages = Amenities::where('type', 'cottage')
+            ->where('is_active', 1)
+            ->whereNotIn('id', $reservedCottages)
+            ->get();
+
+        $availableTables = Amenities::where('type', 'table')
+            ->where('is_active', 1)
+            ->whereNotIn('id', $reservedTables)
+            ->get();
+
+        return response()->json([
+            'availableCottages' => $availableCottages->toArray(),
+            'availableTables' => $availableTables->toArray(),
+        ]);
+    }
+
+
 }

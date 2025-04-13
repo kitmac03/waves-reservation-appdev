@@ -16,7 +16,7 @@ class ReservationRecordController extends Controller
         $user = \App\Models\Admin::find($userId);
         
         if ($user && $user->role === 'vendor') {
-            return view('admin.vendor.reservation_records');
+            return view('admin.vendor.reservations.reservation_records');
         }
     
         // Redirect unauthorized users to dashboard or login
@@ -91,5 +91,10 @@ class ReservationRecordController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function view_edit_reservations()
+    {
+        return view('admin.vendor.reservations.edit_res_req');
     }
 }

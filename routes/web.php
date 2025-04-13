@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     ->name('profile.update');
     Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
     ->name('customer.reservation.records');
+    Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
 });
 
 // Downpayment routes
@@ -86,6 +87,8 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.process-payment');
     Route::post('/admin/vendor/invalid-payment', [PaymentController::class, 'invalidPayment'])
     ->name('admin.vendor.invalid-payment');
+    Route::get('admin/vendor/edit-reservations', [ReservationRecordController::class, 'view_edit_reservations'])
+    ->name('admin.vendor.edit-res-req');
 });
 
 //  Amenities Routes (Manager Only)
