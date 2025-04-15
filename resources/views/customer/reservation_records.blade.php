@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>WAVES Beach Resort</title>
     <link rel="stylesheet" href="{{ asset('css/reservation_records.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,8 +14,10 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="back-button">
-            <i class="fas fa-chevron-left"></i>
-            <span>Back to main</span>
+            <a href="{{ route('customer.reservation') }}" class="back-btn">
+                <i class="fas fa-chevron-left"></i>
+                <span>Back to main</span>
+            </a>
         </div>
 
         <div class="customer-profile">
@@ -34,10 +37,20 @@
 
         </div>
 
-        <button class="logout">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Log Out</span>
+        <!-- logout -->
+        <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf <!-- CSRF Token for security -->
+        </form>
+
+        <button id="logoutButton" class="logout">
+            <i class="fas fa-sign-out-alt"></i> Log Out
         </button>
+
+        <script>
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                document.getElementById('logoutForm').submit();
+            });
+        </script>
     </div>
 
     <div class="content">
@@ -94,46 +107,46 @@
     </div>
 </div>
 
-    <section class="reservation-details hidden">
-        <div class="reservation-container">
-            <button class="ellipsis-btn">
-                <i class="fas fa-ellipsis-h"></i>
-            </button>
-            <button class="close-btn">&times;</button>
-            <div class="menu">
-                <!-- Add any necessary menu items here -->
-            </div>
-            <div class="dropdown-menu hidden">
-                <button class="edit-reservation">Edit Reservation</button>
-                <hr>
-                <button class="cancel-reservation">Cancel Reservation</button>
-            </div>
-            <div class="downpayment-content">
-                <div class="reservation-summary">
-                    <div class="placeholder-box"></div> <!-- Placeholder for dynamic data -->
-                </div>
-
-                <div class="r-details">
-                    <p>
-                        <strong>#<span class="reservation-id"></span></strong>
-                        <span class="verified {{ $reservation->status === 'verified' ? 'verified' : 'pending' }}">
-                            {{ $reservation->status }}
-                        </span>
-                    </p>
-
-                    <p><span class="reservation-date"></span></p>
-                    <p><span class="reservation-start"></span></p>
-                    <!-- Add dynamic cottage and table details -->
-                    <p><span class="cottage-type"></span> - <strong><span class="cottage-price"></span></strong></p>
-                    <p><span class="table-type"></span> - <strong><span class="table-price"></span></strong></p>
-                    <hr>
-                    <p><strong>Total: <span class="total-price"></span></strong></p>
-                    <p><strong>Down Payment: <span class="down-payment"></span></strong></p>
-                </div>
-
-            </div>
+<section class="reservation-details hidden">
+    <div class="reservation-container">
+        <button class="ellipsis-btn">
+            <i class="fas fa-ellipsis-h"></i>
+        </button>
+        <button class="close-btn">&times;</button>
+        <div class="menu">
+            <!-- Add any necessary menu items here -->
         </div>
-    </section>
+        <div class="dropdown-menu hidden">
+            <button class="edit-reservation">Edit Reservation</button>
+            <hr>
+            <button class="cancel-reservation">Cancel Reservation</button>
+        </div>
+        <div class="downpayment-content">
+            <div class="reservation-summary">
+                <div class="placeholder-box"></div> <!-- Placeholder for dynamic data -->
+            </div>
+
+            <div class="r-details">
+                <p>
+                    <strong>#<span class="reservation-id"></span></strong>
+                    <span class="verified {{ $reservation->status === 'verified' ? 'verified' : 'pending' }}">
+                        {{ $reservation->status }}
+                    </span>
+                </p>
+
+                <p><span class="reservation-date"></span></p>
+                <p><span class="reservation-start"></span></p>
+                <!-- Add dynamic cottage and table details -->
+                <p><span class="cottage-type"></span> - <strong><span class="cottage-price"></span></strong></p>
+                <p><span class="table-type"></span> - <strong><span class="table-price"></span></strong></p>
+                <hr>
+                <p><strong>Total: <span class="total-price"></span></strong></p>
+                <p><strong>Down Payment: <span class="down-payment"></span></strong></p>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <!-- Edit Reservation Modal -->
 <div class="edit hidden">
@@ -144,8 +157,11 @@
         <label for="date">Date:</label>
         <input type="date" id="date" placeholder="DD/MM/YYYY">
 
-        <label for="time">Time:</label>
-        <input type="time" id="time" placeholder="00:00:00">
+        <label for="time">Start Time:</label>
+        <input type="time" id="starttime" placeholder="00:00:00">
+
+        <label for="time">End Time:</label>
+        <input type="time" id="endtime" placeholder="00:00:00">
 
         <label for="cottage">Cottage:</label>
         <select id="cottage">
@@ -252,6 +268,39 @@
                 // Populate the cottage and table select options dynamically if needed
             });
         });
+
+        // Cancel reservation with confirmation
+        const cancelButtons = document.querySelectorAll(".cancel-reservation");
+
+        cancelButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const reservationId = document.querySelector(".reservation-id").textContent;
+
+                if (confirm("Are you sure you want to cancel this reservation?")) {
+                    fetch(`/customer/reservation-records/${reservationId}/cancel`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ id: reservationId })
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert("Reservation cancelled successfully.");
+                                location.reload(); 
+                            } else {
+                                alert("Failed to cancel reservation.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred.");
+                        });
+                }
+            });
+        });
+
 
         // Close the reservation details modal
         const closeDetails = document.querySelector(".close-btn");

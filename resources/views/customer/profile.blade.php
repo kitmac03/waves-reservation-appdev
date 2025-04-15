@@ -13,7 +13,9 @@
     <div class="container">
         <aside class="sidebar">
             <div class="back-button">
-                <i class="fas fa-chevron-left"></i> Back to main
+                <a href="{{ route('customer.reservation') }}">
+                    <i class="fas fa-chevron-left"></i> Back to main
+                </a>
             </div>
             <div class="customer-profile">
                 <!-- Profile Icon and Name (Side by side) -->
@@ -22,9 +24,25 @@
             </div>
             <nav class="menu">
                 <a href="{{ route('customer.profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
-                <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i> Reservations</a>
+                <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i>
+                    Reservations</a>
             </nav>
-            <button class="logout"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+
+            <!-- logout -->
+            <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf <!-- CSRF Token for security -->
+            </form>
+
+            <button id="logoutButton" class="logout">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </button>
+
+            <script>
+                document.getElementById('logoutButton').addEventListener('click', function () {
+                    document.getElementById('logoutForm').submit();
+                });
+            </script>
+
         </aside>
         <main class="profile-section">
             <div class="gradient-overlay"></div>

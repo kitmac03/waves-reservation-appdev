@@ -92,10 +92,10 @@
             <a href="#">Book Now</a>
             <a href="#">About Us</a>
             <div class="profile-container">
-                <i class="fas fa-user-circle" id="profile-icon" style="font-size: 32px; cursor: pointer;"></i>
+                <a href="{{ route('customer.profile') }}">
+                    <i class="fas fa-user-circle" id="profile-icon" style="font-size: 32px; cursor: pointer;"></i>
+                </a>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="#">Profile</a>
-                    <a href="#">Logout</a>
                 </div>
             </div>
         </nav>

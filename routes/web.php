@@ -22,6 +22,7 @@ Route::get('/login', [UserAuthController::class, 'create'])->name('login');
 Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
+Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 
 // Customer Routes
 Route::middleware('auth')->group(function () {
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
     ->name('customer.reservation.records');
     Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
+    Route::post('customer/reservation-records/{reservation}/cancel', [ReservationController::class, 'cancel_reservation'])
+    ->name('cancel.reservation');
 });
 
 // Downpayment routes
