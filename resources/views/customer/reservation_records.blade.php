@@ -76,7 +76,7 @@
                 @foreach($invalidReservations as $reservation)
                     <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
                         data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
-                        style="border-left: 5px solid orange; cursor: pointer;">
+                        style="border-left: 5px solid red; cursor: pointer;">
                         <strong>#{{ $reservation->id }}</strong><br>
                         {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
                     </div>
@@ -84,6 +84,7 @@
             </div>
             <div class="reservation-column">
                 <h4>Current</h4>
+
                 @foreach($pendingReservations as $reservation)
                     <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
                         data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
@@ -92,7 +93,17 @@
                         {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
                     </div>
                 @endforeach
+
+                @foreach($verifiedReservations as $reservation)
+                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
+                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+                        style="border-left: 5px solid green; cursor: pointer;">
+                        <strong>#{{ $reservation->id }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
             </div>
+
 
             <div class="reservation-column">
                 <h4>Past</h4>
@@ -196,18 +207,25 @@
                 document.querySelector(".reservation-date").textContent = reservationDate;
                 document.querySelector(".reservation-start").textContent = reservationStart;
 
-                // Fetch the reservations with their amenities data passed by the controller
-                const amenities = @json($pendingReservations); // Pass dynamic data from Laravel to JavaScript
+                // Fetch the reservations data passed by the controller (pending + verified)
+                const reservations = @json($pendingReservations->merge($verifiedReservations));
 
                 // Find the selected reservation data based on reservationId
-                const selectedReservation = amenities.find(reservation => reservation.id == reservationId);
+                const selectedReservation = reservations.find(reservation => reservation.id == reservationId);
 
-                // Initialize the variables to store cottage and table information
+                // If the reservation is not found, handle the error
+                if (!selectedReservation) {
+                    console.error("Reservation not found!");
+                    return;
+                }
+
+                // Initialize variables to store cottage and table information
                 let cottageType = '';
                 let cottagePrice = '';
                 let tableType = '';
                 let tablePrice = '';
 
+                // Iterate through reserved amenities and fetch relevant data
                 selectedReservation.reserved_amenities.forEach(amenity => {
                     if (amenity.amenity.type === 'cottage') {
                         cottageType = amenity.amenity.name;
@@ -225,12 +243,32 @@
                 document.querySelector(".table-type").textContent = tableType;
                 document.querySelector(".table-price").textContent = tablePrice;
 
-                // Calculate total and down payment (replace with real data)
-                const totalPrice = parseFloat(cottagePrice) + parseFloat(tablePrice);
-                const downPayment = totalPrice / 2; // REPLACE THIS WITH DOWNPAYMENT LOGIC. TO BE CHANGED SOON
+                // Calculate total and down payment
+                const totalPrice = parseFloat(cottagePrice || 0) + parseFloat(tablePrice || 0);
+                const downPayment = totalPrice / 2; // You can replace this with your actual down payment logic
 
-                document.querySelector(".total-price").textContent = totalPrice;
-                document.querySelector(".down-payment").textContent = downPayment;
+                document.querySelector(".total-price").textContent = totalPrice.toFixed(2); // Ensure proper formatting
+                document.querySelector(".down-payment").textContent = downPayment.toFixed(2); // Format down payment
+
+                // Dynamically set the reservation status class and status text
+                const statusElement = document.querySelector(".verified");
+
+                if (selectedReservation.status === 'verified') {
+                    statusElement.classList.add("verified"); // Apply the verified class
+                    statusElement.classList.remove("pending");
+                    statusElement.textContent = "Verified";
+
+                    document.querySelector(".ellipsis-btn").classList.add("hidden");
+                }
+
+                if (selectedReservation.status === 'pending') {
+                    statusElement.classList.add("pending"); // Apply the pending class
+                    statusElement.classList.remove("verified");
+                    statusElement.textContent = "Pending";
+                    statusElement.classList.add("verified"); // STUPID AHH LINE???
+
+                    document.querySelector(".ellipsis-btn").classList.remove("hidden");
+                }
 
                 // Show the modal
                 document.querySelector(".reservation-details").classList.remove("hidden");
@@ -288,7 +326,7 @@
                         .then(response => {
                             if (response.ok) {
                                 alert("Reservation cancelled successfully.");
-                                location.reload(); 
+                                location.reload();
                             } else {
                                 alert("Failed to cancel reservation.");
                             }
