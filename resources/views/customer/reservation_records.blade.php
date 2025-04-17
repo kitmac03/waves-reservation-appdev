@@ -94,6 +94,15 @@
                     </div>
                 @endforeach
 
+                @foreach($pendingReservationsWithDP as $reservation)
+                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
+                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+                        style="border-left: 5px solid orange; cursor: pointer;">
+                        <strong>#{{ $reservation->id }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
+
                 @foreach($verifiedReservations as $reservation)
                     <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
                         data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
@@ -152,7 +161,7 @@
                 <p><span class="table-type"></span> - <strong><span class="table-price"></span></strong></p>
                 <hr>
                 <p><strong>Total: <span class="total-price"></span></strong></p>
-                <p><strong>Down Payment: <span class="down-payment"></span></strong></p>
+                <p><strong>Paid: <span class="down-payment"></span></strong></p>
             </div>
 
         </div>
@@ -208,7 +217,7 @@
                 document.querySelector(".reservation-start").textContent = reservationStart;
 
                 // Fetch the reservations data passed by the controller (pending + verified)
-                const reservations = @json($pendingReservations->merge($verifiedReservations));
+                const reservations = @json($pendingReservations->merge($pendingReservationsWithDP)->merge($verifiedReservations));
 
                 // Find the selected reservation data based on reservationId
                 const selectedReservation = reservations.find(reservation => reservation.id == reservationId);
@@ -245,30 +254,48 @@
 
                 // Calculate total and down payment
                 const totalPrice = parseFloat(cottagePrice || 0) + parseFloat(tablePrice || 0);
-                const downPayment = totalPrice / 2; // You can replace this with your actual down payment logic
+                
+                let downPaymentAmount = 0;
+
+                if (selectedReservation.down_payment && selectedReservation.down_payment.amount) {
+                    downPaymentAmount = parseFloat(selectedReservation.down_payment.amount);
+                }
 
                 document.querySelector(".total-price").textContent = totalPrice.toFixed(2); // Ensure proper formatting
-                document.querySelector(".down-payment").textContent = downPayment.toFixed(2); // Format down payment
+                document.querySelector(".down-payment").textContent = downPaymentAmount.toFixed(2);
 
                 // Dynamically set the reservation status class and status text
                 const statusElement = document.querySelector(".verified");
 
+                const editBtn = document.querySelector(".edit-reservation");
+                const cancelBtn = document.querySelector(".cancel-reservation");
+
+                // Show/hide dropdown buttons based on reservation status and downpayment
                 if (selectedReservation.status === 'verified') {
+                    editBtn.classList.add("hidden");   // Can't edit if verified or has downpayment
+                    cancelBtn.classList.remove("hidden");
                     statusElement.classList.add("verified"); // Apply the verified class
                     statusElement.classList.remove("pending");
                     statusElement.textContent = "Verified";
-
-                    document.querySelector(".ellipsis-btn").classList.add("hidden");
-                }
-
-                if (selectedReservation.status === 'pending') {
+                } else if (selectedReservation.status === 'pending' && !selectedReservation.down_payment) {
+                    editBtn.classList.remove("hidden");
+                    cancelBtn.classList.remove("hidden");
                     statusElement.classList.add("pending"); // Apply the pending class
                     statusElement.classList.remove("verified");
                     statusElement.textContent = "Pending";
                     statusElement.classList.add("verified"); // STUPID AHH LINE???
-
-                    document.querySelector(".ellipsis-btn").classList.remove("hidden");
+                } else if (selectedReservation.status === 'pending' && selectedReservation.down_payment) {
+                    editBtn.classList.add("hidden");   // Can't edit if verified or has downpayment
+                    cancelBtn.classList.remove("hidden");
+                    statusElement.classList.add("pending"); // Apply the pending class
+                    statusElement.classList.remove("verified");
+                    statusElement.textContent = "Pending";
+                    statusElement.classList.add("verified"); // STUPID AHH LINE???
                 }
+
+
+                document.querySelector(".ellipsis-btn").classList.remove("hidden");
+
 
                 // Show the modal
                 document.querySelector(".reservation-details").classList.remove("hidden");
