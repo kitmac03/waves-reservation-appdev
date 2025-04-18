@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\ReservedAmenity;
 use App\Models\Amenities;
+use App\Models\DownPayment;
 use App\Models\Bill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -116,15 +117,32 @@ class ReservationController extends Controller
     public function view_reservations()
     {
         $customer = auth()->user();
-
-
-        $allReservations = $customer->reservations()->with('reservedAmenities.amenity')->get();
-        $pendingReservations = $customer->reservations()->where('status', 'pending')->with('reservedAmenities.amenity')->get();
-        $cancelledReservations = $customer->reservations()->where('status', 'cancelled')->with('reservedAmenities.amenity')->get();
-        $completedReservations = $customer->reservations()->where('status', 'completed')->with('reservedAmenities.amenity')->get();
-        $verifiedReservations = $customer->reservations()->where('status', 'verified')->with('reservedAmenities.amenity')->get();
-        $invalidReservations = $customer->reservations()->where('status', 'invalid')->with('reservedAmenities.amenity')->get();
-
+    
+        $allReservations = $customer->reservations()
+            ->with(['reservedAmenities.amenity', 'bill.balance', 'downPayment'])
+            ->get();
+    
+        $allReservations->each(function ($reservation) {
+            $bill = $reservation->bill;
+    
+            $grandTotal = optional($bill)->grand_total ?? 0;
+    
+            // Sum only verified down payments
+            $paidAmount = DownPayment::where('res_num', $reservation->id)
+                            ->where('status', 'verified')
+                            ->sum('amount');
+    
+            $reservation->paidAmount = $paidAmount;
+            $reservation->grandTotal = $grandTotal;
+            $reservation->balance = $grandTotal - $paidAmount;
+        });
+    
+        $pendingReservations = $allReservations->where('status', 'pending');
+        $cancelledReservations = $allReservations->where('status', 'cancelled');
+        $completedReservations = $allReservations->where('status', 'completed');
+        $verifiedReservations = $allReservations->where('status', 'verified');
+        $invalidReservations = $allReservations->where('status', 'invalid');
+    
         $currentReservations = $pendingReservations->merge($verifiedReservations);
     
         return view('customer.reservation_records', compact(

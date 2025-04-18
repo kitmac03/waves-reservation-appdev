@@ -67,7 +67,7 @@
                 @if ($cancelledReservations->isEmpty())
                     <p class="text-center">No cancelled reservations.</p>
                 @else
-                    @foreach ($cancelReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+                    @foreach ($cancelledReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
                     @php
                         $date = new DateTime($reservation->date ?? now());
                         $startTime = new DateTime($reservation->startTime ?? '00:00:00');
@@ -352,7 +352,20 @@
                     document.getElementById("startTime").textContent = reservationStart || '';
                     document.getElementById("endTime").textContent = reservationEnd || '';
                     console.log(reservationpaidAmount, reservationgrandTotal, reservationbalance);
-					const selectedReservation = amenities.find(r => r.id == reservationId);
+					
+                    const selectedReservation = amenities.find(r => r.id == reservationId);
+
+                    if (selectedReservation) {
+                        let amenitiesHtml = '';
+
+                        selectedReservation.reserved_amenities.forEach(amenity => {
+                            const amenityName = amenity.amenity.name;
+                            const amenityPrice = amenity.amenity.price;
+                            amenitiesHtml += `<li>${amenityName} - ₱${parseFloat(amenityPrice).toFixed(2)}</li>`;
+                        });
+
+                        document.getElementById("modalAmenities").innerHTML = amenitiesHtml;
+                    }
 
 					document.querySelector(".reservation-details").classList.remove("hidden");
 				});
