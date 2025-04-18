@@ -15,6 +15,7 @@ class ProfileController extends Controller
         return view('customer.profile', compact('customer'));
     }
 
+
     public function edit_profile($id)
     {
         $customer = Customer::findOrFail($id);
@@ -38,5 +39,6 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }
+
 
 }

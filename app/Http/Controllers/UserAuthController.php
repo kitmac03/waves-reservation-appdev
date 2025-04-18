@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 
 class UserAuthController extends Controller
 {
@@ -28,17 +28,17 @@ class UserAuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
+
         // First, check in the Admins table
         if ($this->attemptLogin(Admin::class, $request)) {
             return redirect()->intended('admin/dashboard'); // Redirect to the admin dashboard
         }
-    
+
         // If not found, check in the Customers table
         if ($this->attemptLogin(Customer::class, $request)) {
             return redirect()->intended('customer/reservation'); // Redirect to the customer dashboard
         }
-    
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -56,5 +56,16 @@ class UserAuthController extends Controller
         }
 
         return false;
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }

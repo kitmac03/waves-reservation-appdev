@@ -23,8 +23,8 @@ Route::get('/login', [UserAuthController::class, 'create'])->name('login');
 Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
+Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 //Route::get('/empty', [EmptyyController::class, 'emptyTables'])->name('login'); 
-
 // Customer Routes
 Route::middleware('auth')->group(function () {
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
     ->name('customer.reservation.records');
     Route::get('customer/balance', [ReservationController::class, 'view_balance'])
     ->name('customer.reservation.balance');
+    Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
+    Route::post('customer/reservation-records/{reservation}/cancel', [ReservationController::class, 'cancel_reservation'])
+    ->name('cancel.reservation');
+
 });
 
 // Downpayment routes
@@ -94,6 +98,8 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.process-payment');
     Route::post('/admin/vendor/invalid-payment', [PaymentController::class, 'invalidPayment'])
     ->name('admin.vendor.invalid-payment');
+    Route::get('admin/vendor/edit-reservations', [ReservationRecordController::class, 'view_edit_reservations'])
+    ->name('admin.vendor.edit-res-req');
 });
 
 //  Amenities Routes (Manager Only)
