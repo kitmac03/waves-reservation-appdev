@@ -6,6 +6,7 @@
     font-family: 'Poppins', sans-serif;
   }
   
+
   body {
     width: 100vw;
     height: 100vh;
@@ -25,7 +26,7 @@
 
 /* Sidebar */
 .sidebar {
-    width: 270px;
+    width: 240px;
     background: #f7f6f6;
     padding: 20px;
     display: flex;
@@ -64,7 +65,7 @@
 }
 
 .customer-name {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 }
 
@@ -135,17 +136,27 @@
 }
 
 .reservation-column {
-    width: 270px;
+    width: 200px;
     min-height: 400px;
+    border: 2px;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    background: white; 
+}
+
+/* .reservation-column {
+    width: 200px;
+    min-height: 250px;
     border: 2px solid rgb(134, 128, 128);
     border-radius: 10px;
     padding: 10px;
     text-align: center;
     background: #fff; 
-}
+} */
 
 .reservation-item {
-    background: rgb(225, 225, 254);
+    background: rgb(206, 206, 232);
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
@@ -175,7 +186,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
+    width: 400px;
     background: rgb(247, 250, 252);
     padding: 20px;
     border-radius: 10px;
@@ -183,7 +194,7 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     max-height: 90vh;
     overflow-y: auto;
 }
@@ -289,6 +300,15 @@
     width: 150px;
     z-index: 1000;
 }
+
+/* .dropdown-menu{
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+    width: 320px;
+} */
 
 .dropdown-menu button{
     width: 100%;
