@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\EmptyyController;
+use App\Http\Controllers\EmptyyController;
 use App\Http\Controllers\Customer\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
     ->name('profile.edit');
     Route::patch('customer/profile/{id}/update', [ProfileController::class, 'update_profile'])
     ->name('profile.update');
+    Route::get('customer/reservation-records', [ReservationController::class, 'view_reservations'])
     Route::get('customer/reservation-records', [ReservationController::class, 'view_reservations'])
     ->name('customer.reservation.records');
     Route::get('customer/balance', [ReservationController::class, 'view_balance'])
@@ -87,6 +89,12 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.cottages');
     Route::get('admin/vendor/tables', [AmenitiesController::class, 'view_tables'])
     ->name('admin.vendor.tables');
+    Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
+    ->name('admin.vendor.reservation_calendar');
+    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])
+    ->name('admin.vendor.reservation_records');
+    Route::get('admin/vendor/balance', [ReservationRecordController::class, 'view_balance'])
+    ->name('admin.vendor.remainingbal');
     Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
     ->name('admin.vendor.reservation_calendar');
     Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])
