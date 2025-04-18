@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\EmptyyController;
 use App\Http\Controllers\Customer\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
@@ -22,6 +23,7 @@ Route::get('/login', [UserAuthController::class, 'create'])->name('login');
 Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
+//Route::get('/empty', [EmptyyController::class, 'emptyTables'])->name('login'); 
 
 // Customer Routes
 Route::middleware('auth')->group(function () {
@@ -42,8 +44,10 @@ Route::middleware('auth')->group(function () {
     ->name('profile.edit');
     Route::patch('customer/profile/{id}/update', [ProfileController::class, 'update_profile'])
     ->name('profile.update');
-    Route::get('customer/reservation-records', [ProfileController::class, 'view_reservations'])
+    Route::get('customer/reservation-records', [ReservationController::class, 'view_reservations'])
     ->name('customer.reservation.records');
+    Route::get('customer/balance', [ReservationController::class, 'view_balance'])
+    ->name('customer.reservation.balance');
 });
 
 // Downpayment routes
@@ -83,6 +87,8 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.reservation_calendar');
     Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])
     ->name('admin.vendor.reservation_records');
+    Route::get('admin/vendor/balance', [ReservationRecordController::class, 'view_balance'])
+    ->name('admin.vendor.remainingbal');
     Route::get('/api/events', [ReservationRecordController::class, 'getEvents']);
     Route::post('/admin/vendor/process-payment', [PaymentController::class, 'processPayment'])
     ->name('admin.vendor.process-payment');

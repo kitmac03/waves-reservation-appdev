@@ -140,95 +140,95 @@ table {
 }
 
 .head-title {
-    font-size: 45px;
-    font-weight: 700;
-    color: #101011;
-    margin-bottom: 20px;
-    text-align: center;
+  font-size: 45px;
+  font-weight: 700;
+  color: #101011;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 /* added */
 .fc-col-header-cell {
-    background-color: #337ab7;
-    color: white;
-    font-weight: bold;
-    text-align: center;
+  background-color: #337ab7;
+  color: white;
+  font-weight: bold;
+  text-align: center;
 }
 .fc-toolbar-title {
-    font-size: 45px !important;
-    font-weight: 700 !important;
-    color: #101011;
+  font-size: 45px !important;
+  font-weight: 700 !important;
+  color: #101011;
 }
 .fc-header-toolbar {
-    margin-bottom: 0px !important; /* Reduces space under the title */
-    margin-top: 0px !important;
+  margin-bottom: 0px !important; /* Reduces space under the title */
+  margin-top: 0px !important;
 }
 
 .fc-toolbar {
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    margin-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 #calendar {
-    width: 100%;
-    height: 79vh;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  width: 100%;
+  height: 79vh;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 #verifyModal {
-    max-height: 80vh;
-    overflow-y: auto;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 #verifyModal::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 #verifyModal::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 3px;
+  background-color: #ccc;
+  border-radius: 3px;
 }
 #verifyModal::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
+  background-color: #aaa;
 }
 /* Fullscreen image modal with fixed center image */
 #fullscreenImageModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    z-index: 1100;
-    overflow: hidden;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+  z-index: 1100;
+  overflow: hidden;
 }
 #fullscreenImageContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    max-height: 90%; /* Reduced to make space for controls */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 90%; /* Reduced to make space for controls */
 }
 #fullscreenImage {
-    display: block;
-    max-width: 100%;
-    max-height: 80vh;
-    object-fit: contain;
-    transform-origin: center center;
-    transition: transform 0.25s ease;
-    cursor: default;
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  transform-origin: center center;
+  transition: transform 0.25s ease;
+  cursor: default;
 }
 #verifyImage {
-    cursor: zoom-in;
-    transition: transform 0.2s;
-    max-width: 100%;
-    max-height: 300px;
-    object-fit: contain;
+  cursor: zoom-in;
+  transition: transform 0.2s;
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
 }
 #verifyImage:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }

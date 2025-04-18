@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WAVES Beach Resort</title>
     <link rel="stylesheet" href="{{ asset('css/reservation_records.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
@@ -64,11 +65,9 @@
             </div>
 
             <div class="reservation-column">
-                <h4>Current</h4>
-                @foreach($pendingReservations as $reservation)
-                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
-                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
-                        style="border-left: 5px solid orange; cursor: pointer;">
+                <h4>invalid</h4>
+                @foreach($invalidReservations as $reservation)
+                    <div class="reservation-item" style="border-left: 5px solid red;">
                         <strong>#{{ $reservation->id }}</strong><br>
                         {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
                     </div>
@@ -76,7 +75,24 @@
             </div>
 
             <div class="reservation-column">
-                <h4>Past</h4>
+                <h4>Current</h4>
+                @foreach($currentReservations as $reservation)
+                    <div class="reservation-item" 
+                    data-id="{{ $reservation->id }}" 
+                    data-name="{{ $reservation->customer->name }}" 
+                    data-date="{{ $reservation->date }}"
+                    data-balance="{{ optional($reservation->bill->balance)->balance ?? 'Not Available' }}" 
+                    data-start="{{ $reservation->startTime }}" 
+                    data-end="{{ $reservation->endTime }}"
+                        style="border-left: 5px solid orange; cursor: pointer;">
+                        <strong>#{{ $reservation->customer->name }}</strong><br>
+                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="reservation-column">
+                <h4>Completed</h4>
                 @foreach($completedReservations as $reservation)
                     <div class="reservation-item" style="border-left: 5px solid gray;">
                         <strong>#{{ $reservation->id }}</strong><br>
@@ -98,8 +114,10 @@
             <div class="menu">
                 <!-- Add any necessary menu items here -->
             </div>
-            <div class="dropdown-menu hidden">
+            <div class="dropdown-menu hidden text-xs">
                 <button class="edit-reservation">Edit Reservation</button>
+                <hr>
+                <button class="pay-reservation">Pay</button>
                 <hr>
                 <button class="cancel-reservation">Cancel Reservation</button>
             </div>
@@ -118,12 +136,12 @@
 
                     <p><span class="reservation-date"></span></p>
                     <p><span class="reservation-start"></span></p>
-                    <!-- Add dynamic cottage and table details -->
-                    <p><span class="cottage-type"></span> - <strong><span class="cottage-price"></span></strong></p>
-                    <p><span class="table-type"></span> - <strong><span class="table-price"></span></strong></p>
+
+                    <ul id="modalAmenities" class="list-none pl-0"></ul>
                     <hr>
                     <p><strong>Total: <span class="total-price"></span></strong></p>
                     <p><strong>Down Payment: <span class="down-payment"></span></strong></p>
+                    <p><strong>Balance: <span class="balance"></span></strong></p>
                 </div>
 
             </div>
@@ -160,61 +178,60 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const reservationItems = document.querySelectorAll(".reservation-item");
+document.addEventListener("DOMContentLoaded", function () {
+    const reservationItems = document.querySelectorAll(".reservation-item");
+    const amenities = @json($allReservations); // Passed from Laravel
 
-        reservationItems.forEach(item => {
-            item.addEventListener("click", function () {
-                const reservationId = item.getAttribute("data-id");
-                const reservationDate = item.getAttribute("data-date");
-                const reservationStart = item.getAttribute("data-start");
-                const reservationEnd = item.getAttribute("data-end");
+    reservationItems.forEach(item => {
+        item.addEventListener("click", function () {
+            const reservationId = item.getAttribute("data-id");
+            const balance = parseFloat(item.getAttribute("data-balance")) || 0;
+            const reservationDate = item.getAttribute("data-date");
+            const reservationStart = item.getAttribute("data-start");
+            const reservationEnd = item.getAttribute("data-end");
 
-                // Populate the reservation details modal with the selected reservation data
-                document.querySelector(".reservation-id").textContent = reservationId;
-                document.querySelector(".reservation-date").textContent = reservationDate;
-                document.querySelector(".reservation-start").textContent = reservationStart;
+            // Populate basic reservation info
+            document.querySelector(".reservation-id").textContent = reservationId;
+            document.querySelector(".reservation-date").textContent = reservationDate;
+            document.querySelector(".reservation-start").textContent = `${reservationStart} - ${reservationEnd}`;
 
-                // Fetch the reservations with their amenities data passed by the controller
-                const amenities = @json($pendingReservations); // Pass dynamic data from Laravel to JavaScript
+            const selectedReservation = amenities.find(reservation => reservation.id == reservationId);
 
-                // Find the selected reservation data based on reservationId
-                const selectedReservation = amenities.find(reservation => reservation.id == reservationId);
+            let totalPrice = 0;
+            let downPayment = 0;
+            let amenitiesHtml = '';
 
-                // Initialize the variables to store cottage and table information
-                let cottageType = '';
-                let cottagePrice = '';
-                let tableType = '';
-                let tablePrice = '';
-
+            if (selectedReservation && selectedReservation.reserved_amenities) {
                 selectedReservation.reserved_amenities.forEach(amenity => {
-                    if (amenity.amenity.type === 'cottage') {
-                        cottageType = amenity.amenity.name;
-                        cottagePrice = amenity.amenity.price;
-                    }
-                    if (amenity.amenity.type === 'table') {
-                        tableType = amenity.amenity.name;
-                        tablePrice = amenity.amenity.price;
-                    }
+                    const name = amenity.amenity.name;
+                    const price = parseFloat(amenity.amenity.price) || 0;
+
+                    totalPrice += price;
+
+                    amenitiesHtml += `<li>${name} - ₱${price.toFixed(2)}</li>`;
                 });
 
-                // Populate the modal with the fetched amenities data
-                document.querySelector(".cottage-type").textContent = cottageType;
-                document.querySelector(".cottage-price").textContent = cottagePrice;
-                document.querySelector(".table-type").textContent = tableType;
-                document.querySelector(".table-price").textContent = tablePrice;
+                downPayment = totalPrice / 2;
+                let newBalance = totalPrice - balance;
 
-                // Calculate total and down payment (replace with real data)
-                const totalPrice = parseFloat(cottagePrice) + parseFloat(tablePrice);
-                const downPayment = totalPrice / 2; // REPLACE THIS WITH DOWNPAYMENT LOGIC. TO BE CHANGED SOON
+                // Insert amenities list into a container
+                document.getElementById("modalAmenities").innerHTML = amenitiesHtml;
+                document.querySelector(".total-price").textContent = `₱${totalPrice.toFixed(2)}`;
+                document.querySelector(".down-payment").textContent = `₱${downPayment.toFixed(2)}`;
+                document.querySelector(".balance").textContent = newBalance >= 0 ? `₱${newBalance.toFixed(2)}` : 'Not Available';
+            } 
 
-                document.querySelector(".total-price").textContent = totalPrice;
-                document.querySelector(".down-payment").textContent = downPayment;
+            // Show the modal
+            document.querySelector(".reservation-details").classList.remove("hidden");
 
-                // Show the modal
-                document.querySelector(".reservation-details").classList.remove("hidden");
+            // Attach click event to Pay button
+            document.querySelector(".pay-reservation").addEventListener("click", function () {
+                // Redirect to downpayment page with reservationId as a URL parameter
+                const url = `/customer/downpayment/${reservationId}`; // Make sure the URL includes the customer prefix
+                window.location.href = url;
             });
         });
+    });
 
         // Open the dropdown menu when the 3-dotted icon is clicked
         const ellipsisButtons = document.querySelectorAll(".ellipsis-btn");

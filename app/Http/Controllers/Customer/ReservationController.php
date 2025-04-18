@@ -112,4 +112,29 @@ class ReservationController extends Controller
 
         return redirect()->route('customer.downpayment.show', $reservation);
     }
+    
+    public function view_reservations()
+    {
+        $customer = auth()->user();
+
+
+        $allReservations = $customer->reservations()->with('reservedAmenities.amenity')->get();
+        $pendingReservations = $customer->reservations()->where('status', 'pending')->with('reservedAmenities.amenity')->get();
+        $cancelledReservations = $customer->reservations()->where('status', 'cancelled')->with('reservedAmenities.amenity')->get();
+        $completedReservations = $customer->reservations()->where('status', 'completed')->with('reservedAmenities.amenity')->get();
+        $verifiedReservations = $customer->reservations()->where('status', 'verified')->with('reservedAmenities.amenity')->get();
+        $invalidReservations = $customer->reservations()->where('status', 'invalid')->with('reservedAmenities.amenity')->get();
+
+        $currentReservations = $pendingReservations->merge($verifiedReservations);
+    
+        return view('customer.reservation_records', compact(
+            'customer', 
+            'pendingReservations', 
+            'cancelledReservations', 
+            'completedReservations',
+            'invalidReservations',
+            'currentReservations',
+            'allReservations'
+        ));
+    }
 }

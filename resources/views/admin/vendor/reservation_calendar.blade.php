@@ -33,6 +33,9 @@
               <i class="material-icons nav-icons">date_range</i> Reservations
             </button>
           </a>
+              
+          
+          
         </div>
     
         <div class="right-side-nav">
@@ -45,12 +48,12 @@
     </nav>
     <main class="main">
         <div class="container mx-auto">
-            <div class="flex justify-center my-3">
+            <div class="flex justify-center mt-3">
                 <div class="flex space-x-4">
-                    <span class="text-green-600">● Verified</span>
-                    <span class="text-yellow-600">● Pending</span>
-                    <span class="text-red-600">● Cancelled</span>
-                    <span class="text-gray-600">● Completed</span>
+                    <span class="text-xs text-green-500">● Verified</span>
+                    <span class="text-xs text-yellow-500">● Pending</span>
+                    <span class="text-xs text-red-500">● Cancelled</span>
+                    <span class="text-xs text-gray-500">● Completed</span>
                 </div>
             </div>
         </div>
@@ -60,14 +63,14 @@
         </div>
 
         <!-- Reservation Details Modal -->
-        <div id="reservationModalBackdrop" data-dialog-backdrop="reservationModal" data-dialog-backdrop-close="true" class="pointer-events-none fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300">
-            <div id="reservationModal" data-dialog="reservationModal" class="relative m-4 p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white shadow-sm">
-                <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800">Reservation by: <span id="modalCustomerName"></span></h2>
-                    <span id="modalStatus" class="text-sm font-bold px-2 py-1 rounded-md"></span>
+        <div id="reservationModalBackdrop" data-dialog-backdrop="reservationModal" data-dialog-backdrop-close="true" class="text-sm pointer-events-none fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300">
+            <div id="reservationModal" data-dialog="reservationModal" class="relative m-4 p-6 w-2/5 min-w-[25%] max-w-[25%] rounded-lg bg-white shadow-sm">
+                <div class="flex justify-between items-center pb-2 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800"><span id="modalCustomerName"></span></h2>
+                    <span id="modalStatus" class="text-xs font-bold px-2 py-1 rounded-md"></span>
                 </div>
 
-                <div class="py-4 text-gray-600">
+                <div class="py-2 text-gray-600">
                     <p>Date: <span id="modalDate"> </span></p>
                     <p>Start Time: <span id="modalStartTime"></span></p>
                     <p>End Time: <span id="modalEndTime"></span></p>
@@ -76,11 +79,11 @@
                     <ul id="modalAmenities" class="list-disc pl-5"></ul>
 
                     <hr class="my-3 border-gray-300">
-                    <p class="font-semibold text-lg">Total: <span id="modalTotal"></span> PHP</p>
-                    <p class="text-sm">Downpayment (50%): <span id="modalDownpayment"></span> PHP</p>
+                    <p class="font-semibold text-base">Total: <span id="modalTotal"></span> PHP</p>
+                    <p class="text-sm ">Downpayment (50%): <span id="modalDownpayment"></span> PHP</p>
                 </div>
 
-                <div class="flex justify-end space-x-2 pt-4 border-t border-gray-200">
+                <div class="flex justify-end space-x-2 pt-2 border-t border-gray-200">
                     <button id="closeReservationModal" class="rounded-md border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100">Close</button>
                     <button id="verifyBtn" class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700">Verify</button>
                 </div>
@@ -93,18 +96,18 @@
         data-dialog-backdrop="verifyModal" 
         data-dialog-backdrop-close="true"
         x-data="paymentFormHandler()"
-        class="pointer-events-none fixed inset-0 z-[1000] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300">
+        class="text-sm pointer-events-none fixed inset-0 z-[1000] grid h-screen w-screen place-items-center bg-black bg-opacity-60 opacity-0 backdrop-blur-sm transition-opacity duration-300">
         <div x-ref="formComponent" class="hidden"></div>
         <div 
             id="verifyModal"
             data-dialog="verifyModal" 
-            class="relative m-4 p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white shadow-sm">
+            class="relative m-4 p-6 w-2/5 min-w-[35%] max-w-[35%] rounded-lg bg-white shadow-sm">
                 <!-- Modal Header -->
+                <button id="closeVerifyModal" @click="resetState()" class="absolute top-0 right-2 text-gray-600 text-2xl">&times;</button>
                 <div class="flex justify-between items-center pb-4 border-b border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-800">Verify Downpayment</h2>
                     <div>
                         <span id="dpStatus" class="text-sm font-bold px-2 py-1 rounded-md"></span>
-                        <button id="closeVerifyModal" @click="resetState()" class="text-gray-700 hover:bg-gray-100 rounded-md px-2 py-1">Close</button>
                     </div>
     
                 </div>
@@ -123,8 +126,8 @@
                     
                         <!-- Customer Details -->
                         <div class="mb-4">
-                            <h2 class="text-xl font-semibold text-gray-800">Username: <span id="verifyCustomerName"></span></h2>
-                            <p>Phone Number: <span id="modalPhoneNumber"></span></p>
+                            <h2 class="text-xl font-semibold text-gray-800"><span id="verifyCustomerName"></span></h2>
+                            <p><span id="modalPhoneNumber"></span></p>
                         </div>
                     
                         <!-- Bill Details -->
@@ -136,9 +139,13 @@
                                 <strong>Total:</strong>
                                 <span class="font-bold"><span id="verifyTotal"></span></span>
                             </div>
-                            <div class="text-sm flex justify-between">
+                            <div class="text-sm flex justify-between" id="downPaymentContainer">
                                 <strong>Down Payment (50%):</strong>
                                 <span class="font-bold"><span id="verifyDownpayment"></span></span>
+                            </div>
+                            <div class="text-sm flex justify-between" id="paidContainer">
+                                <strong>Paid Amount:</strong>
+                                <span class="font-bold"><span id="paidAmount"></span></span>
                             </div>
                             <div class="text-sm flex justify-between" id="balanceContainer">
                                 <strong>Balance:</strong>
@@ -146,43 +153,40 @@
                             </div>
                         </div>
 
-                        <div class="mb-4 bg-grey-600">
-                            <p id="pendingMessage" class="bg-yellow-500 rounded-md text-sm text-white p-2 hidden">Please verify the payment.</p>
-                            <p id="invalidMessage" class="bg-red-500 rounded-md text-sm text-white p-2 hidden">Contact the customer to send clear photo for proof of payment.</p>
+                        <div class="my-2">
+                            <p id="pendingMessage" class="bg-yellow-100 text-yellow-500 rounded-md text-sm p-2 hidden">Please verify the payment.</p>
+                            <p id="invalidMessage" class="bg-red-100 text-red-500 rounded-md text-sm p-2 hidden">Contact the customer to send clear photo for proof of payment.</p>
                         </div>
 
                         <!-- Image -->
                         <div class="mb-4">
-                            <img id="verifyImage" src="" alt="Downpayment Image" class="rounded-md hidden">
-                            <p id="noDownpaymentMessage" class="bg-red-500 rounded-md text-sm text-white p-2 hidden">No downpayment submitted.</p>
-                        </div>
-                    
-                        <!-- Reference Number -->
-                        <div class="mb-4">
-                            <p class="block text-m font-medium">Reference Number: <span id="verifyReferenceNumber"></span></p>
-                        </div>
+                            <img id="verifyImage" alt="Downpayment Image" class="rounded-md hidden">
+                            <p id="noImageMessage" class="bg-green-400 rounded-md text-sm text-white p-2 hidden">Paid by cash</p>
+                        </div>     
                     
                         <!-- Payment Amount Input -->
-                        <div class="mb-4">
-                            <label for="payment_amount" class="block text-m font-medium">Payment Amount</label>
-                            <div>
-                                <p x-show="hasError" class="p-1 bg-red-500 rounded-md text-sm text-white">
-                                Please enter a valid payment amount.</p>
+                        <div id="inputPayment">
+                            <div class="mb-4">
+                                <p class="block text-m font-medium">Reference Number: <span id="verifyReferenceNumber"></span></p>
                             </div>
+                            <label for="payment_amount" class="block text-m font-medium">Payment Amount</label>
                             <input 
                             type="number" 
                             id="payment_amount" 
                             placeholder="Enter Paid Amount" 
                             name="payment_amount" 
                             required 
-                            class="w-full mt-2 p-2 border rounded-md"
+                            class="w-full p-2 border rounded-md"
                             :class="{ 'border-red-500 border-2': showError }"
                             @input="showError = false; hasError = false"
-                        >
-                    </div>
+                            >
+                            <div class="my-2 bg-red-500 rounded-md ">
+                                <p x-show="hasError" class="p-1 text-sm text-white">
+                                Please enter a valid payment amount.</p>
+                            </div>
                         </div>
                         <!-- Modal Footer -->
-                            <div class="flex justify-end space-x-2 pt-4 border-t border-gray-200">
+                            <div class="flex justify-end space-x-2 text-sm border-t border-gray-200">
                                 <div x-data="{ showInvalidConfirm: false }">
                                     <button type="button" id="submitInvalidBtn" 
                                     @click="showInvalidConfirm = true" 
@@ -228,6 +232,7 @@
                                 <!-- Submit Button -->
                                 <button 
                                     type="button" 
+                                    id="submitVerifyBtn"
                                     @click="trySubmit()"
                                     class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"> Submit </button>
                             
@@ -240,7 +245,7 @@
                                     x-transition:leave="ease-in duration-200"
                                     x-transition:leave-start="opacity-100"
                                     x-transition:leave-end="opacity-0"
-                                    class="fixed inset-0 z-[1100] flex items-center justify-center bg-black bg-opacity-50"
+                                    class="fixed inset-0 z-[1100] flex items-center text-sm justify-center bg-black bg-opacity-50"
                                 >
                                     <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
                                         <h3 class="text-lg font-bold text-gray-900">Payment Verified?</h3>
@@ -271,8 +276,6 @@
                 </div>
             </div>
         </div>
-
-
         <!-- Fullscreen Image Modal with Zoom -->
         <div id="fullscreenImageModal" class="hidden">
             <div id="fullscreenImageContainer">
@@ -285,8 +288,7 @@
                 </div>
             </div>
         </div>
-    </main> 
-    
+  
     <script>
     function paymentFormHandler() {
         return {
@@ -358,13 +360,43 @@
             events: '/api/events',
             headerToolbar: {
                 start: 'title',
-                center: '',
-                end: 'today prev,next'
+                center: 'reservationsButton monthSelect yearSelect editRequestButton remainingBalanceButton',
+                end: '',
             },
-            buttonText: {
-                today: 'Today',
-                prev: '‹',
-                next: '›'
+            customButtons: {
+                reservationsButton: {
+                text: 'Reservations',
+                click: function () {
+                    window.location.href = "{{ route('admin.vendor.reservation_records') }}";
+                }
+                },
+                editRequestButton: {
+                text: 'Edit Requests',
+                click: function () {
+                    alert('Edit Requests clicked');
+                }
+                },
+                remainingBalanceButton: {
+                text: 'Remaining Balances',
+                click: function () {
+                    window.location.href = "{{ route('admin.vendor.remainingbal') }}";
+                }
+                },
+                monthSelect: {
+                click: function () {
+                    // optional: use this to open your dropdown or bind real dropdown externally
+                }
+                },
+
+                yearSelect: {
+                click: function () {
+                    // optional
+                }
+                }
+            },
+            datesSet: () => {
+              applyDropdowns();
+              styleCustomButtons();
             },
             eventClick: function(info) {
                 const eventProps = info.event.extendedProps || {};
@@ -383,10 +415,10 @@
 
                 statusEl.textContent = billStatus.charAt(0).toUpperCase() + billStatus.slice(1);
                 statusEl.className = `text-sm font-bold px-2 py-1 rounded-md ${
-                    billStatus === "partially paid" ? "bg-yellow-500 text-white" :
-                    billStatus === "paid" ? "bg-green-500 text-white" :
-                    billStatus === "unpaid" ? "bg-red-500 text-white" :
-                    "bg-gray-500 text-white"
+                    billStatus === "partially paid" ? "bg-yellow-100 text-yellow-700" :
+                    billStatus === "paid" ? "bg-green-100 text-green-700" :
+                    billStatus === "unpaid" ? "bg-red-100 text-red-700" :
+                    "bg-red-100 text-red-700"
                 }`;
 
                 // Amenities handling
@@ -423,9 +455,79 @@
                 document.getElementById('reservationModalBackdrop').classList.remove("opacity-0", "pointer-events-none");
             }
         });
-
         calendar.render();
 
+        function applyDropdowns() {
+            const yearSlot = document.querySelector('.fc-yearSelect-button');
+            const monthSlot = document.querySelector('.fc-monthSelect-button');
+            const today = new Date();
+            const currentYear = today.getFullYear();
+
+            // YEAR DROPDOWN
+            if (yearSlot && !document.getElementById('customYearDropdown')) {
+            const yearDropdownHTML = `
+                <div class="relative w-24" id="customYearDropdown">
+                <select class="block w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-400 max-h-[150px] overflow-y-auto">
+                    ${Array.from({ length: 101 }, (_, i) => {
+                    const year = 1950 + i;
+                    return `<option value="${year}" ${year === currentYear ? 'selected' : ''}>${year}</option>`;
+                    }).join('')}
+                </select>
+                </div>
+            `;
+            yearSlot.innerHTML = yearDropdownHTML;
+
+            yearSlot.querySelector('select').addEventListener('change', function () {
+                const newYear = parseInt(this.value);
+                const currentMonth = calendar.getDate().getMonth();
+                calendar.gotoDate(new Date(newYear, currentMonth, 1));
+            });
+            }
+
+            // MONTH DROPDOWN
+            if (monthSlot && !document.getElementById('customMonthDropdown')) {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            const currentMonth = calendar.getDate().getMonth();
+
+            const monthDropdownHTML = `
+                <div class="relative w-32" id="customMonthDropdown">
+                <select class="block w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-black focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    ${monthNames.map((month, index) => {
+                    return `<option value="${index}" ${index === currentMonth ? 'selected' : ''}>${month}</option>`;
+                    }).join('')}
+                </select>
+                </div>
+            `;
+            monthSlot.innerHTML = monthDropdownHTML;
+
+            monthSlot.querySelector('select').addEventListener('change', function () {
+                const newMonth = parseInt(this.value);
+                const currentYear = calendar.getDate().getFullYear();
+                calendar.gotoDate(new Date(currentYear, newMonth, 1));
+            });
+            }
+        }
+
+        function styleCustomButtons() {
+            const buttonMap = {
+            'fc-reservationsButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+            'fc-editRequestButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+            'fc-remainingBalanceButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+            'fc-monthSelect-button': 'bg-transparent text-white font-medium m-0 py-1 rounded',
+            'fc-yearSelect-button': 'bg-transparent text-white font-medium m-0 py-1 rounded'
+            };
+
+            Object.entries(buttonMap).forEach(([selector, tailwindClasses]) => {
+            const button = document.querySelector(`.${selector}`);
+            if (button) {
+                button.className = tailwindClasses;
+            }
+            });
+        }
+        
         // Modal close handlers
         document.getElementById('closeReservationModal').addEventListener('click', () => {
             document.getElementById('reservationModalBackdrop').classList.add("opacity-0", "pointer-events-none");
@@ -465,19 +567,26 @@
 
             downpaymentStatusEl.textContent = downpaymentStatus.charAt(0).toUpperCase() + downpaymentStatus.slice(1);
             downpaymentStatusEl.className = `text-sm font-bold px-2 py-1 rounded-md ${
-                downpaymentStatus === "verified" ? "bg-green-500 text-white" :
-                downpaymentStatus === "invalid" ? "bg-red-500 text-white" :
-                "bg-gray-500 text-white"
+                downpaymentStatus === "verified" ? "bg-green-100 text-green-700" :
+                downpaymentStatus === "invalid" ? "bg-red-100 text-red-700" :
+                "bg-yellow-100 text-yellow-700"
             }`;
             
             // Show/hide messages based on status
             pendingMessage.classList.add('hidden');
             invalidMessage.classList.add('hidden');
+            submitInvalidBtn.classList.remove('hidden');
+            submitVerifyBtn.classList.remove('hidden');
+            inputPayment.classList.remove('hidden');
 
             if (downpaymentStatus === 'pending') {
                 pendingMessage.classList.remove('hidden');
             } else if (downpaymentStatus === 'invalid') {
                 invalidMessage.classList.remove('hidden');
+            } else if (downpaymentStatus === 'verified') {
+                submitInvalidBtn.classList.add('hidden');
+                submitVerifyBtn.classList.add('hidden');
+                inputPayment.classList.add('hidden');
             }
 
             // Populate amenities
@@ -502,26 +611,47 @@
             document.getElementById('verifyTotal').textContent = `₱${grandTotal.toFixed(2)}`;
             document.getElementById('verifyDownpayment').textContent = `₱${downPaymentAmount.toFixed(2)}`;
             document.getElementById('balanceAmount').textContent = `₱${balanceAmount.toFixed(2)}`;
+            document.getElementById('paidAmount').textContent = `₱${paidAmount.toFixed(2)}`;
 
-            // Hide balance div if paidAmount is 0
-            const balanceDiv = document.getElementById('balanceContainer'); // Add an ID to the div
-            if (paidAmount === 0) {
-                balanceDiv.style.display = 'none';
+            
+           
+            const balanceDiv = document.getElementById('balanceContainer'); 
+            const paidDiv = document.getElementById('paidContainer'); 
+            const downpaymentDiv = document.getElementById('downPaymentContainer');
+            if (paidAmount >= 0) {
+                balanceDiv.classList.remove('hidden');
             } else {
-                balanceDiv.style.display = 'flex'; // Show it if paidAmount is greater than 0
+                balanceDiv.classList.add('hidden');
+            }
+            if (paidAmount === 0) {
+                paidDiv.classList.add('hidden');
+            } else {
+                paidDiv.classList.remove('hidden');
+            }
+
+            if (paidAmount >= grandTotal) {
+                downpaymentDiv.classList.add('hidden');
+            } else {
+                downpaymentDiv.classList.remove('hidden');
             }
 
             // Handle image
             const verifyModalImage = document.getElementById('verifyImage');
-            const noDownpaymentMessage = document.getElementById('noDownpaymentMessage');
-            if (eventProps.downpayment_image) {
-                verifyModalImage.src = eventProps.downpayment_image;
+            const noImageMessage = document.getElementById('noImageMessage');
+
+            const downpaymentImage = eventProps.downpayment_image?.trim();
+
+            // Ensure the image source is set only if the value is valid and not "N/A"
+            if (downpaymentImage && downpaymentImage !== null) {
+                verifyModalImage.src = downpaymentImage;
                 verifyModalImage.classList.remove('hidden');
-                noDownpaymentMessage.classList.add('hidden');
+                noImageMessage.classList.add('hidden');
             } else {
+                verifyModalImage.removeAttribute('src');
                 verifyModalImage.classList.add('hidden');
-                noDownpaymentMessage.classList.remove('hidden');
+                noImageMessage.classList.remove('hidden');
             }
+
             // Open verify modal
             document.getElementById('verifyModalBackdrop').classList.remove("opacity-0", "pointer-events-none");
 
@@ -683,7 +813,7 @@
             };
         }
     }); 
-
     </script>
+    </main>
 </body>
 </html>

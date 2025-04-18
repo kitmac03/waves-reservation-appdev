@@ -30,7 +30,7 @@
                 <h2 class="dp-title">WAVES <span class="text-gray-600">Beach Resort</span></h2>
                 <h3 class="text-lg font-semibold mt-4">Complete Your Reservation with a Down Payment</h5>
                 @php
-                    $total = optional($reservation->bills)->sum('grand_total') ?? 0;
+                    $total = optional($reservation->bill)->grand_total ?? 0;
                     $downpayment = $total * 0.5;
                 @endphp
 

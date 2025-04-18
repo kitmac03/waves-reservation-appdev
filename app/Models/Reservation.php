@@ -29,19 +29,20 @@ class Reservation extends Model
                 $reservation->status = 'pending';
             }
         });
-        /**
-         * added automatic invalid for reservation base on reservation past date and no downpayment
-         */
+
         static::retrieved(function ($reservation) {
-            if ($reservation->isPastDate() && !$reservation->hasDownpayment()) {
-                $reservation->markAsInvalid();
-            }
-            elseif ($reservation->isPastDate() && $reservation->areBillsPaid()) {
-                $reservation->markAsCompleted();
+            if ($reservation->isPastDate()) {
+                if ($reservation->areBillsPaid()) {
+                    $reservation->markAsCompleted();
+                } elseif ($reservation->hasPartiallyPaidBill()) {
+                    $reservation->markAsCancelled();
+                } elseif (!$reservation->hasDownpayment()) {
+                    $reservation->markAsInvalid();
+                }
             }
         });
     }
-    
+
     public function isPastDate(): bool
     {
         $reservationEnd = Carbon::parse($this->date.' '.$this->endTime);
@@ -55,15 +56,16 @@ class Reservation extends Model
 
     protected function areBillsPaid(): bool
     {
-        if ($this->bills->isEmpty()) {
+        if (!$this->bill) {
             return false;
         }
-
-        return $this->bills->every(function ($bill) {
-            return $bill->status === 'paid';
-        });
+        return $this->bill->status === 'paid';
     }
 
+    protected function hasPartiallyPaidBill(): bool
+    {
+        return $this->bill && $this->bill->status === 'partially paid';
+    }
 
     public function markAsCompleted(): void
     {
@@ -77,14 +79,20 @@ class Reservation extends Model
         $this->save();
     }
 
+    public function markAsCancelled(): void
+    {
+        $this->status = 'cancelled';
+        $this->save();
+    }
+
     public function reservedAmenities()
     {
         return $this->hasMany(ReservedAmenity::class, 'res_num');
     }
 
-    public function bills()
+    public function bill()
     {
-        return $this->hasmany(Bill::class, 'res_num', 'id');
+        return $this->hasOne(Bill::class, 'res_num', 'id');
     }
 
     public function customer()

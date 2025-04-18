@@ -1,0 +1,286 @@
+/* Reset and Base Styles */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+  background-color: #263b49;
+  height: 10vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 1000;
+}
+
+.left-side-nav {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.dashboard, .ameneties, .reservations {
+  font: 400 16px poppins;
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px;
+  margin: 12px;
+  border: 0px solid;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  transition: color, background-color, 0.15s;
+}
+
+.dashboard {
+  background-color: white;
+  color: #263b49;
+}
+
+.nav-icons {
+  margin-right: 8px;
+}
+
+.ameneties, .reservations {
+  background-color: #263b49;
+  color: white;
+}
+
+.right-side-nav {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile {
+  background-color: #263b49;
+  border: 0 solid black;
+  cursor: pointer;
+}
+
+.inactive {
+  background-color: #263b49;
+  color: white;
+}
+
+.active {
+  background-color: white;
+  color: #263b49;
+}
+
+/* Main Content Styles */
+.main {
+  margin-top: 10vh;
+  justify-content: center;
+  padding: 20px;
+}
+
+.head-title {
+  font-size: 45px;
+  font-weight: 700;
+  color: #101011;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.back-link {
+  display: block;
+  margin-bottom: 10px;
+  text-align: left;
+  color: #263b49;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.chevron-left {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-right: 4px;
+  transition: transform 0.2s ease;
+}
+
+.back-link:hover .chevron-left {
+  transform: rotate(45deg) translateX(-2px);
+}
+
+/* Reservation Container Styles */
+.reservation-container {
+  background-color: #c8d8e7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: auto;
+  width: 80%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-row {
+  display: flex;
+  padding: 10px 15px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.header-cell {
+  display: flex;
+  align-items: center;
+}
+
+.name-header {
+  width: 20%;
+}
+
+.calculation-header {
+  width: 25%;
+  justify-content: center;
+}
+
+.remaining-header {
+  width: 20%;
+  justify-content: center;
+}
+
+.header-cell:last-child {
+  width: 26%;
+}
+
+.reservation-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: white;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.name-cell {
+  width: 20%;
+}
+
+.guest-name {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.calculation-cell {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.total-amount, .downpayment {
+  font-weight: 500;
+}
+
+.minus, .equals {
+  font-weight: bold;
+  color: #64748b;
+}
+
+.remaining-cell {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-cell {
+  width: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.balance-amount {
+  font-weight: 600;
+  font-size: 18px;
+  color: #ef4444;
+}
+
+.action-cell {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.verify-btn {
+  background-color: #10b981;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.verify-btn:hover {
+  background-color: #059669;
+}
+
+.decline-btn {
+  background-color: #ef4444;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.decline-btn:hover {
+  background-color: #dc2626;
+}
+.verify-btn,
+.decline-btn {
+  font-size: 14px;
+  padding: 6px 12px; /* smaller padding */
+  border-radius: 6px;
+  min-width: 110px;
+  text-align: center;
+}
