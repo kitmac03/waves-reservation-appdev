@@ -10,7 +10,6 @@ use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\EmptyyController;
-use App\Http\Controllers\EmptyyController;
 use App\Http\Controllers\Customer\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
@@ -45,7 +44,6 @@ Route::middleware('auth')->group(function () {
     ->name('profile.edit');
     Route::patch('customer/profile/{id}/update', [ProfileController::class, 'update_profile'])
     ->name('profile.update');
-    Route::get('customer/reservation-records', [ReservationController::class, 'view_reservations'])
     Route::get('customer/reservation-records', [ReservationController::class, 'view_reservations'])
     ->name('customer.reservation.records');
     Route::get('customer/balance', [ReservationController::class, 'view_balance'])

@@ -7,7 +7,6 @@ use App\Models\Reservation;
 use App\Models\ReservedAmenity;
 use App\Models\Amenities;
 use App\Models\DownPayment;
-use App\Models\DownPayment;
 use App\Models\Bill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
