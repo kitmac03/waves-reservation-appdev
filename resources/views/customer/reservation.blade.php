@@ -106,7 +106,7 @@
             <h2>Enjoy Your Vacation</h2>
             <p>7:00 AM - 9:00 PM</p>
             @if(session('success'))
-                <div style="color: green;">{{ session('success') }}</div>
+                <div style="text-xs color: green;">{{ session('success') }}</div>
             @endif
             <form action="{{ route('reservation.store') }}" method="POST" onsubmit="return validateSelection()">
                 @csrf

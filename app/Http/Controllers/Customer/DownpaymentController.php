@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\DownPayment;
+use App\Models\Balance;
 use App\Models\Bill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,13 +15,17 @@ class DownpaymentController extends Controller
 {
     public function show(Reservation $reservation)
     {
-        // Eager load relationships and fetch bill
-        $reservation->load('reservedAmenities.amenity', 'bills');
+        // Eager load bill (singular), not bills (plural)
+        $reservation->load('reservedAmenities.amenity', 'bill');
 
-        // Fetch the bill using the res_num (foreign key)
-        $bill = Bill::where('res_num', $reservation->id)->first();
+        // Access the bill directly from the relationship
+        $bill = $reservation->bill;
 
-        return view('customer.downpayment', compact('reservation'));
+        if (!$bill) {
+            return back()->withErrors(['bill' => 'No billing information found. Please contact support.']);
+        }
+
+        return view('customer.downpayment', compact('reservation', 'bill'));
     }
 
     public function store(Request $request, $reservationId)
@@ -31,33 +36,39 @@ class DownpaymentController extends Controller
             'payment_proof' => 'required|image|max:2048',
         ]);
 
-        // Get the reservation with amenities
-        $reservation = Reservation::with('reservedAmenities.amenity')->findOrFail($reservationId);
-
-        // Get the bill for the reservation
-        $bill = Bill::where('res_num', $reservation->id)->first();
+        // Get the reservation with its bill
+        $reservation = Reservation::with('reservedAmenities.amenity', 'bill')->findOrFail($reservationId);
+        $bill = $reservation->bill;
 
         if (!$bill) {
             return back()->withErrors(['bill' => 'No billing information found. Please contact support.']);
         }
 
-        // Calculate 50% downpayment
-        $downpaymentAmount = $bill->grand_total * 0.5;
 
         // Store the uploaded image proof
         $imagePath = $request->file('payment_proof')->store('proofs', 'public');
 
-        // Save the downpayment
-        DownPayment::create([
+        // Create the new downpayment
+        $downpayment = DownPayment::create([
             'id' => Str::uuid(),
             'res_num' => $reservation->id,
-            'amount' => $downpaymentAmount,
+            'bill_id' => $bill->id,
+            'amount' => null,
             'ref_num' => $request->ref_number,
             'img_proof' => $imagePath,
             'date' => now(),
             'status' => 'pending',
             'verified_by' => null,
         ]);
+
+        // Update or create the balance record
+        $existingBalance = Balance::where('bill_id', $bill->id)->first();
+
+        if ($existingBalance) {
+            $existingBalance->update([
+                'dp_id' => $downpayment->id,
+            ]);
+        }
 
         return redirect()->route('customer.reservation')->with('success', 'Downpayment submitted successfully!');
     }

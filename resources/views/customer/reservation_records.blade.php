@@ -7,6 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>WAVES Beach Resort</title>
     <link rel="stylesheet" href="{{ asset('css/reservation_records.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jaldi&family=Allura&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
@@ -64,65 +68,112 @@
         <div class="reservations">
             <div class="reservation-column">
                 <h4>Cancelled</h4>
-                @foreach($cancelledReservations as $reservation)
-                    <div class="reservation-item" style="border-left: 5px solid red;">
-                        <strong>#{{ $reservation->id }}</strong><br>
-                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
-                    </div>
+                @foreach ($cancelledReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+                                @php
+                                    $date = new DateTime($reservation->date ?? now());
+                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+                                    $statusColor = match ($reservation->status) {
+                                        'pending' => 'orange',
+                                        'verified' => 'green',
+                                        'invalid', 'cancelled' => 'red',
+                                        'completed' => 'gray',
+                                        default => 'black',
+                                    };
+                                @endphp
+                                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
+                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
+                                    data-date="{{ $reservation->date }}" data-start="{{ $reservation->startTime }}"
+                                    data-end="{{ $reservation->endTime }}" data-status="{{ $reservation->status }}"
+                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+                                    <strong>#{{ $reservation->id }}</strong><br>
+                                    {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                                </div>
                 @endforeach
             </div>
+
             <div class="reservation-column">
-                <h4>Invalid</h4>
-                @foreach($invalidReservations as $reservation)
-                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
-                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
-                        style="border-left: 5px solid red; cursor: pointer;">
-                        <strong>#{{ $reservation->id }}</strong><br>
-                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
-                    </div>
+                <h4>invalid</h4>
+                @foreach ($invalidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+                                @php
+                                    $date = new DateTime($reservation->date ?? now());
+                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+                                    $statusColor = match ($reservation->status) {
+                                        'pending' => 'orange',
+                                        'verified' => 'green',
+                                        'invalid', 'cancelled' => 'red',
+                                        'completed' => 'gray',
+                                        default => 'black',
+                                    };
+                                @endphp
+                                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
+                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
+                                    data-date="{{ $reservation->date }}" data-start="{{ $reservation->startTime }}"
+                                    data-end="{{ $reservation->endTime }}" data-status="{{ $reservation->status }}"
+                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+                                    <strong>#{{ $reservation->id }}</strong><br>
+                                    {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                                </div>
                 @endforeach
             </div>
+
             <div class="reservation-column">
                 <h4>Current</h4>
-
-                @foreach($pendingReservations as $reservation)
-                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
-                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
-                        style="border-left: 5px solid orange; cursor: pointer;">
-                        <strong>#{{ $reservation->id }}</strong><br>
-                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
-                    </div>
-                @endforeach
-
-                @foreach($pendingReservationsWithDP as $reservation)
-                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
-                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
-                        style="border-left: 5px solid orange; cursor: pointer;">
-                        <strong>#{{ $reservation->id }}</strong><br>
-                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
-                    </div>
-                @endforeach
-
-                @foreach($verifiedReservations as $reservation)
-                    <div class="reservation-item" data-id="{{ $reservation->id }}" data-date="{{ $reservation->date }}"
-                        data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
-                        style="border-left: 5px solid green; cursor: pointer;">
-                        <strong>#{{ $reservation->id }}</strong><br>
-                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
-                    </div>
+                @foreach ($currentReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+                                @php
+                                    $date = new DateTime($reservation->date ?? now());
+                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+                                    $statusColor = match ($reservation->status) {
+                                        'pending' => 'orange',
+                                        'verified' => 'green',
+                                        'invalid', 'cancelled' => 'red',
+                                        'completed' => 'gray',
+                                        default => 'black',
+                                    };
+                                @endphp
+                                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
+                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
+                                    data-date="{{ $reservation->date }}" data-start="{{ $reservation->startTime }}"
+                                    data-end="{{ $reservation->endTime }}" data-status="{{ $reservation->status }}"
+                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+                                    <strong>#{{ $reservation->id }}</strong><br>
+                                    {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                                </div>
                 @endforeach
             </div>
-
 
             <div class="reservation-column">
-                <h4>Past</h4>
-                @foreach($completedReservations as $reservation)
-                    <div class="reservation-item" style="border-left: 5px solid gray;">
-                        <strong>#{{ $reservation->id }}</strong><br>
-                        {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
-                    </div>
+                <h4>Completed</h4>
+                @foreach ($completedReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+                                @php
+                                    $date = new DateTime($reservation->date ?? now());
+                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+                                    $statusColor = match ($reservation->status) {
+                                        'pending' => 'orange',
+                                        'verified' => 'green',
+                                        'invalid', 'cancelled' => 'red',
+                                        'completed' => 'gray',
+                                        default => 'black',
+                                    };
+                                @endphp
+                                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
+                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
+                                    data-date="{{ $reservation->date }}" data-start="{{ $reservation->startTime }}"
+                                    data-end="{{ $reservation->endTime }}" data-status="{{ $reservation->status }}"
+                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+                                    <strong>#{{ $reservation->customer->name }}</strong><br>
+                                    {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
+                                </div>
                 @endforeach
             </div>
+
         </div>
     </div>
 </div>
@@ -136,8 +187,10 @@
         <div class="menu">
             <!-- Add any necessary menu items here -->
         </div>
-        <div class="dropdown-menu hidden">
+        <div class="dropdown-menu hidden text-xs">
             <button class="edit-reservation">Edit Reservation</button>
+            <hr>
+            <button class="pay-reservation">Pay</button>
             <hr>
             <button class="cancel-reservation">Cancel Reservation</button>
         </div>
@@ -148,20 +201,17 @@
 
             <div class="r-details">
                 <p>
-                    <strong>#<span class="reservation-id"></span></strong>
-                    <span class="verified {{ $reservation->status === 'verified' ? 'verified' : 'pending' }}">
-                        {{ $reservation->status }}
-                    </span>
+                    <strong><span id="name" class="reservation-id"></span></strong>
+                    <span id="status" class="reservation-status"></span>
                 </p>
 
-                <p><span class="reservation-date"></span></p>
-                <p><span class="reservation-start"></span></p>
-                <!-- Add dynamic cottage and table details -->
-                <p><span class="cottage-type"></span> - <strong><span class="cottage-price"></span></strong></p>
-                <p><span class="table-type"></span> - <strong><span class="table-price"></span></strong></p>
+                <p><span id="startTime"></span> - <span id="endTime"></span></p>
+
+                <ul id="modalAmenities"></ul>
                 <hr>
-                <p><strong>Total: <span class="total-price"></span></strong></p>
-                <p><strong>Paid: <span class="down-payment"></span></strong></p>
+                <p><strong>Total: <span id="grandTotal"></span></strong></p>
+                <p><strong>Paid Amount: <span id="paidAmount"></span></strong></p>
+                <p><strong>Balance: <span id="balance"></span></strong></p>
             </div>
 
         </div>
@@ -203,98 +253,111 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const reservationItems = document.querySelectorAll(".reservation-item");
+        const amenities = @json($allReservations->values()->all());
 
         reservationItems.forEach(item => {
             item.addEventListener("click", function () {
-                const reservationId = item.getAttribute("data-id");
+                var reservationId = item.getAttribute("data-id");
+                const reservationName = item.getAttribute("data-name");
+                const reservationpaidAmount = item.getAttribute("data-paidAmount");
+                const reservationgrandTotal = item.getAttribute("data-total");
+                const reservationbalance = item.getAttribute("data-balance");
                 const reservationDate = item.getAttribute("data-date");
                 const reservationStart = item.getAttribute("data-start");
                 const reservationEnd = item.getAttribute("data-end");
 
-                // Populate the reservation details modal with the selected reservation data
+                const reservationStatus = item.getAttribute("data-status");
+                const statusElement = document.getElementById("status");
+
                 document.querySelector(".reservation-id").textContent = reservationId;
-                document.querySelector(".reservation-date").textContent = reservationDate;
-                document.querySelector(".reservation-start").textContent = reservationStart;
 
-                // Fetch the reservations data passed by the controller (pending + verified)
-                const reservations = @json($pendingReservations->merge($pendingReservationsWithDP)->merge($verifiedReservations));
+                console.log("Reservation ID:", reservationId);
 
-                // Find the selected reservation data based on reservationId
-                const selectedReservation = reservations.find(reservation => reservation.id == reservationId);
+                if (statusElement) {
+                    // Capitalize first letter
+                    const capitalizedStatus = reservationStatus.charAt(0).toUpperCase() + reservationStatus.slice(1);
+                    statusElement.textContent = capitalizedStatus;
 
-                // If the reservation is not found, handle the error
-                if (!selectedReservation) {
-                    console.error("Reservation not found!");
-                    return;
+                    // Reset class/style
+                    statusElement.className = "reservation-status";
+
+                    // Apply color
+                    switch (reservationStatus) {
+                        case "pending":
+                            statusElement.style.color = "orange";
+                            break;
+                        case "verified":
+                            statusElement.style.color = "green";
+                            break;
+                        case "invalid":
+                        case "cancelled":
+                            statusElement.style.color = "red";
+                            break;
+                        case "completed":
+                            statusElement.style.color = "gray";
+                            break;
+                        default:
+                            statusElement.style.color = "black";
+                    }
                 }
 
-                // Initialize variables to store cottage and table information
-                let cottageType = '';
-                let cottagePrice = '';
-                let tableType = '';
-                let tablePrice = '';
+                document.getElementById("name").textContent = reservationId || '';
+                document.getElementById("date").textContent = reservationDate || '';
+                document.getElementById("grandTotal").textContent = `Total: ₱${reservationgrandTotal || 0}`;
+                document.getElementById("paidAmount").textContent = `Paid Amount: ₱${reservationpaidAmount || 0}`;
+                document.getElementById("balance").textContent = `Balance: ₱${reservationbalance || 0}`;
+                document.getElementById("startTime").textContent = reservationStart || '';
+                document.getElementById("endTime").textContent = reservationEnd || '';
+                console.log(reservationpaidAmount, reservationgrandTotal, reservationbalance);
 
-                // Iterate through reserved amenities and fetch relevant data
-                selectedReservation.reserved_amenities.forEach(amenity => {
-                    if (amenity.amenity.type === 'cottage') {
-                        cottageType = amenity.amenity.name;
-                        cottagePrice = amenity.amenity.price;
-                    }
-                    if (amenity.amenity.type === 'table') {
-                        tableType = amenity.amenity.name;
-                        tablePrice = amenity.amenity.price;
-                    }
+                const selectedReservation = amenities.find(r => r.id == reservationId);
+
+                if (selectedReservation) {
+                    let amenitiesHtml = '';
+
+                    // Iterate through reserved amenities and fetch relevant data
+                    selectedReservation.reserved_amenities.forEach(amenity => {
+                        const amenityName = amenity.amenity.name;
+                        const amenityPrice = amenity.amenity.price;
+                        amenitiesHtml += `<li>${amenityName} - ₱${parseFloat(amenityPrice).toFixed(2)}</li>`;
+                    });
+
+                    document.getElementById("modalAmenities").innerHTML = amenitiesHtml;
+                }
+
+                document.querySelector(".reservation-details").classList.remove("hidden");
+
+                // Attach click event to Pay button
+                document.querySelector(".pay-reservation").addEventListener("click", function () {
+                    // Redirect to downpayment page with reservationId as a URL parameter
+                    const url = `/customer/downpayment/${reservationId}`; // Make sure the URL includes the customer prefix
+                    window.location.href = url;
                 });
-
-                // Populate the modal with the fetched amenities data
-                document.querySelector(".cottage-type").textContent = cottageType;
-                document.querySelector(".cottage-price").textContent = cottagePrice;
-                document.querySelector(".table-type").textContent = tableType;
-                document.querySelector(".table-price").textContent = tablePrice;
-
-                // Calculate total and down payment
-                const totalPrice = parseFloat(cottagePrice || 0) + parseFloat(tablePrice || 0);
-                
-                let downPaymentAmount = 0;
-
-                if (selectedReservation.down_payment && selectedReservation.down_payment.amount) {
-                    downPaymentAmount = parseFloat(selectedReservation.down_payment.amount);
-                }
-
-                document.querySelector(".total-price").textContent = totalPrice.toFixed(2); // Ensure proper formatting
-                document.querySelector(".down-payment").textContent = downPaymentAmount.toFixed(2);
-
-                // Dynamically set the reservation status class and status text
-                const statusElement = document.querySelector(".verified");
+                document.querySelector(".ellipsis-btn").classList.add("hidden");
 
                 const editBtn = document.querySelector(".edit-reservation");
                 const cancelBtn = document.querySelector(".cancel-reservation");
+                const payBtn = document.querySelector(".pay-reservation");
 
-                // Show/hide dropdown buttons based on reservation status and downpayment
-                if (selectedReservation.status === 'verified') {
-                    editBtn.classList.add("hidden");   // Can't edit if verified or has downpayment
-                    cancelBtn.classList.remove("hidden");
-                    statusElement.classList.add("verified"); // Apply the verified class
-                    statusElement.classList.remove("pending");
-                    statusElement.textContent = "Verified";
-                } else if (selectedReservation.status === 'pending' && !selectedReservation.down_payment) {
+                if (selectedReservation.status === 'pending') {
+                    payBtn.classList.remove("hidden");
                     editBtn.classList.remove("hidden");
                     cancelBtn.classList.remove("hidden");
-                    statusElement.classList.add("pending"); // Apply the pending class
-                    statusElement.classList.remove("verified");
-                    statusElement.textContent = "Pending";
-                    statusElement.classList.add("verified"); // STUPID AHH LINE???
-                } else if (selectedReservation.status === 'pending' && selectedReservation.down_payment) {
-                    editBtn.classList.add("hidden");   // Can't edit if verified or has downpayment
-                    cancelBtn.classList.remove("hidden");
-                    statusElement.classList.add("pending"); // Apply the pending class
-                    statusElement.classList.remove("verified");
-                    statusElement.textContent = "Pending";
-                    statusElement.classList.add("verified"); // STUPID AHH LINE???
+
+                    if (selectedReservation.status === 'pending' && selectedReservation.down_payment) {
+                        editBtn.classList.add("hidden");
+                        payBtn.classList.add("hidden");
+                        cancelBtn.classList.remove("hidden");
+                    }
+                    document.querySelector(".ellipsis-btn").classList.remove("hidden");
                 }
 
-
-                document.querySelector(".ellipsis-btn").classList.remove("hidden");
+                if (selectedReservation.status === 'verified') {
+                    document.querySelector(".ellipsis-btn").classList.remove("hidden");
+                    editBtn.classList.add("hidden");   // Can't edit if verified or has downpayment
+                    cancelBtn.classList.remove("hidden");
+                    payBtn.classList.add("hidden");
+                }
 
 
                 // Show the modal
@@ -335,6 +398,7 @@
         });
 
         // Cancel reservation with confirmation
+        // Cancel reservation with confirmation
         const cancelButtons = document.querySelectorAll(".cancel-reservation");
 
         cancelButtons.forEach(button => {
@@ -348,7 +412,7 @@
                             "Content-Type": "application/json",
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         },
-                        body: JSON.stringify({ id: reservationId })
+                        body: JSON.stringify({ id: this.reservationId })
                     })
                         .then(response => {
                             if (response.ok) {
@@ -365,6 +429,7 @@
                 }
             });
         });
+
 
 
         // Close the reservation details modal

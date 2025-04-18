@@ -15,57 +15,6 @@ class ProfileController extends Controller
         return view('customer.profile', compact('customer'));
     }
 
-    public function view_reservations()
-    {
-        $customer = auth()->user();
-
-        // Pending reservations WITHOUT downpayment
-        $pendingReservations = $customer->reservations()
-            ->where('status', 'pending')
-            ->whereDoesntHave('downPayment') // exclude those that have a downpayment
-            ->with(['reservedAmenities.amenity', 'downPayment'])
-            ->get();
-
-
-        // Pending reservations that have a downpayment
-        $pendingReservationsWithDP = $customer->reservations()
-            ->where('status', 'pending')
-            ->whereHas('downPayment') // make sure the relationship is defined in the Reservation model
-            ->with(['reservedAmenities.amenity', 'downPayment']) // include the downpayment data
-            ->get();
-
-        $cancelledReservations = $customer->reservations()
-            ->where('status', 'cancelled')
-            ->with('reservedAmenities.amenity')
-            ->get();
-
-        $completedReservations = $customer->reservations()
-            ->where('status', 'completed')
-            ->with('reservedAmenities.amenity')
-            ->get();
-
-        $invalidReservations = $customer->reservations()
-            ->where('status', 'invalid')
-            ->with('reservedAmenities.amenity')
-            ->get();
-
-        $verifiedReservations = $customer->reservations()
-            ->where('status', 'verified')
-            ->whereHas('downPayment')
-            ->with(['reservedAmenities.amenity', 'downPayment'])
-            ->get();
-
-        return view('customer.reservation_records', compact(
-            'customer',
-            'pendingReservations',
-            'pendingReservationsWithDP',
-            'cancelledReservations',
-            'completedReservations',
-            'invalidReservations',
-            'verifiedReservations'
-        ));
-    }
-
 
     public function edit_profile($id)
     {
@@ -90,4 +39,5 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }
+
 }
