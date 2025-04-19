@@ -29,7 +29,7 @@
             </a>
             <a href="ameneties.html">
                 <button class="ameneties" id="ameneties">
-                    <i class="material-icons nav-icons">holiday_village</i> Amenities
+                    <i class="material-icons nav-icons">holiday_village</i> Ameneties
                 </button>
             </a>
             <a href="reservations.html">
