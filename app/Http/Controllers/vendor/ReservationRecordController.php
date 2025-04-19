@@ -88,7 +88,7 @@ class ReservationRecordController extends Controller
 
         $currentReservations = $pendingReservations->merge($verifiedReservations);
 
-        return view('admin.vendor.reservation_records', compact(
+        return view('admin.vendor.reservations.reservation_records', compact(
             'pendingReservations',
             'cancelledReservations',
             'completedReservations',

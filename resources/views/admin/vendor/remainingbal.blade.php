@@ -24,8 +24,8 @@
                 </button>
             </a>
             <a href="{{ url('ameneties') }}">
-                <button class="ameneties" id="ameneties">
-                    <i class="material-icons nav-icons">holiday_village</i> Ameneties
+                <button class="amenities" id="amenities">
+                    <i class="material-icons nav-icons">holiday_village</i> Amenities
                 </button>
             </a>
             <a href="{{ url('reservations') }}">

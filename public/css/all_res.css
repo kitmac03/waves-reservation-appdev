@@ -1,0 +1,290 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+  display: flex;
+  flex-direction: column;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/******* NAVIGATION BAR STYLE ***********/
+
+.navbar {
+  background-color: #002044;
+
+  height: 10vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 1000;
+}
+
+/******* LEFT-SECTION NAVIGATION BAR STYLE ***********/
+
+.left-side-nav {
+  width: fit-content;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.reservations {
+  background-color: white;
+  color: #002044;
+  font: 400 16px poppins;
+  cursor: pointer;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px 8px 22px;
+  margin: 12px;
+
+  border: 0px solid;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+}
+.nav-icons {
+  margin-right: 8px;
+}
+.ameneties, .dashboard {
+  background-color:#002044;
+  color: white;
+  font: 400 16px poppins;
+  cursor: pointer;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px 8px 22px;
+  margin: 12px;
+
+  border: 0px solid;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+
+  transition: color, background-color, 0.15s;
+}
+
+/******* RIGHT-SECTION NAVIGATION BAR STYLE ***********/
+
+.right-side-nav {
+  width: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profile {
+  background-color: #002044;
+  border: 0 solid black;
+  cursor: pointer;
+}
+
+.inactive {
+  background-color: #002044;
+  color: white;
+}
+.active {
+  background-color: white;
+  color: #002044;
+}
+
+/***************** MAIN STYLE SECTION *******************/
+
+.main {
+  margin-top: 10vh;
+  height: 90vh;
+
+}
+
+ /* HEADER */
+ .header {
+  padding: 30px 30px;
+
+  display: flex;
+  align-items: center;
+}
+.back-section {
+  flex: 1;
+}
+
+.header a {
+  text-decoration: none;
+  color: #002044;
+  font: 400 14px poppins;
+}
+
+.title-section {
+  font-size: 36px;
+  font: 700 50px poppins;
+}
+
+/* STATUS LEGEND */
+.legend-section {
+  font: 400 12px poppins;
+
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.legend span {
+  margin: 0 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 1px 0 12px;
+  text-align: center;
+}
+
+.verified { background-color: #6bd96b; }
+.pending { background-color: #ffe564; }
+.cancelled { background-color: #ff6666; }
+.completed { background-color: #999999; }
+
+/* RESERVATION COLUMNS */
+.reservations-container {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 0 30px 30px;
+
+  height: 65vh;
+}
+
+.column {
+  background-color: #eaf0f6;
+  padding: 20px;
+  border-radius: 10px;
+  flex: 1;
+  min-width: 250px;
+  height: 100%;
+}
+
+.column h2 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.reservation {
+  border: 2px solid;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 10px 0;
+  background-color: white;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.cancelled-res { border-color: #ff3333; color: #ff3333; }
+.verified-res { border-color: #6bd96b; color: #4caf50; }
+.pending-res { border-color: #ffc107; color: #e69500; }
+.completed-res { border-color: #888888; color: #333333; }
+
+.reservation .details {
+  flex: 1;
+  cursor: pointer;
+}
+
+.reservation .time {
+  white-space: nowrap;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+/********** RESERVATION MODAL/DIALOG ***********/
+
+.reservation-modal {
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  outline: none;
+
+  height: 31vh;
+  width: 36vw;
+
+  padding: 6px;
+}
+
+.dialog-container {
+  height: 100%;
+  width: 100%;
+}
+.dialog-header {
+  width: 100%;
+  height: 4vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dialog-head-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.id, .name {
+  font: 400 18px poppins;
+}
+.status {
+  font: 400 20px poppins;
+  color: green;
+}
+.close-icon, .more-icon {
+  cursor: pointer;
+}
+.dialog-details {
+  font: 400 18px poppins;
+}
+.dialog-figures {
+  font: 600 18px poppins;
+}
