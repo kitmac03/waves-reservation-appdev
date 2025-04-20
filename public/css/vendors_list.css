@@ -1,0 +1,237 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  a, p, hr, input {
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Container */
+  .container {
+    display: flex;
+    height: 100vh;
+    background-color: #e6f5ff;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 20%;
+    background-color: #d1e8f3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .back-to-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font: 400 16px poppins;
+    cursor: pointer;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-family: poppins;
+    color: #333;
+  }
+  .profile p {
+    font-size: 20px;
+  }
+  .profile-icon .material-icons {
+    font-size: 50px;
+  }
+  
+  .menu {
+    font: 400 16px poppins;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-item {
+    padding: 10px 15px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #333;
+  }
+  
+  .menu-item.active {
+    background-color: #002044;
+    color: white;
+  }
+  
+  .notification {
+    background-color: red;
+    color: white;
+    font: 600 10px poppins;
+    padding: 4px 10px;
+    border-radius: 50%;
+    margin-left: 5px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    margin: 50px auto;
+    width: 80%;
+    max-width: 900px;
+  }
+  
+  .list-table {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .head-title {
+    font: 700 45px poppins;
+    color: #002b54;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  td {
+    font: 400 16px poppins;
+  }
+  
+  th {
+    font: 600 18px poppins;
+  }
+  
+  .role {
+    padding: 8px;
+  }
+  
+  .change-button {
+    background-color: #87ceeb;
+    color: #002b54;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font: 500 12px poppins;
+  }
+  
+  .change-button:hover {
+    background-color: #5da8d1;
+  }
+  
+  .change-admin-modal {
+    border: none;
+    border-radius: 18px;
+  }
+  .dialog-container {
+    padding: 8px 12px;
+  
+    width: 25vw;
+    height:35vh;
+  }
+  .dialog-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .dialog-title {
+    font: 600 35px poppins;
+    color: #002044;
+  }
+  b {
+    font: 600 18px poppins;
+  }
+  
+  .name, .email, .contact, .select-role {
+    font: 400 18px poppins;
+  }
+  .select-role {
+    border-radius: 12px;
+    padding: 4px;
+    width: 70%;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: right;
+    gap: 4px;
+  }
+  .cancel-button, .save-button {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    font: 400 14px poppins;
+  }
+  .cancel-button {
+    border: none;
+    background: none;
+    color: red;
+  }
+  .save-button {
+    color: white;
+    background: #002044;
+  }
+  
+  .confirmation-modal {
+    height: 25vh;
+    width: 30vw;
+  
+    border: none;
+    border-radius: 12px;
+  }
+  .confirm-modal-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .confirm-modal-heading {
+    font: 700 18px poppins;
+  }
+  .confirm-modal-text {
+    font: 400 16px poppins;
+    padding: 6px 30px 12px 30px;
+  }
+  .confirm-button-container {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+  
+    width: 100%;
+  }
+  .exit-button {
+    color: red;
+    font: 400 16px poppins;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  .confirm-button {
+    background-color: #002044;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 20px 4px 20px;
+    font: 400 16px poppins;
+    cursor: pointer;
+  }
