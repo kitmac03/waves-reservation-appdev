@@ -100,37 +100,40 @@
             document.getElementById("date").setAttribute("min", today);
             document.getElementById("date").value = today;
 
-            // Handle dropdown visibility
-				document.querySelectorAll('.dropdown-btn').forEach(function (btn) {
-					btn.addEventListener('click', function () {
-						const dropdownMenu = this.nextElementSibling;
+            // Fetch and update available amenities for the default date (today)
+            fetchAvailableAmenities(today);
 
-						if (dropdownMenu && dropdownMenu.classList) {
-							// Toggle visibility by checking the current state
-							if (dropdownMenu.style.display === "none" || dropdownMenu.classList.contains('hidden')) {
-									dropdownMenu.style.display = "block"; // Show the dropdown
-									dropdownMenu.classList.remove('hidden');
-									console.log("Dropdown toggled: visible");
-							} else {
-									dropdownMenu.style.display = "none"; // Hide the dropdown
-									dropdownMenu.classList.add('hidden');
-									console.log("Dropdown toggled: hidden");
-							}
-						} else {
-							console.warn("No dropdown menu found for:", this);
-						}
-					});
-				});
+            // Handle dropdown visibility
+            document.querySelectorAll('.dropdown-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const dropdownMenu = this.nextElementSibling;
+
+                    if (dropdownMenu && dropdownMenu.classList) {
+                        // Toggle visibility by checking the current state
+                        if (dropdownMenu.style.display === "none" || dropdownMenu.classList.contains('hidden')) {
+                            dropdownMenu.style.display = "block"; // Show the dropdown
+                            dropdownMenu.classList.remove('hidden');
+                            console.log("Dropdown toggled: visible");
+                        } else {
+                            dropdownMenu.style.display = "none"; // Hide the dropdown
+                            dropdownMenu.classList.add('hidden');
+                            console.log("Dropdown toggled: hidden");
+                        }
+                    } else {
+                        console.warn("No dropdown menu found for:", this);
+                    }
+                });
+            });
 
             // Close dropdown if clicked outside
             document.addEventListener('click', function (event) {
-					document.querySelectorAll('.dropdown').forEach(function (dropdown) {
-						const dropdownMenu = dropdown.querySelector('.dropdown-menu');
-						if (!dropdown.contains(event.target) && dropdownMenu) {
-								dropdownMenu.classList.add('hidden');
-						}
-					});
-				});
+                document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+                    const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+                    if (!dropdown.contains(event.target) && dropdownMenu) {
+                        dropdownMenu.classList.add('hidden');
+                    }
+                });
+            });
 
             // Update minimum end time based on selected start time
             document.getElementById("startTime").addEventListener("change", function () {
@@ -141,20 +144,24 @@
             // Fetch and update available amenities when a date is selected
             document.getElementById("date").addEventListener("change", function () {
                 let selectedDate = this.value;
+                fetchAvailableAmenities(selectedDate);
+            });
 
-                fetch(`/customer/check-availability?date=${selectedDate}`)
+            // Function to fetch and update available cottages and tables
+            function fetchAvailableAmenities(date) {
+                fetch(`/customer/check-availability?date=${date}`)
                     .then(response => response.json())
                     .then(data => {
                         updateAvailableAmenities(data.availableCottages, data.availableTables);
                     })
                     .catch(error => {
                         console.error("Error fetching availability data:", error);
+                        updateAvailableAmenities([], []); // Clear dropdowns on error
                     });
-            });
+            }
 
             // Function to update the available cottages and tables dynamically
             function updateAvailableAmenities(cottages, tables) {
-
                 // Check if cottages and tables are arrays
                 if (!Array.isArray(cottages) || !Array.isArray(tables)) {
                     return;
@@ -164,28 +171,36 @@
                 let cottageMenu = document.getElementById("cottage-menu");
                 cottageMenu.innerHTML = ''; // Clear existing items
 
-                cottages.forEach(cottage => {
-                    let label = document.createElement('label');
-                    label.innerHTML = `
-                <input type="checkbox" name="cottages[]" value="${cottage.id}" id="cottage-${cottage.id}">
-                ${cottage.name} - ₱${cottage.price.toFixed(2)}
-                `;
-                    cottageMenu.appendChild(label);
-                });
+                if (cottages.length > 0) {
+                    cottages.forEach(cottage => {
+                        let label = document.createElement('label');
+                        label.innerHTML = `
+                            <input type="checkbox" name="cottages[]" value="${cottage.id}" id="cottage-${cottage.id}">
+                            ${cottage.name} - ₱${cottage.price.toFixed(2)}
+                        `;
+                        cottageMenu.appendChild(label);
+                    });
+                } else {
+                    cottageMenu.innerHTML = '<p class="text-gray-500 px-4 py-2">No cottages available</p>';
+                }
 
                 // Update Table Dropdown
                 let tableMenu = document.getElementById("table-menu");
                 tableMenu.innerHTML = ''; // Clear existing items
 
-                tables.forEach(table => {
-                    let label = document.createElement('label');
-                    label.innerHTML = `
-                <input type="checkbox" name="tables[]" value="${table.id}" id="table-${table.id}">
-                ${table.name} - ₱${table.price.toFixed(2)}
-                `;
-                    tableMenu.appendChild(label);
-                });
+                if (tables.length > 0) {
+                    tables.forEach(table => {
+                        let label = document.createElement('label');
+                        label.innerHTML = `
+                            <input type="checkbox" name="tables[]" value="${table.id}" id="table-${table.id}">
+                            ${table.name} - ₱${table.price.toFixed(2)}
+                        `;
+                        tableMenu.appendChild(label);
+                    });
+                } else {
+                    tableMenu.innerHTML = '<p class="text-gray-500 px-4 py-2">No tables available</p>';
                 }
+            }
 
             // Validation before form submission
             function validateSelection() {
