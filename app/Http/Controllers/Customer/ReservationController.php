@@ -192,31 +192,37 @@ class ReservationController extends Controller
 
     public function checkAvailability(Request $request)
     {
-        $date = $request->query('date');
-
-        // Fetch the reserved cottages and tables for the selected date
-        $reservedCottages = ReservedAmenity::whereHas('reservation', function ($query) use ($date) {
-            $query->where('date', $date)->where('status', '!=', 'cancelled');
-        })->pluck('amenity_id')->toArray();
-
-        $reservedTables = ReservedAmenity::whereHas('reservation', function ($query) use ($date) {
-            $query->where('date', $date)->where('status', '!=', 'cancelled');
-        })->pluck('amenity_id')->toArray();
-
+        $date = $request->input('date');
+        $startTime = $request->input('startTime');
+        $endTime = $request->input('endTime');
+    
+        // Fetch all reserved amenities for the given date and overlapping time range
+        $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($query) use ($date, $startTime, $endTime) {
+            $query->where('date', $date)
+                  ->where(function ($query) use ($startTime, $endTime) {
+                      $query->whereBetween('startTime', [$startTime, $endTime])
+                            ->orWhereBetween('endTime', [$startTime, $endTime])
+                            ->orWhere(function ($query) use ($startTime, $endTime) {
+                                $query->where('startTime', '<=', $startTime)
+                                      ->where('endTime', '>=', $endTime);
+                            });
+                  });
+        })->pluck('amenity_id');
+    
         // Fetch available cottages and tables
         $availableCottages = Amenities::where('type', 'cottage')
-            ->where('is_active', 1)
-            ->whereNotIn('id', $reservedCottages)
+            ->where('is_active', true)
+            ->whereNotIn('id', $reservedAmenities)
             ->get();
-
+    
         $availableTables = Amenities::where('type', 'table')
-            ->where('is_active', 1)
-            ->whereNotIn('id', $reservedTables)
+            ->where('is_active', true)
+            ->whereNotIn('id', $reservedAmenities)
             ->get();
-
+    
         return response()->json([
-            'availableCottages' => $availableCottages->toArray(),
-            'availableTables' => $availableTables->toArray(),
+            'availableCottages' => $availableCottages,
+            'availableTables' => $availableTables,
         ]);
     }
 

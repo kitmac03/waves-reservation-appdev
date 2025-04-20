@@ -93,15 +93,55 @@
 @endsection
 
 @section('scripts')
-  <script>
+    <script>
+        // Validation before form submission
+        function validateSelection() {
+
+            const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
+            const tables = document.querySelectorAll('input[name="tables[]"]:checked');
+            const cottageChecked = cottages.length > 0;
+            const tableChecked = tables.length > 0;
+
+            if (!cottageChecked && !tableChecked) {
+                alert("Please select at least one Cottage or Table before submitting.");
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
         document.addEventListener("DOMContentLoaded", function () {
-            // Set the minimum date to today for the date input field
-            let today = new Date().toISOString().split('T')[0];
-            document.getElementById("date").setAttribute("min", today);
-            document.getElementById("date").value = today;
+            // Function to update the minimum date and start time dynamically
+            function updateDateAndTime() {
+                const now = new Date();
+                const currentDate = now.toISOString().split('T')[0];
+                const currentTime = now.toTimeString().split(' ')[0].slice(0, 5); // Get current time in HH:MM format
+
+                // Update the minimum date to today
+                const dateInput = document.getElementById("date");
+                dateInput.setAttribute("min", currentDate);
+
+                // If the selected date is in the past, reset it to today
+                if (!dateInput.value || dateInput.value < currentDate) {
+                    dateInput.value = currentDate;
+                }
+
+                // Update the minimum start time if the selected date is today
+                const startTimeInput = document.getElementById("startTime");
+                if (dateInput.value === currentDate) {
+                    startTimeInput.setAttribute("min", currentTime);
+                } else {
+                    startTimeInput.removeAttribute("min"); // Remove restriction for future dates
+                }
+            }
+
+            // Set the minimum date and start time on page load
+            updateDateAndTime();
+
+            // Update the date and time dynamically every minute
+            setInterval(updateDateAndTime, 60000); // Check every 60 seconds
 
             // Fetch and update available amenities for the default date (today)
-            fetchAvailableAmenities(today);
+            fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
 
             // Handle dropdown visibility
             document.querySelectorAll('.dropdown-btn').forEach(function (btn) {
@@ -113,14 +153,10 @@
                         if (dropdownMenu.style.display === "none" || dropdownMenu.classList.contains('hidden')) {
                             dropdownMenu.style.display = "block"; // Show the dropdown
                             dropdownMenu.classList.remove('hidden');
-                            console.log("Dropdown toggled: visible");
                         } else {
                             dropdownMenu.style.display = "none"; // Hide the dropdown
                             dropdownMenu.classList.add('hidden');
-                            console.log("Dropdown toggled: hidden");
                         }
-                    } else {
-                        console.warn("No dropdown menu found for:", this);
                     }
                 });
             });
@@ -139,17 +175,25 @@
             document.getElementById("startTime").addEventListener("change", function () {
                 let startTime = this.value;
                 document.getElementById("endTime").setAttribute("min", startTime);
+
+                // Fetch updated amenities based on the new start and end times
+                fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
+            });
+
+            document.getElementById("endTime").addEventListener("change", function () {
+                // Fetch updated amenities based on the new end time
+                fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
             });
 
             // Fetch and update available amenities when a date is selected
             document.getElementById("date").addEventListener("change", function () {
                 let selectedDate = this.value;
-                fetchAvailableAmenities(selectedDate);
+                fetchAvailableAmenities(selectedDate, getStartTime(), getEndTime());
             });
 
             // Function to fetch and update available cottages and tables
-            function fetchAvailableAmenities(date) {
-                fetch(`/customer/check-availability?date=${date}`)
+            function fetchAvailableAmenities(date, startTime, endTime) {
+                fetch(`/customer/check-availability?date=${date}&startTime=${startTime}&endTime=${endTime}`)
                     .then(response => response.json())
                     .then(data => {
                         updateAvailableAmenities(data.availableCottages, data.availableTables);
@@ -202,17 +246,19 @@
                 }
             }
 
-            // Validation before form submission
-            function validateSelection() {
-                const cottageChecked = document.querySelectorAll('input[name="cottages[]"]:checked').length > 0;
-                const tableChecked = document.querySelectorAll('input[name="tables[]"]:checked').length > 0;
+            // Helper function to get the selected date
+            function getSelectedDate() {
+                return document.getElementById("date").value;
+            }
 
-                if (!cottageChecked && !tableChecked) {
-                    alert("Please select at least one Cottage or Table before submitting.");
-                    return false;
-                }
+            // Helper function to get the selected start time
+            function getStartTime() {
+                return document.getElementById("startTime").value || "00:00";
+            }
 
-                return true;
+            // Helper function to get the selected end time
+            function getEndTime() {
+                return document.getElementById("endTime").value || "23:59";
             }
         });
   </script>
