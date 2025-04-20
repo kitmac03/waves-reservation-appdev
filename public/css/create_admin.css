@@ -1,0 +1,176 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  a, p, hr, input {
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Container */
+  .container {
+    display: flex;
+    height: 100vh;
+    background-color: #e6f5ff;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 20%;
+    background-color: #d1e8f3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .back-to-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font: 400 16px poppins;
+    cursor: pointer;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-family: poppins;
+    color: #333;
+  }
+  .profile p {
+    font-size: 20px;
+  }
+  .profile-icon .material-icons {
+    font-size: 50px;
+  }
+  
+  .menu {
+    font: 400 16px poppins;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-item {
+    padding: 10px 15px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #333;
+  }
+  
+  .menu-item.active {
+    background-color: #002044;
+    color: white;
+  }
+  
+  .notification {
+    background-color: red;
+    color: white;
+    font: 600 10px poppins;
+    padding: 4px 10px;
+    border-radius: 50%;
+    margin-left: 5px;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex-direction: column;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding-top: 20vh;
+    gap: 30px;
+  }
+  
+  .head-title {
+    color: #002044;
+    font: 700 50px poppins;
+    text-align: center;
+    line-height: 1;
+    width: 500px;
+  }
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 23vw;
+  }
+  
+  .name-input, .email-input, .password-input,
+  .contact-input, .select-role {
+    font: 400 18px poppins;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 6px;
+  }
+  
+  .button-container {
+    width: 23vw;
+    display: flex;
+    justify-content: right;
+  }
+  .create-button {
+    font: 400 16px poppins;
+    background-color: #002044;
+    color: white;
+    padding: 8px 12px 8px 12px;
+    border: none;
+    border-radius: 8px;
+  }
+  
+  .confirm-account-modal {
+    height: 25vh;
+    width: 30vw;
+    border: none;
+    border-radius: 12px;
+    left: 22%;
+  }
+  .confirm-account-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  .modal-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .modal-heading {
+    font: 700 18px poppins;
+  }
+  .modal-text {
+    font: 400 16px poppins;
+    padding: 6px 30px 12px 30px;
+  }
+  .modal-button-wrapper {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+  
+    width: 100%;
+  }
+  .cancel-button {
+    color: red;
+    font: 400 16px poppins;
+    border: none;
+    background: none;
+  }
+  .confirm-button {
+    background-color: #002044;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 20px 4px 20px;
+    font: 400 16px poppins;
+  }

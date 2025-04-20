@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\DownPayment;
-use App\Models\Bill;
 use App\Models\Balance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -108,7 +109,7 @@ class PaymentController extends Controller
     
             DB::commit();
     
-            return back()->with(['success' => 'Cash payment recorded successfully.']);
+            return redirect()->route('admin.vendor.reservation_calendar')->with(['success' => 'Cash payment recorded successfully.']);
     
         } catch (\Exception $e) {
             DB::rollBack();
@@ -118,7 +119,7 @@ class PaymentController extends Controller
 
     public function invalidPayment(Request $request)
     {
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
             'reservation_id' => 'required|exists:reservations,id',
             'dp_id' => 'required|exists:down_payment,id', 
             'bill_id' => 'required|exists:bills,id',

@@ -54,6 +54,6 @@ class AdminDashboardController extends Controller
 
     public function create_admin()
     {
-        return view('admin.manager.create_admin');
+        return view('admin.manager.profile.create_admin');
     }
 }

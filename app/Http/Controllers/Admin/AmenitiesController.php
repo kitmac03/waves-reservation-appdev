@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Amenities;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,13 +18,14 @@ class AmenitiesController extends Controller
         $cottages = Amenities::where('type', 'cottage')->get();
 
         $userId = Auth::id();
-        $user = \App\Models\Admin::find($userId);
+        $user = Admin::find($userId);
 
         if ($user->role == 'manager') {
             return view('admin.manager.amenities.cottages', compact('cottages'));
         } else if ($user->role == 'vendor') {
             return view('admin.vendor.amenities.cottages', compact('cottages'));
         }
+        return redirect()->route('login')->with('error', 'Unauthorized access.');
     }
 
     public function add_cottage(Request $request)
