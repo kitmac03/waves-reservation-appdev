@@ -15,7 +15,6 @@ class ProfileController extends Controller
         return view('customer.profile', compact('customer'));
     }
 
-
     public function edit_profile($id)
     {
         $customer = Customer::findOrFail($id);

@@ -14,8 +14,10 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="back-button">
-                <i class="fas fa-chevron-left"></i>
-                <span>Back to main</span>
+                <a href="{{ route('customer.reservation') }}" class="back-link">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>Back to main</span>
+                </a>
             </div>
 
             <div class="customer-profile">
@@ -32,11 +34,17 @@
                     <i class="fas fa-calendar-alt"></i>
                     <span>Reservation</span>
                 </a>
+                <!-- nag add kog button ani for acc balance -->
+
+                <a href="#"><i class="fas fa-wallet"></i> Account Balance</a>
             </div>
 
-            <button class="logout">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Log Out</span>
+            <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf <!-- CSRF Token for security -->
+            </form>
+
+            <button id="logoutButton" class="logout">
+                <i class="fas fa-sign-out-alt"></i> Log Out
             </button>
         </div>
 
