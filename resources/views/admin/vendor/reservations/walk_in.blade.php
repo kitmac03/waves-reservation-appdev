@@ -1,0 +1,204 @@
+@extends('admin.vendor.reservation')
+
+@section('styles')
+  <link rel="stylesheet" href="{{ asset('css/walkin.css') }}" />  
+@endsection
+
+@section('reservation-content')
+    <a href="{{ route('admin.vendor.reservation_calendar') }}" class="back-link">
+        <span class="chevron-left"></span> Back to Calendar
+    </a>
+    <h2 class="head-title">Walk-in Reservation</h2>
+
+    <section class="booking">
+      <form action="{{ route('admin.vendor.walk_in.store') }}" method="POST" class="booking-form" onsubmit="return validateSelection()">
+        @csrf
+        
+        <h2>Customer Reservation</h2>
+        <p>7:00 AM - 9:00 PM</p>
+
+        <div class="date-time-container">
+			<div>
+				<label for="customerName" class="payment-label">Customer Name:</label>
+				<input type="text" name="name" id="customerName" required>
+			 </div>
+			 <div>
+				<label for="customerContactNumber" class="payment-label">Contact number:</label>
+				<input type="tel" pattern="[0-9]{11}" name="number" id="customerContactNumber" placeholder="09123456789" required>
+			 </div>
+
+          <div class="reservation-date">
+            <label>Reservation Date:</label>
+            <input type="date" name="date" id="date" required>
+          </div>
+
+          <div class="start-end-time-container">
+            <div>
+              <label for="start-time">Start Time:</label>
+              <input class="px-4 py-2" type="time" name="startTime" id="startTime" required>
+            </div>
+            <div>
+              <label for="end-time">End Time:</label>
+              <input class="px-4 py-2" type="time" name="endTime" id="endTime" required>
+            </div>
+          </div>
+        </div>
+
+		  <div class="flex space-x-4 mb-4">
+
+			<!-- Cottage Dropdown -->
+			<div class="dropdown relative inline-block w-full">
+				 <button type="button" class="dropdown-btn w-full bg-white border border-gray-300 px-4 py-2 rounded shadow">
+					  Select Cottages
+				 </button>
+				 <div id="cottage-menu" class="dropdown-menu absolute z-10 mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded shadow hidden">
+					@if (isset($cottages))  
+						@foreach ($cottages as $cottage)
+								@if ($cottage->is_active)
+									<label for="cottage-{{ $cottage->id }}" class="flex items-center hover:bg-gray-100">
+										<input class="mr-2 w-4 h-4" type="checkbox" name="cottages[]" value="{{ $cottage->id }}" id="cottage-{{ $cottage->id }}">
+										{{ $cottage->name }} - ₱{{ number_format($cottage->price, 2) }}
+									</label>
+								@endif
+						@endforeach
+					  @endif
+				 </div>
+			</div>
+	  
+			<!-- Table Dropdown -->
+			<div class="dropdown relative inline-block w-full">
+				 <button type="button" class="dropdown-btn w-full bg-white border border-gray-300 px-4 py-2 rounded shadow">
+					  Select Tables
+				 </button>
+				 <div id="table-menu" class="dropdown-menu absolute z-10 mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded shadow hidden">
+					@if (isset($tables))    
+						@foreach ($tables as $table)
+								@if ($table->is_active)
+									<label for="table-{{ $table->id }}" class="flex items-center px-4 py-2 hover:bg-gray-100">
+										<input type="checkbox" name="tables[]" value="{{ $table->id }}" id="table-{{ $table->id }}">
+										{{ $table->name }} - ₱{{ number_format($table->price, 2) }}
+									</label>
+								@endif
+						@endforeach
+               @endif
+				</div>
+			</div>
+	  
+	  </div>
+        <div class="button-wrapper">
+          <button type="submit" class="payment-button">Proceed to payment</button>
+        </div>
+      </form>
+    </section>
+@endsection
+
+@section('scripts')
+  <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Set the minimum date to today for the date input field
+            let today = new Date().toISOString().split('T')[0];
+            document.getElementById("date").setAttribute("min", today);
+            document.getElementById("date").value = today;
+
+            // Handle dropdown visibility
+				document.querySelectorAll('.dropdown-btn').forEach(function (btn) {
+					btn.addEventListener('click', function () {
+						const dropdownMenu = this.nextElementSibling;
+
+						if (dropdownMenu && dropdownMenu.classList) {
+							// Toggle visibility by checking the current state
+							if (dropdownMenu.style.display === "none" || dropdownMenu.classList.contains('hidden')) {
+									dropdownMenu.style.display = "block"; // Show the dropdown
+									dropdownMenu.classList.remove('hidden');
+									console.log("Dropdown toggled: visible");
+							} else {
+									dropdownMenu.style.display = "none"; // Hide the dropdown
+									dropdownMenu.classList.add('hidden');
+									console.log("Dropdown toggled: hidden");
+							}
+						} else {
+							console.warn("No dropdown menu found for:", this);
+						}
+					});
+				});
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', function (event) {
+					document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+						const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+						if (!dropdown.contains(event.target) && dropdownMenu) {
+								dropdownMenu.classList.add('hidden');
+						}
+					});
+				});
+
+            // Update minimum end time based on selected start time
+            document.getElementById("startTime").addEventListener("change", function () {
+                let startTime = this.value;
+                document.getElementById("endTime").setAttribute("min", startTime);
+            });
+
+            // Fetch and update available amenities when a date is selected
+            document.getElementById("date").addEventListener("change", function () {
+                let selectedDate = this.value;
+
+                fetch(`/customer/check-availability?date=${selectedDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateAvailableAmenities(data.availableCottages, data.availableTables);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching availability data:", error);
+                    });
+            });
+
+            // Function to update the available cottages and tables dynamically
+            function updateAvailableAmenities(cottages, tables) {
+
+                // Check if cottages and tables are arrays
+                if (!Array.isArray(cottages) || !Array.isArray(tables)) {
+                    return;
+                }
+
+                // Update Cottage Dropdown
+                let cottageMenu = document.getElementById("cottage-menu");
+                cottageMenu.innerHTML = ''; // Clear existing items
+
+                cottages.forEach(cottage => {
+                    let label = document.createElement('label');
+                    label.innerHTML = `
+                <input type="checkbox" name="cottages[]" value="${cottage.id}" id="cottage-${cottage.id}">
+                ${cottage.name} - ₱${cottage.price.toFixed(2)}
+                `;
+                    cottageMenu.appendChild(label);
+                });
+
+                // Update Table Dropdown
+                let tableMenu = document.getElementById("table-menu");
+                tableMenu.innerHTML = ''; // Clear existing items
+
+                tables.forEach(table => {
+                    let label = document.createElement('label');
+                    label.innerHTML = `
+                <input type="checkbox" name="tables[]" value="${table.id}" id="table-${table.id}">
+                ${table.name} - ₱${table.price.toFixed(2)}
+                `;
+                    tableMenu.appendChild(label);
+                });
+                }
+
+            // Validation before form submission
+            function validateSelection() {
+                const cottageChecked = document.querySelectorAll('input[name="cottages[]"]:checked').length > 0;
+                const tableChecked = document.querySelectorAll('input[name="tables[]"]:checked').length > 0;
+
+                if (!cottageChecked && !tableChecked) {
+                    alert("Please select at least one Cottage or Table before submitting.");
+                    return false;
+                }
+
+                return true;
+            }
+        });
+  </script>
+@endsection

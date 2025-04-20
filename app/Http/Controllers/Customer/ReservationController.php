@@ -49,7 +49,6 @@ class ReservationController extends Controller
             $cottages = $cottages->whereNotIn('id', $reservedCottages);
             $tables = $tables->whereNotIn('id', $reservedTables);
         }
-
         return view('customer.reservation', compact('cottages', 'tables'));
     }
 

@@ -1,0 +1,234 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+  display: flex;
+  flex-direction: column;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/******* NAVIGATION BAR STYLE ***********/
+
+.navbar {
+  background-color: #263b49;
+
+  height: 10vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 1000;
+}
+
+/******* LEFT-SECTION NAVIGATION BAR STYLE ***********/
+
+.left-side-nav {
+  width: fit-content;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+.dashboard {
+  background-color: white;
+  color: #263b49;
+  font: 400 16px poppins;
+  cursor: pointer;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px 8px 22px;
+  margin: 12px;
+
+  border: 0px solid;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+}
+.nav-icons {
+  margin-right: 8px;
+}
+.ameneties, .reservations {
+  background-color:#263b49;
+  color: white;
+  font: 400 16px poppins;
+  cursor: pointer;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px 8px 22px;
+  margin: 12px;
+
+  border: 0px solid;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+
+  transition: color, background-color, 0.15s;
+}
+
+/******* RIGHT-SECTION NAVIGATION BAR STYLE ***********/
+
+.right-side-nav {
+  width: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profile {
+  background-color: #263b49;
+  border: 0 solid black;
+  cursor: pointer;
+}
+
+.inactive {
+  background-color: #263b49;
+  color: white;
+}
+.active {
+  background-color: white;
+  color: #263b49;
+}
+/*********** Main Style Section ****************/
+
+.main {
+  margin-top: 10vh;
+  justify-content: center;
+  padding: 20px;
+}
+
+.balance-container {
+    width: 50vw;
+    height: 100vh;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+.balance-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    width: 100%;
+    
+}
+
+.balance-header {
+    padding: 1rem 1.5rem;
+    background: rgba(49, 105, 109, 0.751);
+    color: var(--white);
+}
+
+.balance-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.balance-content {
+    padding: 1rem;
+    width: 100%;
+}
+
+.reservation-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.payment-summary {
+    background: var(--light);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.pay-button {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(49, 105, 109, 0.751);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.pay-button:hover {
+    background: rgba(49, 105, 109, 0.9);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .reservation-details {
+        grid-template-columns: 1fr;
+    }
+}

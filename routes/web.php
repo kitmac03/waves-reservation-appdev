@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\ManagerMiddleware;
 use App\Http\Middleware\VendorMiddleware;
+use App\Models\Reservation;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 //  Home & Authentication Routes
@@ -85,7 +86,7 @@ Route::middleware(AdminMiddleware::class)->group(function () {
 Route::middleware(VendorMiddleware::class)->group(function () {
     Route::get('admin/vendor/cottages', [AmenitiesController::class, 'view_cottages'])
     ->name('admin.vendor.cottages');
-    Route::get('admin/vendor/tables', [AmenitiesController::class, 'view_tables'])
+    Route::get('admin/vendor/amenities', [AmenitiesController::class, 'view_tables'])
     ->name('admin.vendor.tables');
     Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
     ->name('admin.vendor.reservation_calendar');
@@ -100,6 +101,12 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.invalid-payment');
     Route::get('admin/vendor/edit-reservations', [ReservationRecordController::class, 'view_edit_reservations'])
     ->name('admin.vendor.edit-res-req');
+    Route::get('/admin/vendor/walk-in', [ReservationRecordController::class, 'create_walkIn'])
+    ->name('admin.vendor.walk_in');
+    Route::post('/admin/vendor/walk-in', [ReservationRecordController::class, 'custom_walkIn'])
+    ->name('admin.vendor.walk_in.store');
+    Route::get('admin/vendor/payment/{reservation}', [ReservationRecordController::class, 'payment_show'])
+    ->name('admin.vendor.reservations.payment.show');
 });
 
 //  Amenities Routes (Manager Only)

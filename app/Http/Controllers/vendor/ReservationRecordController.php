@@ -4,8 +4,15 @@ namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
+use App\Models\Amenities;
+use App\Models\ReservedAmenity;
+use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\DownPayment;
+use App\Models\Bill;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -88,7 +95,7 @@ class ReservationRecordController extends Controller
 
         $currentReservations = $pendingReservations->merge($verifiedReservations);
 
-        return view('admin.vendor.reservation_records', compact(
+        return view('admin.vendor.reservations.reservation_records', compact(
             'pendingReservations',
             'cancelledReservations',
             'completedReservations',
@@ -182,7 +189,146 @@ class ReservationRecordController extends Controller
             return response()->json(['error' => 'An error occurred while processing the request.', 'details' => $e->getMessage()], 500);
         }
     }
-    
 
-    
+    public function create_walkIn(Request $request)
+    {
+        // Fetch only active cottages and tables
+        $cottages = Amenities::where('type', 'cottage')->where('is_active', 1)->get();
+        $tables = Amenities::where('type', 'table')->where('is_active', 1)->get();
+
+        // If date is selected, filter out the reserved amenities for that date
+        if ($request->has('date')) {
+            $date = $request->date;
+
+            // Get all reserved amenities for the selected date
+            $reservedCottages = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
+                ->where('reservations.date', $date)
+                ->where('reservations.status', '!=', 'cancelled') // Make sure we are only considering active reservations
+                ->whereHas('amenity', function ($query) {
+                    $query->where('type', 'cottage');
+                })
+                ->pluck('reserved_amenity.amenity_id')
+                ->toArray();
+
+            $reservedTables = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
+                ->where('reservations.date', $date)
+                ->where('reservations.status', '!=', 'cancelled')
+                ->whereHas('amenity', function ($query) {
+                    $query->where('type', 'table');
+                })
+                ->pluck('reserved_amenity.amenity_id')
+                ->toArray();
+
+            // Filter out the reserved cottages and tables from the available list
+            $cottages = $cottages->whereNotIn('id', $reservedCottages);
+            $tables = $tables->whereNotIn('id', $reservedTables);
+        }
+        return view('admin.vendor.reservations.walk_in', compact('cottages', 'tables'));
+    }
+
+    public function custom_WalkIn(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'number' => 'required|regex:/^[0-9]{11}$/',
+            'date' => 'required|date',
+            'startTime' => 'required|date_format:H:i',
+            'endTime' => 'required|date_format:H:i|after:startTime',
+            'cottage' => 'nullable|exists:amenities,id',
+            'tables' => 'nullable|exists:amenities,id',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Create or find the customer
+        $customer = Customer::Create(
+            [
+                'id' => Str::uuid(),
+                'name' => $request->name,
+                'number' => $request->number,
+                'email'=> null,
+                'password' => null,
+            ]
+        );
+
+        // Create the reservation
+        $reservation = Reservation::create([
+            'id' => Str::uuid(),
+            'customer_id' => $customer->id,
+            'date' => $request->date,
+            'startTime' => Carbon::parse($request->startTime)->format('H:i:s'),
+            'endTime' => Carbon::parse($request->endTime)->format('H:i:s'),
+            'status' => 'pending',
+        ]);
+
+        // Save selected cottages
+        if ($request->has('cottages')) {
+            foreach ($request->cottages as $cottageId) {
+                ReservedAmenity::create([
+                    'res_num' => $reservation->id,
+                    'amenity_id' => $cottageId,
+                ]);
+            }
+        }
+
+        // Save selected tables
+        if ($request->has('tables')) {
+            foreach ($request->tables as $tableId) {
+                ReservedAmenity::create([
+                    'res_num' => $reservation->id,
+                    'amenity_id' => $tableId,
+                ]);
+            }
+        }
+
+        // Calculate the total price
+        $total = 0;
+
+        // Sum selected cottages
+        if ($request->filled('cottages')) {
+            foreach ($request->cottages as $cottageId) {
+                $amenity = Amenities::find($cottageId);
+                if ($amenity) {
+                    $total += $amenity->price;
+                }
+            }
+        }
+
+        // Sum selected tables
+        if ($request->filled('tables')) {
+            foreach ($request->tables as $tableId) {
+                $amenity = Amenities::find($tableId);
+                if ($amenity) {
+                    $total += $amenity->price;
+                }
+            }
+        }
+
+        // Create the bill
+        Bill::create([
+            'id' => Str::uuid(),
+            'res_num' => $reservation->id,
+            'grand_total' => $total,
+            'date' => Carbon::now(),
+            'status' => 'unpaid',
+        ]);
+
+        return redirect()->route('admin.vendor.reservations.payment.show', $reservation);
+    }
+
+    public function payment_show(Reservation $reservation)
+    {
+        // Eager load the necessary relationships for this one reservation
+        $reservation->load(['customer', 'reservedAmenities.amenity', 'bill', 'downPayment']);
+
+        $bill = $reservation->bill;
+
+        if (!$bill) {
+            return back()->withErrors(['bill' => 'No billing information found. Please contact support.']);
+        }
+
+        return view('admin.vendor.reservations.payment', compact('reservation', 'bill'));
+    }
 }
