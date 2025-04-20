@@ -10,75 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Styling for the form and buttons */
-        .custom-dropdown {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            /* Make the dropdown take full width like other inputs */
-            margin-bottom: 20px;
-            /* Add some space between the form elements */
-        }
-
-        .dropdown-btn {
-            width: 100%;
-            /* Make button width same as input fields */
-            padding: 12px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: white;
-            text-align: left;
-            /* Align text to the left */
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: white;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
-            z-index: 1;
-            max-height: 150px;
-            overflow-y: auto;
-            padding: 8px 0;
-            /* Added padding to make the dropdown more spacious */
-        }
-
-        .dropdown-menu label {
-            display: flex;
-            align-items: center;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            width: 100%;
-            /* Ensure that labels take up full width */
-        }
-
-        .dropdown-menu input[type="checkbox"] {
-            margin-right: 10px;
-            /* Add space between checkbox and label */
-        }
-
-        .dropdown-menu label:hover {
-            background-color: #f1f1f1;
-        }
-
-        .custom-dropdown.open .dropdown-menu {
-            display: block;
-        }
-
-        /* Space between the form fields */
-        .date-time-container,
-        .start-end-time-container,
-        .cottage-table-container {
-            margin-bottom: 20px;
-        }
-    </style>
 
 </head>
 
@@ -298,5 +229,4 @@
     </script>
 
 </body>
-
 </html>
