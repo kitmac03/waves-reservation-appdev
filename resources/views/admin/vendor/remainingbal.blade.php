@@ -9,6 +9,31 @@
 		<span class="chevron-left"></span> Back to Calendar
 	</a>
 	<h2 class="head-title">Remaining Balances</h2>
+	<div x-data="{ showToast: false, toastMessage: '', toastType: 'success' }" 
+		x-show="showToast" 
+		@toast.window="
+         toastMessage = $event.detail.message;
+         toastType = $event.detail.type;
+         showToast = true;
+         setTimeout(() => showToast = false, 3000)"
+		x-transition:enter="transition ease-out duration-300"
+		x-transition:enter-start="opacity-0 translate-y-2"
+		x-transition:enter-end="opacity-100 translate-y-0"
+		x-transition:leave="transition ease-in duration-300"
+		x-transition:leave-start="opacity-100 translate-y-0"
+		x-transition:leave-end="opacity-0 translate-y-2"
+		class="fixed top-4 right-4 z-[9999]" 
+		x-cloak>
+		<div x-bind:class="{
+				'bg-green-500': toastType === 'success',
+				'bg-red-500': toastType === 'error',
+				'bg-blue-500': toastType === 'info',
+				'bg-yellow-500': toastType === 'warning'
+			}" 
+			class="text-white px-4 py-2 rounded shadow-lg flex items-center">
+			<span x-text="toastMessage" class="text-sm"></span>
+		</div>
+	</div>
 
 	<div class="reservation-container">
 		<div class="header-row">
@@ -65,7 +90,7 @@
 					@endphp
 
 					<button
-						class="verify-btn"
+						class="verify-btn {{ !$reservation->customer || !$reservation->customer->email ? 'w-full' : '' }}"
 						onclick='openPaymentModal(
 								"{{ $reservation->id }}", 
 								"{{ $bill->id }}",
@@ -81,7 +106,23 @@
 					>
 						Record Payment
 					</button>
-					<button class="decline-btn">Send Reminder</button>
+					<button 
+						id="sendReminderBtn-{{ $reservation->id }}"
+						x-data="reminder('{{ $reservation->id }}')"
+						@click="sendReminder"
+						:disabled="isLoading"
+						class="reminder-btn"
+						:class="{ 'opacity-50 cursor-not-allowed': isLoading }"
+					>
+						<span x-show="!isLoading">Send Reminder</span>
+						<span x-show="isLoading" class="flex items-center">
+							<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+							Sending...
+						</span>
+					</button>
 				</div>
 		</div>
 		@endforeach
@@ -144,9 +185,9 @@
 					</div>
 
 					<div class="my-2">
-					<p id="pendingMessage" class="bg-yellow-100 rounded-md text-sm text-yellow-500 p-2 hidden">Please verify the payment.</p>
-					<p id="invalidMessage" class="bg-red-100 rounded-md text-sm text-red-500 p-2 hidden">Contact the customer to send clear photo for proof of payment.</p>
-				</div>
+						<p id="pendingMessage" class="bg-yellow-100 rounded-md text-sm text-yellow-500 p-2 hidden">Please verify the payment.</p>
+						<p id="invalidMessage" class="bg-red-100 rounded-md text-sm text-red-500 p-2 hidden">Contact the customer to send clear photo for proof of payment.</p>
+					</div>
 					
 					<div class="mb-4">
 						<div id="verifyImageWrapper" class="w-full">
@@ -275,6 +316,63 @@
 
 @section('scripts')
 	<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.data('reminder', (reservationId) => ({
+				isLoading: false,
+				sendReminder() {
+					this.isLoading = true;
+					fetch('{{ route('send-reminder') }}', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							'X-CSRF-TOKEN': '{{ csrf_token() }}'
+						},
+						body: JSON.stringify({ reservation_id: reservationId })
+					})
+					.then(response => {
+						if (!response.ok) throw new Error('Failed to send reminder');
+						return response.json();
+					})
+					.then(data => {
+						window.dispatchEvent(new CustomEvent('toast', {
+							detail: {
+								message: data.message,
+								type: 'success'
+							}
+						}));
+					})
+					.catch(error => {
+						window.dispatchEvent(new CustomEvent('toast', {
+							detail: {
+								message: 'Failed to send reminder: ' + error.message,
+								type: 'error'
+							}
+						}));
+					})
+					.finally(() => {
+						this.isLoading = false;
+					});
+				}
+			}));
+		});
+		function toggleSendReminderButton(reservationId, hasEmail) {
+            const button = document.getElementById(`sendReminderBtn-${reservationId}`);
+            if (hasEmail) {
+                button.classList.remove('hidden'); // Remove hidden class if customer has an email
+            } else {
+                button.classList.add('hidden'); // Add hidden class if customer does not have an email
+            }
+        }
+
+        // Call this function for each reservation on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            @foreach ($reservations as $reservation)
+                toggleSendReminderButton(
+                    '{{ $reservation->id }}',
+                    {{ $reservation->customer && $reservation->customer->email ? 'true' : 'false' }}
+                );
+            @endforeach
+        });
 		function paymentFormHandler() {
 			return {
 					isOpen: false,

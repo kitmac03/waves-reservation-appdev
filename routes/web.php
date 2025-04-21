@@ -25,6 +25,7 @@ Route::post('/login', [UserAuthController::class, 'store']);
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
+Route::post('/send-reminder', [ReservationController::class, 'sendReminder'])->name('send-reminder');
 //Route::get('/empty', [EmptyyController::class, 'emptyTables'])->name('login'); 
 // Customer Routes
 Route::middleware('auth')->group(function () {

@@ -96,7 +96,6 @@
     <script>
         // Validation before form submission
         function validateSelection() {
-
             const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
             const tables = document.querySelectorAll('input[name="tables[]"]:checked');
             const cottageChecked = cottages.length > 0;

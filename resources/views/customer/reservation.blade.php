@@ -110,17 +110,16 @@
     <script>
     // Validation before form submission
     function validateSelection() {
+        const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
+        const tables = document.querySelectorAll('input[name="tables[]"]:checked');
+        const cottageChecked = cottages.length > 0;
+        const tableChecked = tables.length > 0;
 
-            const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
-            const tables = document.querySelectorAll('input[name="tables[]"]:checked');
-            const cottageChecked = cottages.length > 0;
-            const tableChecked = tables.length > 0;
-
-            if (!cottageChecked && !tableChecked) {
-                alert("Please select at least one Cottage or Table before submitting.");
-                return false; // Prevent form submission
-            }
-            return true; // Allow form submission
+        if (!cottageChecked && !tableChecked) {
+            alert("Please select at least one Cottage or Table before submitting.");
+            return false; // Prevent form submission
+        }
+        return true; // Allow form submission
     }
     document.addEventListener("DOMContentLoaded", function () {
         // Set the minimum date to today for the date input field
