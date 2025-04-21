@@ -213,8 +213,8 @@
 
 						<p><span id="date"></span>
 						</p>
-						<p><span id="startTime"> - </span><span id="endTime"></span></p>
-								<ul id="modalAmenities"></ul>
+						<p><span id="startTime"></span> - <span id="endTime"></span></p>
+						<ul id="modalAmenities"></ul>
 						<hr>
 						<p><strong id="grandTotal">Total: </strong>
 						</p>
@@ -303,13 +303,24 @@
 						}
 					}
 
+					 // Format times to 24-hour format
+					 const formatTo12Hour = (time) => {
+						const [hours, minutes] = time.split(':');
+						const period = hours >= 12 ? 'PM' : 'AM';
+						const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+						return `${formattedHours}:${minutes.padStart(2, '0')} ${period}`;
+					};
+
+					const formattedStartTime = reservationStart ? formatTo12Hour(reservationStart) : '';
+					const formattedEndTime = reservationEnd ? formatTo12Hour(reservationEnd) : '';
+
 					document.getElementById("name").textContent = reservationName || '';
 					document.getElementById("date").textContent = reservationDate || '';
 					document.getElementById("grandTotal").textContent = `Total: ₱${reservationgrandTotal || 0}`;
 					document.getElementById("paidAmount").textContent = `Paid Amount: ₱${reservationpaidAmount || 0}`;
 					document.getElementById("balance").textContent = `Balance: ₱${reservationbalance || 0}`;
-					document.getElementById("startTime").textContent = reservationStart || '';
-					document.getElementById("endTime").textContent = reservationEnd || '';
+					document.getElementById("startTime").textContent = formattedStartTime;
+					document.getElementById("endTime").textContent = formattedEndTime;
 					console.log(reservationpaidAmount, reservationgrandTotal, reservationbalance);
 					
 					const selectedReservation = amenities.find(r => r.id == reservationId);

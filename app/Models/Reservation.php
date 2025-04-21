@@ -34,7 +34,7 @@ class Reservation extends Model
             if ($reservation->isPastDate()) {
                 if ($reservation->areBillsPaid()) {
                     $reservation->markAsCompleted();
-                } elseif ($reservation->hasPartiallyPaidBill()) {
+                } elseif ($reservation->hasDownpayment() || $reservation->hasPartiallyPaidBill()) {
                     $reservation->markAsCancelled();
                 } elseif (!$reservation->hasDownpayment()) {
                     $reservation->markAsInvalid();
@@ -104,5 +104,4 @@ class Reservation extends Model
     {
         return $this->hasOne(DownPayment::class, 'res_num', 'id')->latestOfMany('date');
     }
-
 }
