@@ -25,7 +25,7 @@
           </a>
           <a href="{{ route('admin.vendor.cottages') }}">
             <button class="ameneties" id="ameneties">
-              <i class="material-icons nav-icons">holiday_village</i> Ameneties
+              <i class="material-icons nav-icons">holiday_village</i> Amenities
             </button>
           </a>
           <a href="{{ route('admin.vendor.reservation_calendar') }}">
