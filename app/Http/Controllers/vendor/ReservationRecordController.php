@@ -315,20 +315,12 @@ class ReservationRecordController extends Controller
             'status' => 'unpaid',
         ]);
 
-        return redirect()->route('admin.vendor.reservations.payment.show', $reservation);
+        return view('admin.vendor.reservations.payment', compact('reservation', 'total'));
     }
 
-    public function payment_show(Reservation $reservation)
+    public function payment_show($id)
     {
-        // Eager load the necessary relationships for this one reservation
-        $reservation->load(['customer', 'reservedAmenities.amenity', 'bill', 'downPayment']);
-
-        $bill = $reservation->bill;
-
-        if (!$bill) {
-            return back()->withErrors(['bill' => 'No billing information found. Please contact support.']);
-        }
-
-        return view('admin.vendor.reservations.payment', compact('reservation', 'bill'));
+        $reservation = Reservation::with(['customer', 'reserved_amenities.amenity', 'bill'])->findOrFail($id);
+        return view('admin.vendor.reservations.payment', compact('reservation'));
     }
 }

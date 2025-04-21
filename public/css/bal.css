@@ -262,8 +262,8 @@ body {
   background-color: #059669;
 }
 
-.decline-btn {
-  background-color: #ef4444;
+.reminder-btn {
+  background-color: rgb(66, 120, 235);
   border: none;
   color: white;
   border-radius: 4px;
@@ -273,11 +273,11 @@ body {
   white-space: nowrap;
 }
 
-.decline-btn:hover {
-  background-color: #dc2626;
+.reminder-btn:hover {
+  background-color: #2663dc;
 }
 .verify-btn,
-.decline-btn {
+.reminder-btn {
   font-size: 14px;
   padding: 6px 12px; /* smaller padding */
   border-radius: 6px;
