@@ -26,8 +26,10 @@
         </div>
 
         <div class="customer-profile">
-            <i class="fas fa-user-circle profile-icon"></i>
-            <div class="customer-name">{{ $customer->name }}</div>
+            <div class="avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <span class="customer-name">{{ $customer->name }}</span>
         </div>
 
         <div class="menu">
@@ -59,13 +61,19 @@
     </div>
 
     <div class="content">
+        <div class="title-container">
+        <div class="content-card">
+            <div class="content-header">
         <h2>Your Reservations</h2>
+
         <div class="status-bar">
             <span style="color: green;">● Verified</span>
             <span style="color: orange;">● Pending</span>
             <span style="color: red;">● Cancelled</span>
-            <span style="color: gray;">● Past</span>
-        </div>
+            <span style="color: rgb(51, 51, 51);">● Past</span>
+            </div>
+            </div>
+            
         <div class="reservations">
             <div class="reservation-column">
                 <h4>Cancelled</h4>
@@ -95,7 +103,7 @@
             </div>
 
             <div class="reservation-column">
-                <h4>invalid</h4>
+                <h4>Invalid</h4>
                 @foreach ($invalidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
                                 @php
                                     $date = new DateTime($reservation->date ?? now());
@@ -169,7 +177,7 @@
                                     data-date="{{ $reservation->date }}" data-start="{{ $reservation->startTime }}"
                                     data-end="{{ $reservation->endTime }}" data-status="{{ $reservation->status }}"
                                     style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-                                    <strong>#{{ $reservation->customer->name }}</strong><br>
+                                    <strong>#{{ $reservation->id }}</strong><br>
                                     {{ $reservation->date }} | {{ $reservation->startTime }} - {{ $reservation->endTime }}
                                 </div>
                 @endforeach

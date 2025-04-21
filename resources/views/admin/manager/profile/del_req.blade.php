@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +8,25 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
   <title>Account Deletion</title>
 </head>
+
 <body>
   <div class="container">
 
     <!--- SIDEBAR SECTION -->
     <div class="sidebar">
 
-      <a href="dashboard.html">
+      <a href="{{ route('admin.dashboard') }}">
         <div class="back-to-main">
           <i class="material-icons">arrow_back</i>
           <p>Back to main</p>
-      </div>
+        </div>
       </a>
-      
+
       <div class="profile">
         <div class="profile-icon">
           <i class="material-icons">account_circle</i>
@@ -32,16 +36,16 @@
 
       <!--- MENU SECTION -->
       <ul class="menu">
-        <a href="manager_profile.html">
+        <a href="{{ route('admin.manager.profile') }}">
           <li class="menu-item">Profile</li>
         </a>
-        <a href="create_manager_account.html">
+        <a href="{{ route('admin.create.account') }}">
           <li class="menu-item">Create Admin Account</li>
         </a>
-        <a href="vendor_list.html">
+        <a href="{{ route('admin.vendors.list') }}">
           <li class="menu-item">List of Vendors</li>
         </a>
-        <a href="account_deletion_request.html">
+        <a href="{{ route('admin.delete.requests') }}">
           <li class="menu-item active">
             Account Deletion Requests
           </li>
@@ -64,7 +68,7 @@
         <tbody>
           <tr>
             <td>
-              Maria Sanchez 
+              Maria Sanchez
               <button class="view-account" onclick="openDialog()">View account</button>
             </td>
             <td>I'll make a new one</td>
@@ -129,7 +133,7 @@
     <div class="accept-content">
       <p class="accept-title">Accept Account Deletion?</p>
       <hr class="divider">
-      
+
       <p class="accept-text">
         Are you sure you want to delete this customer's account?
         This action cannot be undone.
@@ -147,9 +151,9 @@
     <div class="decline-content">
       <p class="decline-title">Decline Account Deletion?</p>
       <hr class="divider">
-      
+
       <p class="decline-text">
-        Are you sure you want to decline this request? The account 
+        Are you sure you want to decline this request? The account
         will remain undeleted and will no longer be processed for removal.
       </p>
       <div class="decline-actions">
@@ -158,14 +162,14 @@
       </div>
     </div>
   </dialog>
-  
+
   <!------------ SCRIPT SECTION ------------>
 
   <script>
 
     const reservationDialog = document.querySelector('.reservation-dialog');
-    const acceptDeletion = document.querySelector('.accept-deletion');  
-    const declineDeletion = document.querySelector('.decline-deletion'); 
+    const acceptDeletion = document.querySelector('.accept-deletion');
+    const declineDeletion = document.querySelector('.decline-deletion');
 
     function openDialog() {
       reservationDialog.showModal();
@@ -174,7 +178,7 @@
       reservationDialog.close();
     }
 
-    
+
     function showAcceptDeletion() {
       acceptDeletion.showModal();
     }
@@ -182,18 +186,19 @@
       acceptDeletion.close();
     }
 
-     
+
     function showDeclineDeletion() {
       declineDeletion.showModal();
     }
     function closeDeclineDeletion() {
       declineDeletion.close();
     }
-    
+
 
 
   </script>
-  
-  
+
+
 </body>
+
 </html>

@@ -16,7 +16,7 @@
     <!--- SIDEBAR SECTION -->
     <div class="sidebar">
 
-      <a href="dashboard.html">
+      <a href="{{ route('admin.dashboard') }}">
         <div class="back-to-main">
           <i class="material-icons">arrow_back</i>
           <p>Back to main</p>
@@ -32,16 +32,16 @@
 
       <!--- MENU SECTION -->
       <ul class="menu">
-        <a href="manager_profile.html">
+        <a href="{{ route('admin.manager.profile') }}">
           <li class="menu-item">Profile</li>
         </a>
-        <a href="create_manager_account.html">
+        <a href="{{ route('admin.create.account') }}">
           <li class="menu-item active">Create Admin Account</li>
         </a>
-        <a href="vendor_list.html">
+        <a href="{{ route('admin.vendors.list') }}">
           <li class="menu-item">List of Vendors</li>
         </a>
-        <a href="account_deletion_request.html">
+        <a href="{{ route('admin.delete.requests') }}">
           <li class="menu-item">
             Account Deletion Requests
             <span class="notification">1</span>
