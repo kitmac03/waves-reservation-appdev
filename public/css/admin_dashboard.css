@@ -1,0 +1,141 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+  display: flex;
+  flex-direction: column;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/******* NAVIGATION BAR STYLE ***********/
+
+.navbar {
+  background-color: #002044;
+
+  height: 10vh;
+  width: 100vw;
+
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 1000;
+}
+
+/******* LEFT-SECTION NAVIGATION BAR STYLE ***********/
+
+.left-side-nav {
+  width: fit-content;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dashboard {
+  background-color: white;
+  color: #002044;
+  font: 400 16px poppins;
+  cursor: pointer;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px 8px 22px;
+  margin: 12px;
+
+  border: 0px solid;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+}
+.nav-icons {
+  margin-right: 8px;
+}
+.ameneties, .reservations {
+  background-color:#002044;
+  color: white;
+  font: 400 16px poppins;
+  cursor: pointer;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 8px 22px 8px 22px;
+  margin: 12px;
+
+  border: 0px solid;
+  border-radius: 15px;
+
+  display: inline-flex;
+  align-items: center;
+
+  transition: color, background-color, 0.15s;
+}
+
+/******* RIGHT-SECTION NAVIGATION BAR STYLE ***********/
+
+.right-side-nav {
+  width: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profile {
+  background-color: #002044;
+  border: 0 solid black;
+  cursor: pointer;
+}
+
+.inactive {
+  background-color: #002044;
+  color: white;
+}
+.active {
+  background-color: white;
+  color: #002044;
+}
+/*********** Main Style Section ****************/
+
+.main {
+  margin-top: 10vh;
+}
+
+.head-title {
+  font: 500 100px poppins;
+}

@@ -31,7 +31,7 @@ class UserAuthController extends Controller
 
         // First, check in the Admins table
         if ($this->attemptLogin(Admin::class, $request)) {
-            return redirect()->intended('admin/manager-profile'); // Redirect to the admin dashboard
+            return redirect()->intended('admin/dashboard'); // Redirect to the admin dashboard
         }
 
         // If not found, check in the Customers table

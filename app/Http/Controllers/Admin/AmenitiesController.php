@@ -21,7 +21,7 @@ class AmenitiesController extends Controller
         $user = Admin::find($userId);
 
         if ($user->role == 'manager') {
-            return view('admin.manager.amenities.cottages', compact('cottages'));
+            return view('admin.manager.amenities.cottages2', compact('cottages'));
         } else if ($user->role == 'vendor') {
             return view('admin.vendor.amenities.cottages', compact('cottages'));
         }
@@ -104,7 +104,7 @@ class AmenitiesController extends Controller
         $user = \App\Models\Admin::find($userId);
 
         if ($user->role == 'manager') {
-            return view('admin.manager.amenities.tables', compact('tables')); 
+            return view('admin.manager.amenities.tables2', compact('tables')); 
         } else if ($user->role == 'vendor') {
             return view('admin.vendor.amenities.tables', compact('tables')); 
         }

@@ -33,7 +33,7 @@
 
             <!-- nag add kog button ani for acc balance -->
 
-            <a href="#"><i class="fas fa-wallet"></i> Account Balance</a>
+            <!-- <a href="#"><i class="fas fa-wallet"></i> Account Balance</a> -->
 
             </nav>
 
