@@ -134,11 +134,11 @@ class ReservationRecordController extends Controller
     
             $events = $reservations->map(function ($reservation) {
                 $statusColors = [
-                    'verified' => ['bg' => '#16a34a', 'border' => '#15803d'],
-                    'pending' => ['bg' => '#ca8a04', 'border' => '#a16207'],
-                    'cancelled' => ['bg' => '#dc2626', 'border' => '#b91c1c'],
-                    'invalid' => ['bg' => '#dc2626', 'border' => '#b91c1c'],
-                    'completed' => ['bg' => '#64748b', 'border' => '#475569']
+                    'verified' => ['bg' => '#def2df', 'border' => '#33884d'],
+                    'pending' => ['bg' => '#fdf0bf', 'border' => '##a96715'],
+                    'cancelled' => ['bg' => '#fce1e1', 'border' => '#c23a3a'],
+                    'invalid' => ['bg' => '#fce1e1', 'border' => '#c23a3a'],
+                    'completed' => ['bg' => '#f3ebed', 'border' => '#4a4a58']
                 ];
     
                 $status = strtolower($reservation->status);
@@ -150,7 +150,9 @@ class ReservationRecordController extends Controller
     
                 return [
                     'id' => $reservation->id,
-                    'title' => $reservation->customer->name ?? 'No Name',
+                    'title' => ($reservation->customer->name ?? 'No Name') . ' | ' . 
+                        Carbon::parse($reservation->startTime ?? '00:00')->format('g:i A'). ' - ' .
+                        Carbon::parse($reservation->endTime ?? '00:00')->format('g:i A'),
                     'start' => $reservation->date,
                     'end' => $reservation->date,
                     'status' => $reservation->status,

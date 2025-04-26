@@ -12,4 +12,5 @@ In VS Code:
 - install SQLite viewer extension
 - type "php artisan serve" in terminal (dont kill the terminal after)
 - type "npm run dev" in terminal
+- type "php artisan storage:link" in terminal if images not loaded
 - copy the http link where you typed the: "php artisan serve" then paste in the browser to run

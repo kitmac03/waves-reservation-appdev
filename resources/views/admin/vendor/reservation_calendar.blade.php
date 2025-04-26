@@ -364,6 +364,21 @@
 					applyDropdowns();
 					styleCustomButtons();
 				},
+				eventContent: function(info) {
+					let [name, time] = info.event.title.split('|').map(item => item.trim());
+
+					return {
+						html: `
+							 <div class="flex justify-between items-center w-full 
+							 	hover:bg-blue-100 
+								text-black hover:text-blue-700 
+								px-2 py-1 rounded-lg shadow-sm hover:shadow-md transition">
+								<span>${name || 'No Name'}</span>
+								<span class="text-xs">${time || ''}</span>
+							</div>
+						`
+					};
+				},		
 				eventClick: function(info) {
 						const eventProps = info.event.extendedProps || {};
 						const amenities = eventProps.amenities || [];
@@ -479,10 +494,10 @@
 
 			function styleCustomButtons() {
 				const buttonMap = {
-				'fc-reservationsButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
-				'fc-walkInRequestButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
-				'fc-editRequestButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
-				'fc-remainingBalanceButton-button': 'bg-[#337ab7] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+				'fc-reservationsButton-button': 'bg-[#002044] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+				'fc-walkInRequestButton-button': 'bg-[#002044] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+				'fc-editRequestButton-button': 'bg-[#002044] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
+				'fc-remainingBalanceButton-button': 'bg-[#002044] hover:bg-[#245f92] text-white text-sm font-medium m-0 px-2 py-1 rounded shadow',
 				'fc-monthSelect-button': 'bg-transparent text-white font-medium m-0 py-1 rounded',
 				'fc-yearSelect-button': 'bg-transparent text-white font-medium m-0 py-1 rounded'
 				};

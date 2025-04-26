@@ -92,10 +92,8 @@ Route::middleware(ManagerMiddleware::class)->group(function () {
 
 //  Vendor Routes
 Route::middleware(VendorMiddleware::class)->group(function () {
-    Route::get('admin/vendor/cottages', [AmenitiesController::class, 'view_cottages'])
-    ->name('admin.vendor.cottages');
-    Route::get('admin/vendor/amenities', [AmenitiesController::class, 'view_tables'])
-    ->name('admin.vendor.tables');
+    Route::get('admin/vendor/amenities/{type?}', [AmenitiesController::class, 'view_amenities'])
+    ->name('admin.vendor.amenities');
     Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
     ->name('admin.vendor.reservation_calendar');
     Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])

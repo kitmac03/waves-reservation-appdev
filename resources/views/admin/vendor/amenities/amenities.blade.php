@@ -23,7 +23,7 @@
           <i class="material-icons nav-icons">dashboard</i> Dashboard
         </button>
       </a>
-      <a href="{{ route('admin.vendor.cottages') }}">
+      <a href="{{ route('admin.vendor.amenities', ['type' => 'table']) }}">
         <button class="ameneties" id="ameneties-btn">
           <i class="material-icons nav-icons">holiday_village</i> Amenities
         </button>
@@ -85,37 +85,11 @@
 
     <div class="date-container">
       <h2 id="current-date" class="date-title"></h2>
-  
       <div class="date-selectors">
         <select id="month-select"></select>
         <select id="day-select"></select>
         <select id="year-select"></select>
-        <select id="time-select">
-          <option>12:00 AM</option>
-          <option>1:00 AM</option>
-          <option>2:00 AM</option>
-          <option>3:00 AM</option>
-          <option>4:00 AM</option>
-          <option>5:00 AM</option>
-          <option>6:00 AM</option>
-          <option>7:00 AM</option>
-          <option>8:00 AM</option>
-          <option>9:00 AM</option>
-          <option>10:00 AM</option>
-          <option>11:00 AM</option>
-          <option>12:00 PM</option>
-          <option>1:00 PM</option>
-          <option>2:00 PM</option>
-          <option>3:00 PM</option>
-          <option>4:00 PM</option>
-          <option>5:00 PM</option>
-          <option>6:00 PM</option>
-          <option>7:00 PM</option>
-          <option>8:00 PM</option>
-          <option>9:00 PM</option>
-          <option>10:00 PM</option>
-          <option>11:00 PM</option>
-        </select>
+        <input class="px-4 py-2 border rounded-md outline-none" type="time" id="time-select">
       </div>
     </div>
   
@@ -126,129 +100,171 @@
 
   
 
-
+<!-- JavaScript Section -->
   <script>
-    window.onload = function () {
-      const monthNames = [
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentDateEl = document.getElementById('current-date');
+    const monthSelect = document.getElementById('month-select');
+    const daySelect = document.getElementById('day-select');
+    const yearSelect = document.getElementById('year-select');
+    const timeSelect = document.getElementById('time-select');
+    const amenitiesTableBody = document.querySelector('.availability-table tbody');
+    const now = new Date();
+
+    const monthNames = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
-      ];
-  
-      const monthSelect = document.getElementById("month-select");
-      const daySelect = document.getElementById("day-select");
-      const yearSelect = document.getElementById("year-select");
-      const currentDateTitle = document.getElementById("current-date");
-  
-      // Populate month select
-      monthNames.forEach((month, index) => {
-        const option = document.createElement("option");
+    ];
+
+    // Populate month select
+    monthNames.forEach((month, index) => {
+        const option = document.createElement('option');
         option.value = index;
         option.textContent = month;
         monthSelect.appendChild(option);
-      });
-  
-      // Populate year select
-      const currentYear = new Date().getFullYear();
-      for (let y = currentYear - 5; y <= currentYear + 5; y++) {
-        const option = document.createElement("option");
+    });
+
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 5; y <= currentYear + 5; y++) {
+        const option = document.createElement('option');
         option.value = y;
         option.textContent = y;
         yearSelect.appendChild(option);
+    }
+
+    function updateCurrentDateTitle(year, month, day) {
+      const parsedYear = parseInt(year, 10);
+      const parsedMonth = parseInt(month, 10) - 1;
+      const parsedDay = parseInt(day, 10);
+
+      const date = new Date(parsedYear, parsedMonth, parsedDay);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      
+      if (isNaN(date)) {
+          currentDateEl.textContent = 'Invalid Date';
+      } else {
+          currentDateEl.textContent = date.toLocaleDateString(undefined, options);
       }
-  
-      // Update days
-      function updateDays() {
+  }
+
+    function updateCurrentDateTitle(year, month, day) {
+        const date = new Date(year, month, day);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateEl.textContent = date.toLocaleDateString(undefined, options);
+    }
+
+
+    function updateDays() {
         const selectedYear = parseInt(yearSelect.value);
         const selectedMonth = parseInt(monthSelect.value);
         const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-  
-        daySelect.innerHTML = "";
+
+        daySelect.innerHTML = '';
         for (let d = 1; d <= daysInMonth; d++) {
-          const option = document.createElement("option");
-          option.value = d;
-          option.textContent = d;
-          daySelect.appendChild(option);
+            const option = document.createElement('option');
+            option.value = d;
+            option.textContent = d;
+            daySelect.appendChild(option);
         }
-      }
-  
-      // Update header
-      function updateTitle() {
-        const selectedMonth = monthNames[parseInt(monthSelect.value)];
-        const selectedDay = daySelect.value;
+    }
+
+    function updateAmenitiesStatus() {
         const selectedYear = yearSelect.value;
-  
-        currentDateTitle.textContent = `${selectedMonth} ${selectedDay}, ${selectedYear}`;
-      }
-  
-      // Initial setup
-      const now = new Date();
-      monthSelect.value = now.getMonth();
-      yearSelect.value = now.getFullYear();
+        const selectedMonth = parseInt(monthSelect.value) + 1;
+        const selectedDay = daySelect.value;
+        const selectedTime = timeSelect.value;
+
+        if (!selectedYear || !selectedMonth || !selectedDay || !selectedTime) return;
+
+        const dateTime = `${selectedYear}-${selectedMonth.toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}T${selectedTime}`;
+
+        fetch(`{{ url()->current() }}?date_time=${dateTime}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const amenities = data.amenities;
+
+            const tableBody = document.querySelector('.availability-table tbody');
+            tableBody.innerHTML = '';
+
+            amenities.forEach(amenity => {
+                const row = document.createElement('tr');
+                row.className = amenity.availability_status === 'Available' ? 'active' : 'archived';
+                row.innerHTML = `
+                    <td>${amenity.name}</td>
+                    <td>₱${parseFloat(amenity.price).toFixed(2)}</td>
+                    <td>
+                        <span class="${amenity.availability_status === 'Available' ? 'text-green-600' : 'text-red-600'}">
+                            ${amenity.availability_status}
+                        </span>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching amenities:', error);
+        });
+    }
+
+    // Initial setup
+    monthSelect.value = now.getMonth();
+    yearSelect.value = now.getFullYear();
+    updateDays();
+    daySelect.value = now.getDate();
+    updateCurrentDateTitle(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // Set current time to timeSelect (HH:MM)
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    timeSelect.value = `${hours}:${minutes}`;
+
+    monthSelect.addEventListener('change', () => {
       updateDays();
-      daySelect.value = now.getDate();
-      updateTitle();
-  
-      // Event listeners
-      monthSelect.addEventListener("change", () => {
-        updateDays();
-        updateTitle();
-      });
-  
-      yearSelect.addEventListener("change", () => {
-        updateDays();
-        updateTitle();
-      });
-  
-      daySelect.addEventListener("change", updateTitle);
-    };
-    
-    function loadContent(page) {
-  fetch(page)
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('main-content').innerHTML = html;
-    })
-    .catch(error => {
-      console.error('Error loading content:', error);
+      updateCurrentDateTitle(yearSelect.value, monthSelect.value, daySelect.value);
+      updateAmenitiesStatus();
     });
-}
-
-
-  // Sidebar tab buttons
-  const cottagesTab = document.getElementById('cottages-tab');
-  const tablesTab = document.getElementById('tables-tab');
-  const cancelTab = document.getElementById('cancel-tab');
-
-  cottagesTab.addEventListener('click', () => {
-    setActiveTab(cottagesTab);
-    window.location.href = "{{ route('admin.vendor.cottages') }}";
-  });
-
-
-  tablesTab.addEventListener('click', () => {
-    setActiveTab(tablesTab);
-    window.location.href = "{{ route('admin.vendor.tables') }}";
-  });
-
-  cancelTab.addEventListener('click', () =>{
-    setActiveTab(cancelTab);
-    window.location.href = "{{ url('cancel') }}";
-  });
-
-  function setActiveTab(activeTab) {
-    document.querySelectorAll('.icon-container').forEach(tab => {
-      tab.classList.remove('active');
+    yearSelect.addEventListener('change', () => {
+      updateDays();
+      updateCurrentDateTitle(yearSelect.value, monthSelect.value, daySelect.value);
+      updateAmenitiesStatus();
     });
-    activeTab.classList.add('active');
-  }
-    
-  
+    daySelect.addEventListener('change', () => { 
+      updateAmenitiesStatus();
+      updateCurrentDateTitle(yearSelect.value, monthSelect.value, daySelect.value);
+    });
+    timeSelect.addEventListener('change', updateAmenitiesStatus);
+  });
 
-  
-    
+    // Sidebar tab functionality
+    const cottagesTab = document.getElementById('cottages-tab');
+    const tablesTab = document.getElementById('tables-tab');
+    const cancelTab = document.getElementById('cancel-tab');
+
+    cottagesTab.addEventListener('click', () => {
+      setActiveTab(cottagesTab);
+      window.location.href = "{{ route('admin.vendor.amenities', ['type' => 'cottage']) }}";
+    });
+
+    tablesTab.addEventListener('click', () => {
+      setActiveTab(tablesTab);
+      window.location.href = "{{ route('admin.vendor.amenities', ['type' => 'table']) }}";
+    });
+
+    cancelTab.addEventListener('click', () => {
+      setActiveTab(cancelTab);
+      window.location.href = "{{ url('cancel') }}";
+    });
+
+    function setActiveTab(activeTab) {
+      document.querySelectorAll('.icon-container').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      activeTab.classList.add('active');
+    }
   </script>
-    
-    
-  
 </body>
 </html>

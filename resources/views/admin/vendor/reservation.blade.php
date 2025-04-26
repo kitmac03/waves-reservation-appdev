@@ -23,7 +23,7 @@
               <i class="material-icons nav-icons">dashboard</i> Dashboard
             </button>
           </a>
-          <a href="{{ route('admin.vendor.cottages') }}">
+          <a href="{{ route('admin.vendor.amenities', ['type' => 'cottage']) }}">
             <button class="ameneties" id="ameneties">
               <i class="material-icons nav-icons">holiday_village</i> Amenities
             </button>
