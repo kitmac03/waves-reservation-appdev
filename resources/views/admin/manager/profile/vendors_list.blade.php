@@ -67,17 +67,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Harry Potter</td>
-            <td class="role">Cashier - Morning Shift</td>
-            <td><button class="change-button" onclick="openDialog()">Change role</button></td>
-          </tr>
-          <tr>
-            <td>Hermione Granger</td>
-            <td class="role">Cashier - Afternoon Shift</td>
-            <td><button class="change-button">Change role</button></td>
-          </tr>
+          @foreach ($vendors as $vendor)
+        <tr>
+        <td>{{ $vendor->name }}</td>
+        <td class="role">{{ $vendor->role }}</td>
+        <td>
+          <button class="change-button"
+          onclick="openDialog('{{ $vendor->id }}', '{{ $vendor->name }}', '{{ $vendor->email }}', '{{ $vendor->number }}')">
+          Change role
+          </button>
+        </td>
+        </tr>
+      @endforeach
         </tbody>
+
       </table>
 
     </div>
@@ -89,20 +92,18 @@
     <div class="dialog-container">
       <div class="dialog-info">
         <p class="dialog-title">CHANGE ADMIN ROLE</p>
-        <p class="name"><b>Name: </b>Harry Potter</p>
-        <p class="email"><b>Email: </b>ilovedraco@gmail.com</p>
-        <p class="contact"><b>Contact No: </b>09123479899</p>
+        <p class="name"><b>Name: </b></p> <!-- Dynamic -->
+        <p class="email"><b>Email: </b></p> <!-- Dynamic -->
+        <p class="contact"><b>Contact No: </b></p> <!-- Dynamic -->
         <select class="select-role">
-          <option>Cashier - Morning Shift</option>
-          <option>Cashier - Afternoon Shift</option>
+          <option>Vendor</option>
+          <option>Manager</option>
         </select>
       </div>
 
-      <!---------- Confirm Change Admin Role Dialog ----------->
-
       <div class="button-container">
         <button class="cancel-button" onclick="closeDialog()">Cancel</button>
-        <button class="save-button" onclick="confirmDialog()">Save</button>
+        <button class="save-button" onclick="saveDialog()">Save</button>
       </div>
     </div>
   </dialog>
@@ -118,7 +119,7 @@
       </p>
       <div class="confirm-button-container">
         <button class="exit-button" onclick="exitDialog(); closeDialog()">Cancel</button>
-        <button class="confirm-button">Confirm</button>
+        <button class="confirm-button" onclick="confirmDialog()"> Confirm</button>
       </div>
     </div>
   </dialog>
@@ -127,19 +128,62 @@
   <script>
 
     const changeAdminModal = document.querySelector('.change-admin-modal');
+    let id = ""
+    function openDialog(id, name, email, contact) {
+      this.id = id;
 
-    function openDialog() {
+      const changeAdminModal = document.querySelector('.change-admin-modal');
+
+      // Set the text in the modal
+      changeAdminModal.querySelector('.name').innerHTML = '<b>Name: </b>' + name;
+      changeAdminModal.querySelector('.email').innerHTML = '<b>Email: </b>' + email;
+      changeAdminModal.querySelector('.contact').innerHTML = '<b>Contact No: </b>' + contact;
+
       changeAdminModal.showModal();
     }
+
     function closeDialog() {
       changeAdminModal.close();
     }
 
     const confirmModal = document.querySelector('.confirmation-modal');
 
-    function confirmDialog() {
+    function saveDialog() {
       confirmModal.showModal();
     }
+
+    function confirmDialog() {
+      const selectedRole = document.querySelector('.select-role').value;
+
+      fetch(`/admin/vendors-list/${this.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+          id: this.id,
+          role: selectedRole
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Role updated successfully!');
+            location.reload();
+          } else {
+            alert('Failed to update role.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Something went wrong.');
+        });
+
+      confirmModal.close();
+      changeAdminModal.close();
+    }
+
     function exitDialog() {
       confirmModal.close();
     }

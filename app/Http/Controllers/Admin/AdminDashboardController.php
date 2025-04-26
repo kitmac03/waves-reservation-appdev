@@ -8,6 +8,7 @@ use App\Models\Admin;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AdminDashboardController extends Controller
 {
@@ -19,8 +20,7 @@ class AdminDashboardController extends Controller
 
     public function create()
     {
-        // Return the view for the admin dashboard
-        return view('admin.dashboard'); // Make sure you have an 'admin/dashboard.blade.php' view
+        return view('admin.dashboard');
     }
 
     public function store(Request $request)
@@ -36,10 +36,9 @@ class AdminDashboardController extends Controller
             'role' => $request->role,
         ]);
 
-        // Auth::login($admin);
-
-        // return redirect()->route('admin/dashboard');
+        return redirect()->route('admin.create.account');
     }
+
 
     protected function validator(array $data)
     {

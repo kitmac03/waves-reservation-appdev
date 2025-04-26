@@ -101,7 +101,7 @@ class AmenitiesController extends Controller
         $tables = Amenities::where('type', 'table')->get();
 
         $userId = Auth::id();
-        $user = \App\Models\Admin::find($userId);
+        $user = Admin::find($userId);
 
         if ($user->role == 'manager') {
             return view('admin.manager.amenities.tables2', compact('tables')); 
