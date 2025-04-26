@@ -67,7 +67,7 @@ table {
   justify-content: center;
   align-items: center;
 }
-.reservations {
+.ameneties {
   background-color: white;
   color: #002044;
   font: 400 16px poppins;
@@ -87,7 +87,7 @@ table {
 .nav-icons {
   margin-right: 8px;
 }
-.ameneties, .dashboard {
+.dashboard, .reservations {
   background-color:#002044;
   color: white;
   font: 400 16px poppins;
@@ -131,184 +131,160 @@ table {
   color: #002044;
 }
 
-/******* MAIN STYLE SECTION *******/
-.main {
+.container {
   margin-top: 10vh;
-  justify-content: center;
-  padding: 20px;
 }
 
-.head-title {
-  font-size: 45px;
-  font-weight: 700;
-  color: #101011;
-  margin-bottom: 20px;
-  text-align: center;
+/******* SIDE BAR STYLE ***********/
+
+.sidebar {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+
+  height: 90vh;
+  width: 5vw;
+
+  padding: 2vh 1vw 2vh 1vw;
+
+}
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 95px;
+  height: 95px;
+}
+.icon-container:hover {
+  background-color: #ecf0f1;
+  border-radius: 10px;
+}
+.icon-label {
+  font: 500 14px poppins;
+  color: #002044;
+  cursor: pointer;
+}
+.side-icons {
+  color: #002044; 
+  font-size: 65px !important;
+  margin-top: 8px; 
+  cursor: pointer;
 }
 
-.back-link {
-  display: block;
-  margin-bottom: 10px;
+/*******************  MAIN BODY  *****************************/
+
+.main {
+  background-color: #ecf0f1;
+  height: 90vh;
+  width: 95vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 45px;
+
+  margin-left: 7vw;
+  position: fixed;
+}
+.label {
   text-align: left;
-  color: #263b49;
-  font-size: 18px;
-  text-decoration: none;
+  font: 700 35px poppins;
+  margin-bottom: 18px;
+  width: 86vw;
 }
-
-.chevron-left {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-left: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg);
-  margin-right: 4px;
-  transition: transform 0.2s ease;
-}
-
-.back-link:hover .chevron-left {
-  transform: rotate(45deg) translateX(-2px);
-}
-
-/* Reservation Container Styles */
-.reservation-container {
-  background-color: #c8d8e7;
-  border-radius: 8px;
-  padding: 20px;
-  margin: auto;
-  width: 80%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header-row {
-  display: flex;
-  padding: 10px 15px;
-  border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 15px;
-  font-weight: 600;
-  font-size: 18px;
-}
-
-.header-cell {
-  display: flex;
-  align-items: center;
-}
-
-.name-header {
-  width: 20%;
-}
-
-.calculation-header {
-  width: 25%;
-  justify-content: center;
-}
-
-.remaining-header {
-  width: 20%;
-  justify-content: center;
-}
-
-.header-cell:last-child {
-  width: 26%;
-}
-
-.reservation-item {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background-color: white;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.name-cell {
-  width: 20%;
-}
-
-.guest-name {
-  font-weight: 500;
-  font-size: 16px;
-}
-
-.calculation-cell {
-  width: 20%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-}
-
-.total-amount, .downpayment {
-  font-weight: 500;
-}
-
-.minus, .equals {
-  font-weight: bold;
-  color: #64748b;
-}
-
-.remaining-cell {
-  width: 25%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.status-cell {
-  width: 15%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.balance-amount {
-  font-weight: 600;
-  font-size: 18px;
-  color: #ef4444;
-}
-
-.action-cell {
-  width: 25%;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.verify-btn {
-  background-color: #10b981;
-  border: none;
-  color: white;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  white-space: nowrap;
-}
-
-.verify-btn:hover {
-  background-color: #059669;
-}
-
-.reminder-btn {
-  background-color: rgb(66, 120, 235);
-  border: none;
-  color: white;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  white-space: nowrap;
-}
-
-.reminder-btn:hover {
-  background-color: #2663dc;
-}
-.verify-btn,
-.reminder-btn {
-  font-size: 14px;
-  padding: 6px 12px; /* smaller padding */
-  border-radius: 6px;
-  min-width: 110px;
+.table {
+  width: 80vw;
+  margin-left: 0;
+  margin-right: 100px;
   text-align: center;
+
+  padding: 30px 30px 30px 30px;
+
+}
+th {
+  font: 700 18px poppins;
+  padding: 12px 50px 12px 70px;;
+}
+td {
+  text-align: center;
+  border-bottom: 2px solid #ccc;
+  border-top: 2px solid #ccc;
+  padding: 12px 50px 12px 70px;
+  font: 300 18px poppins;
+}
+.button-wrapper {
+  margin-left: 100px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.edit-icon {
+  color: #002044;
+}
+.archive-button {
+  border: none;
+  background-color: #002044;
+  color: white;
+  border-radius: 8px;
+  font: 300 12px poppins;
+  padding: 8px 16px 8px 16px;
+}
+
+.add-items-container {
+  width: 86vw;
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+  gap: 8px;
+}
+.add-icon, .add-text {
+  color: #002044;
+  font: 500 12px poppins;
+}
+
+.modal {
+  height: 25vh;
+  width: 30vw;
+
+  border: none;
+  border-radius: 12px;
+}
+.modal-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.modal-heading {
+  font: 700 18px poppins;
+}
+.modal-text {
+  font: 400 16px poppins;
+  padding: 6px 30px 12px 30px;
+}
+.modal-button-wrapper {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+
+  width: 100%;
+}
+.cancel-button {
+  color: red;
+  font: 400 16px poppins;
+  border: none;
+  background: none;
+}
+.confirm-button {
+  background-color: #002044;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 20px 4px 20px;
+  font: 400 16px poppins;
 }

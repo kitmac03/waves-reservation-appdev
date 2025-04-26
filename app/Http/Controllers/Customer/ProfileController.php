@@ -25,9 +25,6 @@ class ProfileController extends Controller
     {
         $customer = Customer::findOrFail($id);
 
-        Log::debug('Updating Profile for customer ID: ' . $id);
-        Log::debug('Request Data: ', $request->all());
-
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|regex:/^[0-9]{11}$/',

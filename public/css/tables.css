@@ -87,7 +87,7 @@ table {
 .nav-icons {
   margin-right: 8px;
 }
-.reservations, .dashboard {
+.dashboard, .reservations {
   background-color:#002044;
   color: white;
   font: 400 16px poppins;
@@ -177,139 +177,70 @@ table {
 /*******************  MAIN BODY  *****************************/
 
 .main {
-    background-color: white;
-    height: 90vh;
-    width: 95vw;
-    margin-left: 7vw;
-    position: fixed;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    overflow: hidden;
-  
+  background-color: #ecf0f1;
+  height: 90vh;
+  width: 95vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 45px;
+
+  margin-left: 7vw;
+  position: fixed;
+}
+.label {
+  text-align: left;
+  font: 700 35px poppins;
+  margin-bottom: 18px;
+  width: 86vw;
+}
+.table {
+  width: 80vw;
+  margin-left: 0;
+  margin-right: 100px;
+  text-align: center;
+
+  padding: 30px 30px 30px 30px;
+
+}
+th {
+  font: 700 18px poppins;
+  padding: 12px 50px 12px 70px;;
+}
+td {
+  text-align: center;
+  border-bottom: 2px solid #ccc;
+  border-top: 2px solid #ccc;
+  padding: 12px 50px 12px 70px;
+  font: 300 18px poppins;
+}
+.button-wrapper {
+  margin-left: 100px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.edit-icon {
+  color: #002044;
+}
+.archive-button {
+  border: none;
+  background-color: #002044;
+  color: white;
+  border-radius: 8px;
+  font: 300 12px poppins;
+  padding: 8px 16px 8px 16px;
 }
 
-.date-container {
-    margin: 20px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    font-family: 'Poppins', sans-serif;
-    border: 2px solid #e0e0e0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-
-  }
-  
-  .date-title {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-  
-  .date-selectors select {
-    margin: 5px;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  /* Availability table */
-  .availability-table {
-    width: calc(100% - 40px);
-    border-collapse: separate;
-    margin: 20px;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    border: 2px solid #e0e0e0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
-  .availability-table th, 
-  .availability-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .availability-table th {
-    background-color: #002044;
-    color: white;
-  }
-  
-  /* Status indicators */
-  .available {
-    color: #27ae60;
-    font-weight: 500;
-  }
-  
-  .not-available {
-    color: #e74c3c;
-    font-weight: 500;
-  }
-  
-  /* Status indicators with dots */
-  .available::before,
-  .not-available::before {
-    content: "";
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-  
-  .available::before {
-    background-color: #27ae60;
-  }
-  
-  .not-available::before {
-    background-color: #e74c3c;
-  }
-  
-  /* Hover effects */
-  .availability-table tr:hover td {
-    background-color: #f8fafc;
-  }
-
-
-  .available {
-    background-color: #d4edda; /* Light green */
-    color: #155724; /* Dark green text */
-    font-weight: bold;
-  }
-  
-  .not-available {
-    background-color: #f8d7da; /* Light red */
-    color: #721c24; /* Dark red text */
-    font-weight: bold;
-  }
-  
-
-  .icon-container.active {
-    background-color: #263b49; /* green background */
-    color: white; /* white icon and text */
-    border-radius: 10px;
-  }
-  
-  .icon-container.active .material-icons,
-  .icon-container.active .icon-label {
-    color: white;
-  }
-  
-  .content-section{
-    display: none;
-  }
-
-  .content-section.active{
-    display: block;
-  }
-
-  #cancel-tab {
-    color: #e74c3c; /* red tone */
-  }
-  
-  #cancel-tab:hover {
-    background-color: #fbeaea;
-  }
-  
+.add-items-container {
+  width: 86vw;
+  display: flex;
+  align-items: center;
+  margin-top: 18px;
+  gap: 8px;
+}
+.add-icon, .add-text {
+  color: #002044;
+  font: 500 12px poppins;
+}
