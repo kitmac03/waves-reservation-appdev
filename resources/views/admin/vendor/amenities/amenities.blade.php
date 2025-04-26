@@ -103,11 +103,13 @@
 <!-- JavaScript Section -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
+    const currentDateEl = document.getElementById('current-date');
     const monthSelect = document.getElementById('month-select');
     const daySelect = document.getElementById('day-select');
     const yearSelect = document.getElementById('year-select');
     const timeSelect = document.getElementById('time-select');
     const amenitiesTableBody = document.querySelector('.availability-table tbody');
+    const now = new Date();
 
     const monthNames = [
         "January", "February", "March", "April", "May", "June",
@@ -129,6 +131,28 @@
         option.textContent = y;
         yearSelect.appendChild(option);
     }
+
+    function updateCurrentDateTitle(year, month, day) {
+      const parsedYear = parseInt(year, 10);
+      const parsedMonth = parseInt(month, 10) - 1;
+      const parsedDay = parseInt(day, 10);
+
+      const date = new Date(parsedYear, parsedMonth, parsedDay);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      
+      if (isNaN(date)) {
+          currentDateEl.textContent = 'Invalid Date';
+      } else {
+          currentDateEl.textContent = date.toLocaleDateString(undefined, options);
+      }
+  }
+
+    function updateCurrentDateTitle(year, month, day) {
+        const date = new Date(year, month, day);
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDateEl.textContent = date.toLocaleDateString(undefined, options);
+    }
+
 
     function updateDays() {
         const selectedYear = parseInt(yearSelect.value);
@@ -187,11 +211,11 @@
     }
 
     // Initial setup
-    const now = new Date();
     monthSelect.value = now.getMonth();
     yearSelect.value = now.getFullYear();
     updateDays();
     daySelect.value = now.getDate();
+    updateCurrentDateTitle(now.getFullYear(), now.getMonth(), now.getDate());
 
     // Set current time to timeSelect (HH:MM)
     const hours = now.getHours().toString().padStart(2, '0');
@@ -199,14 +223,19 @@
     timeSelect.value = `${hours}:${minutes}`;
 
     monthSelect.addEventListener('change', () => {
-        updateDays();
-        updateAmenitiesStatus();
+      updateDays();
+      updateCurrentDateTitle(yearSelect.value, monthSelect.value, daySelect.value);
+      updateAmenitiesStatus();
     });
     yearSelect.addEventListener('change', () => {
-        updateDays();
-        updateAmenitiesStatus();
+      updateDays();
+      updateCurrentDateTitle(yearSelect.value, monthSelect.value, daySelect.value);
+      updateAmenitiesStatus();
     });
-    daySelect.addEventListener('change', updateAmenitiesStatus);
+    daySelect.addEventListener('change', () => { 
+      updateAmenitiesStatus();
+      updateCurrentDateTitle(yearSelect.value, monthSelect.value, daySelect.value);
+    });
     timeSelect.addEventListener('change', updateAmenitiesStatus);
   });
 

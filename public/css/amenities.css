@@ -47,7 +47,7 @@ table {
 /******* NAVIGATION BAR STYLE ***********/
 
 .navbar {
-  background-color: #263b49;
+  background-color: #002044;
 
   height: 10vh;
   width: 100vw;
@@ -67,9 +67,9 @@ table {
   justify-content: center;
   align-items: center;
 }
-.ameneties {
+.reservations {
   background-color: white;
-  color: #263b49;
+  color: #002044;
   font: 400 16px poppins;
   cursor: pointer;
 
@@ -87,8 +87,8 @@ table {
 .nav-icons {
   margin-right: 8px;
 }
-.dashboard, .reservations {
-  background-color:#263b49;
+.ameneties, .dashboard {
+  background-color:#002044;
   color: white;
   font: 400 16px poppins;
   cursor: pointer;
@@ -117,18 +117,18 @@ table {
   align-items: center;
 }
 .profile {
-  background-color: #263b49;
+  background-color: #002044;
   border: 0 solid black;
   cursor: pointer;
 }
 
 .inactive {
-  background-color: #263b49;
+  background-color: #002044;
   color: white;
 }
 .active {
   background-color: white;
-  color: #263b49;
+  color: #002044;
 }
 
 .container {
@@ -164,11 +164,11 @@ table {
 }
 .icon-label {
   font: 500 14px poppins;
-  color: #263b49;
+  color: #002044;
   cursor: pointer;
 }
 .side-icons {
-  color: #263b49; 
+  color: #002044; 
   font-size: 65px !important;
   margin-top: 8px; 
   cursor: pointer;
@@ -233,7 +233,7 @@ table {
   }
   
   .availability-table th {
-    background-color: #4a668e;
+    background-color: #002044;
     color: white;
   }
   
