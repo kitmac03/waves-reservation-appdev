@@ -6,27 +6,87 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Amenities;
+use App\Models\ReservedAmenity;
+use Carbon\Carbon;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class AmenitiesController extends Controller
 {
+    public function view_amenities(Request $request, $type = 'cottage')
+    {
+        if (!in_array($type, ['cottage', 'table'])) {
+            return redirect()->back()->with('error', 'Invalid amenities type.');
+        }
+
+        $dateTime = $request->input('date_time', now());
+        $currentDateTime = Carbon::parse($dateTime);
+
+        $date = $currentDateTime->toDateString();
+        $time = $currentDateTime->format('H:i:s');
+
+        // Correct column name: `amenity_id`
+        $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($query) use ($date, $time) {
+            $query->whereDate('date', $date)
+                ->where('startTime', '<=', $time)
+                ->where('endTime', '>=', $time);
+        })->pluck('amenity_id')->toArray();
+
+        $amenities = Amenities::where('type', $type)->get();
+
+        foreach ($amenities as $amenity) {
+            $amenity->availability_status = ($amenity->is_active && !in_array($amenity->id, $reservedAmenities))
+                ? 'Available'
+                : 'Not Available';
+        }
+
+        if ($request->ajax()) {
+            return response()->json(['amenities' => $amenities]);
+        }
+
+        $userId = Auth::id();
+        $user = Admin::find($userId);
+
+        if ($user->role == 'manager') {
+            return view('admin.manager.amenities.index', compact('amenities', 'type'));
+        } elseif ($user->role == 'vendor') {
+            return view('admin.vendor.amenities.index', compact('amenities', 'type'));
+        }
+
+        return redirect()->route('login')->with('error', 'Unauthorized access.');
+    }
+
     public function view_cottages()
     {
         // Retrieve all cottages (both active and archived)
         $cottages = Amenities::where('type', 'cottage')->get();
 
         $userId = Auth::id();
-        $user = Admin::find($userId);
+        $user = \App\Models\Admin::find($userId);
 
         if ($user->role == 'manager') {
             return view('admin.manager.amenities.cottages', compact('cottages'));
         } else if ($user->role == 'vendor') {
             return view('admin.vendor.amenities.cottages', compact('cottages'));
         }
-        return redirect()->route('login')->with('error', 'Unauthorized access.');
     }
+
+    public function view_tables()
+    {
+        // Retrieve all tables (both active and archived)
+        $tables = Amenities::where('type', 'table')->get();
+
+        $userId = Auth::id();
+        $user = \App\Models\Admin::find($userId);
+
+        if ($user->role == 'manager') {
+            return view('admin.manager.amenities.tables', compact('tables')); 
+        } else if ($user->role == 'vendor') {
+            return view('admin.vendor.amenities.tables', compact('tables')); 
+        }
+    }
+
 
     public function add_cottage(Request $request)
     {
@@ -93,22 +153,6 @@ class AmenitiesController extends Controller
         return redirect()->back()->with('success', 'Cottage unarchived successfully!');
     }
 
-
-
-    public function view_tables()
-    {
-        // Retrieve all tables (both active and archived)
-        $tables = Amenities::where('type', 'table')->get();
-
-        $userId = Auth::id();
-        $user = \App\Models\Admin::find($userId);
-
-        if ($user->role == 'manager') {
-            return view('admin.manager.amenities.tables', compact('tables')); 
-        } else if ($user->role == 'vendor') {
-            return view('admin.vendor.amenities.tables', compact('tables')); 
-        }
-    }
 
     public function add_table(Request $request)
     {
