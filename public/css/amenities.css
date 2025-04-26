@@ -67,7 +67,7 @@ table {
   justify-content: center;
   align-items: center;
 }
-.reservations {
+.ameneties {
   background-color: white;
   color: #002044;
   font: 400 16px poppins;
@@ -87,7 +87,7 @@ table {
 .nav-icons {
   margin-right: 8px;
 }
-.ameneties, .dashboard {
+.reservations, .dashboard {
   background-color:#002044;
   color: white;
   font: 400 16px poppins;
