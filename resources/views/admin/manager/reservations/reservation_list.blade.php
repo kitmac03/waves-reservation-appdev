@@ -16,17 +16,17 @@
   <nav class="navbar">
 
     <div class="left-side-nav">
-      <a href="dashboard.html">
+      <a href="{{ route('admin.dashboard') }}">
         <button class="dashboard" id="dashboard">
           <i class="material-icons nav-icons">dashboard</i> Dashboard
         </button>
       </a>
-      <a href="cottages.html">
+      <a href="{{ route('admin.cottages') }}">
         <button class="ameneties" id="ameneties">
           <i class="material-icons nav-icons">holiday_village</i> Amenities
         </button>
       </a>
-      <a href="reservations.html">
+      <a href="{{ route('admin.reservation.list') }}">
         <button class="reservations" id="reservation">
           <i class="material-icons nav-icons">date_range</i> Reservations
         </button>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="right-side-nav">
-      <a href="manager_profile.html">
+      <a href="{{ route('admin.manager.profile') }}">
         <button class="profile">
           <i class="material-icons" style="font-size:45px; color: white">
             account_circle
@@ -52,7 +52,7 @@
     <div class="calendar-header">
       <p>October 2024</p>
       <div class="dropdowns">
-        <a href="reservation_history.html">
+        <a href="{{ route('admin.all.reservations') }}">
           <button>
             Reservation
           </button>

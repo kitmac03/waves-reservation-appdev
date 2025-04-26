@@ -61,9 +61,9 @@
         <div class="profile-details">
           <div class="avatar"></div>
           <div class="info">
-            <p class="name">Hector Culaste</p>
-            <p><i class="material-icons">email</i> hectorc@gmail.com</p>
-            <p><i class="material-icons">phone</i> 09204567334</p>
+            <p class="name">{{ $admin->name }}</p>
+            <p><i class="material-icons">email</i> {{ $admin->email }}</p>
+            <p><i class="material-icons">phone</i> {{ $admin->number }}</p>
           </div>
         </div>
 

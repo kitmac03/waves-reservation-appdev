@@ -34,7 +34,7 @@ class AdminMiddleware
             return redirect()->route('login');  // Redirect if not an admin or manager
         }
 
-        if ($user && ($user->role === 'vendor' || $user->role === 'manager')) {
+        if ($user && ($user->role === 'Vendor' || $user->role === 'Manager')) {
             return $next($request);  // Allow the request to continue if the user is an admin or manager
         }
     }

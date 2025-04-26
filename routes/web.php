@@ -68,19 +68,26 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
 Route::middleware(AdminMiddleware::class)->group(function () {
     Route::get('admin/dashboard', [AdminDashboardController::class, 'create'])
     ->name('admin.dashboard');
+});
+
+// Manager Routes
+Route::middleware(ManagerMiddleware::class)->group(function () {
     Route::get('admin/create-account', [AdminDashboardController::class, 'create_admin'])
-    ->middleware(ManagerMiddleware::class)->name('admin.create.account');
-    Route::post('admin/create-account', [AdminDashboardController::class, 'store']);
+    ->name('admin.create.account');
+    Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
+    ->name('admin.create.account.store');;
     Route::get('admin/reservation-list', [ManagerProfileController::class, 'view_reservation_list'])
-    ->middleware(ManagerMiddleware::class)->name('admin.reservation.list');
+    ->name('admin.reservation.list');
     Route::get('admin/all-reservations', [ManagerProfileController::class, 'view_all_reservations'])
-    ->middleware(ManagerMiddleware::class)->name('admin.all.reservations');
+    ->name('admin.all.reservations');
     Route::get('admin/manager-profile', [ManagerProfileController::class, 'view_profile'])
-    ->middleware(ManagerMiddleware::class)->name('admin.manager.profile');
+    ->name('admin.manager.profile');
     Route::get('admin/vendors-list', [ManagerProfileController::class, 'view_vendors_list'])
-    ->middleware(ManagerMiddleware::class)->name('admin.vendors.list');
+    ->name('admin.vendors.list');
+    Route::post('admin/vendors-list/{id}', [ManagerProfileController::class, 'update_vendors_list'])
+    ->name('admin.vendors.list.promote');
     Route::get('admin/delete-requests', [ManagerProfileController::class, 'view_del_req'])
-    ->middleware(ManagerMiddleware::class)->name('admin.delete.requests');
+    ->name('admin.delete.requests');
 });
 
 //  Vendor Routes
