@@ -48,175 +48,84 @@ class AmenitiesController extends Controller
         $userId = Auth::id();
         $user = Admin::find($userId);
 
-        if ($user->role == 'manager') {
+        if ($user->role == 'Manager') {
             return view('admin.manager.amenities.index', compact('amenities', 'type'));
-        } elseif ($user->role == 'vendor') {
+        } elseif ($user->role == 'Vendor') {
             return view('admin.vendor.amenities.index', compact('amenities', 'type'));
         }
 
         return redirect()->route('login')->with('error', 'Unauthorized access.');
     }
 
-    public function view_cottages()
-    {
-        // Retrieve all cottages (both active and archived)
-        $cottages = Amenities::where('type', 'cottage')->get();
-
-        $userId = Auth::id();
-        $user = \App\Models\Admin::find($userId);
-
-        if ($user->role == 'manager') {
-            return view('admin.manager.amenities.cottages2', compact('cottages'));
-        } else if ($user->role == 'vendor') {
-            return view('admin.vendor.amenities.cottages', compact('cottages'));
-        }
-    }
-
-    public function view_tables()
-    {
-        // Retrieve all tables (both active and archived)
-        $tables = Amenities::where('type', 'table')->get();
-
-        $userId = Auth::id();
-        $user = \App\Models\Admin::find($userId);
-
-        if ($user->role == 'manager') {
-            return view('admin.manager.amenities.tables', compact('tables')); 
-        } else if ($user->role == 'vendor') {
-            return view('admin.vendor.amenities.tables', compact('tables')); 
-        }
-    }
-
-
-    public function add_cottage(Request $request)
+    public function add_amenity(Request $request)
     {
         Log::debug('Incoming request data:', $request->all());
-
-        $type = 'cottage';
+    
+        // Get the type from the request, defaulting to 'cottage' if not provided
+        $type = $request->input('type', 'cottage'); 
+    
+        // Ensure that the type is either 'cottage' or 'table'
+        if (!in_array($type, ['cottage', 'table'])) {
+            return redirect()->back()->with('error', 'Invalid amenity type selected.');
+        }
+    
+        // Get the authenticated admin's ID
         $userId = Auth::id();
-
+    
         Log::debug('Admin ID:', [$userId]);
-
+    
+        // Validate the input data, adding the type and added_by to the validation
         $validator = $this->validator(array_merge($request->all(), ['type' => $type, 'added_by' => $userId]));
-
+    
+        // Handle validation failure
         if ($validator->fails()) {
             Log::error('Validation failed:', $validator->errors()->all());
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+    
+        // Create the new amenity (either cottage or table)
         Amenities::create([
             'name' => $request->name,
             'price' => $request->price,
             'type' => $type,
             'added_by' => $userId,
         ]);
-
-        return redirect()->back()->with('success', 'Cottage added successfully!');
+    
+        return redirect()->back()->with('success', ucfirst($type) . ' added successfully!');
     }
 
-    public function edit_cottage($id)
+    public function update_amenity(Request $request, $type, $id)
     {
-        $cottage = Amenities::findOrFail($id);
-        return view('admin.manager.amenities.edit_cottage', compact('cottage'));
-    }
+        $amenity = Amenities::where('type', $type)->findOrFail($id);
 
-    public function update_cottage(Request $request, $id)
-    {
-        $cottage = Amenities::findOrFail($id);
-
+        // Validate the data
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
         ]);
 
-        $cottage->update([
+        // Update the amenity (whether it's a cottage or table)
+        $amenity->update([
             'name' => $request->name,
             'price' => $request->price,
         ]);
 
-        return redirect()->back()->with('success', 'Cottage updated successfully!');
+        return redirect()->back()->with('success', ucfirst($type) . ' updated successfully!');
     }
-
-    public function archive_cottage($id)
+    public function archive($id)
     {
-        $cottage = Amenities::findOrFail($id);
-        $cottage->update(['is_active' => false]);
+        $amenity = Amenities::findOrFail($id);
+        $amenity->update(['is_active' => false]);
 
         return redirect()->back()->with('success', 'Cottage archived successfully!');
     }
 
-    public function unarchive_cottage($id)
+    public function unarchive($id)
     {
-        $cottage = Amenities::findOrFail($id);
-        $cottage->update(['is_active' => true]);
+        $amenity = Amenities::findOrFail($id);
+        $amenity->update(['is_active' => true]);
 
         return redirect()->back()->with('success', 'Cottage unarchived successfully!');
-    }
-
-
-    public function add_table(Request $request)
-    {
-        Log::debug('Incoming request data:', $request->all());
-
-        $type = 'table';
-        $userId = Auth::id();
-
-        Log::debug('Admin ID:', [$userId]);
-
-        $validator = $this->validator(array_merge($request->all(), ['type' => $type, 'added_by' => $userId]));
-
-        if ($validator->fails()) {
-            Log::error('Validation failed:', $validator->errors()->all());
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        Amenities::create([
-            'name' => $request->name,
-            'price' => $request->price,
-            'type' => $type,
-            'added_by' => $userId,
-        ]);
-
-        return redirect()->back()->with('success', 'Table added successfully!');
-    }
-
-    public function edit_table($id)
-    {
-        $table = Amenities::findOrFail($id);
-        return view('admin.manager.amenities.edit_table', compact('table'));
-    }
-
-    public function update_table(Request $request, $id)
-    {
-        $table = Amenities::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-        ]);
-
-        $table->update([
-            'name' => $request->name,
-            'price' => $request->price,
-        ]);
-
-        return redirect()->back()->with('success', 'Table updated successfully!');
-    }
-
-    public function archive_table($id)
-    {
-        $table = Amenities::findOrFail($id);
-        $table->update(['is_active' => false]);
-
-        return redirect()->back()->with('success', 'Table archived successfully!');
-    }
-
-    public function unarchive_table($id)
-    {
-        $table = Amenities::findOrFail($id);
-        $table->update(['is_active' => true]);
-
-        return redirect()->back()->with('success', 'Table unarchived successfully!');
     }
 
     protected function validator(array $data)

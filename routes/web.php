@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
     Route::post('customer/reservation-records/{reservation}/cancel', [ReservationController::class, 'cancel_reservation'])
     ->name('cancel.reservation');
-
+    Route::get('/api/events', [ReservationRecordController::class, 'getEvents']);
 });
 
 // Downpayment routes
@@ -72,11 +72,22 @@ Route::middleware(AdminMiddleware::class)->group(function () {
 
 // Manager Routes
 Route::middleware(ManagerMiddleware::class)->group(function () {
+    Route::get('admin/amenities/{type?}', [AmenitiesController::class, 'view_amenities'])
+    ->name('admin.manager.amenities');
+    Route::post('admin/amenities', [AmenitiesController::class, 'add_amenity'])
+    ->name('amenities.store');
+    Route::patch('admin/{type}s/{id}/update', [AmenitiesController::class, 'update_amenity'])
+    ->name('amenities.update')
+    ->where('type', '(cottage|table)');
+    Route::patch('admin/amenities/{id}/archive', [AmenitiesController::class, 'archive'])
+    ->name('amenitys.archive');
+    Route::patch('admin/amenities/{id}/unarchive', [AmenitiesController::class, 'unarchive'])
+    ->name('amenitys.unarchive');
     Route::get('admin/create-account', [AdminDashboardController::class, 'create_admin'])
     ->name('admin.create.account');
     Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
-    ->name('admin.create.account.store');;
-    Route::get('admin/reservation-list', [ManagerProfileController::class, 'view_reservation_list'])
+    ->name('admin.create.account.store');
+    Route::get('admin/reservation-list', [ReservationRecordController::class, 'view_reservation'])
     ->name('admin.reservation.list');
     Route::get('admin/all-reservations', [ManagerProfileController::class, 'view_all_reservations'])
     ->name('admin.all.reservations');
@@ -106,7 +117,6 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.reservation_records');
     Route::get('admin/vendor/balance', [ReservationRecordController::class, 'view_balance'])
     ->name('admin.vendor.remainingbal');
-    Route::get('/api/events', [ReservationRecordController::class, 'getEvents']);
     Route::post('/admin/vendor/process-payment', [PaymentController::class, 'processPayment'])
     ->name('admin.vendor.process-payment');
     Route::post('/admin/vendor/invalid-payment', [PaymentController::class, 'invalidPayment'])
@@ -119,35 +129,4 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     ->name('admin.vendor.walk_in.store');
     Route::get('admin/vendor/payment/{reservation}', [ReservationRecordController::class, 'payment_show'])
     ->name('admin.vendor.reservations.payment.show');
-});
-
-//  Amenities Routes (Manager Only)
-Route::middleware([ManagerMiddleware::class])->group(function () {
-    // Cottages
-    Route::get('admin/cottages', [AmenitiesController::class, 'view_cottages'])
-    ->name('admin.cottages');
-    Route::post('admin/cottages', [AmenitiesController::class, 'add_cottage'])
-    ->name('cottages.store');
-    Route::get('/cottages/{id}/edit', [AmenitiesController::class, 'edit_cottage'])
-    ->name('cottages.edit');
-    Route::patch('/cottages/{id}/update', [AmenitiesController::class, 'update_cottage'])
-    ->name('cottages.update');
-    Route::patch('admin/cottages/{id}/archive', [AmenitiesController::class, 'archive_cottage'])
-    ->name('cottages.archive');
-    Route::patch('admin/cottages/{id}/unarchive', [AmenitiesController::class, 'unarchive_cottage'])
-    ->name('cottages.unarchive');
-
-    // Tables
-    Route::get('admin/tables', [AmenitiesController::class, 'view_tables'])
-    ->name('admin.tables');
-    Route::post('admin/tables', [AmenitiesController::class, 'add_table'])
-    ->name('tables.store');
-    Route::patch('admin/tables/{id}/update', [AmenitiesController::class, 'update_table'])
-    ->name('tables.update');
-    Route::get('admin/tables/{id}/edit', [AmenitiesController::class, 'edit_table'])
-    ->name('tables.edit');
-    Route::patch('admin/tables/{id}/archive', [AmenitiesController::class, 'archive_table'])
-    ->name('tables.archive');
-    Route::patch('admin/tables/{id}/unarchive', [AmenitiesController::class, 'unarchive_table'])
-    ->name('tables.unarchive');
 });
