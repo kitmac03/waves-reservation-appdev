@@ -109,14 +109,16 @@ class ReservationRecordController extends Controller
     public function view_reservation()
     {
         $userId = Auth::id();
-        $vendor = Admin::find($userId);
-        
-        if ($vendor && $vendor->role === 'vendor') {
+        $user = Admin::find($userId);
+
+        if ($user->role == 'Manager') {
+            return view('admin.manager.reservations.reservation_list');
+        } elseif ($user->role == 'Vendor') {
             return view('admin.vendor.reservation_calendar');
         }
-    
-       
+
         return redirect()->route('login')->with('error', 'Unauthorized access.');
+    
     }
 
     public function getEvents()
@@ -138,7 +140,7 @@ class ReservationRecordController extends Controller
                     'pending' => ['bg' => '#fdf0bf', 'border' => '##a96715'],
                     'cancelled' => ['bg' => '#fce1e1', 'border' => '#c23a3a'],
                     'invalid' => ['bg' => '#fce1e1', 'border' => '#c23a3a'],
-                    'completed' => ['bg' => '#f3ebed', 'border' => '#4a4a58']
+                    'completed' => ['bg' => '#f3ebed', 'border' => '#475569']
                 ];
     
                 $status = strtolower($reservation->status);

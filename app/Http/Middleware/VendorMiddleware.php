@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Admin;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -21,7 +22,7 @@ class VendorMiddleware
 
         if ($userId) {
             // Attempt to find the admin by their ID
-            $user = \App\Models\Admin::find($userId);
+            $user = Admin::find($userId);
 
             // Debug: Log if the user is found or not
             if ($user) {
@@ -34,7 +35,7 @@ class VendorMiddleware
             return redirect()->route('login');  // Redirect if not an admin or manager
         }
 
-        if ($user && ($user->role === 'vendor')) {
+        if ($user && ($user->role === 'Vendor')) {
             return $next($request);  // Allow the request to continue if the user is an admin or manager
         }
     }

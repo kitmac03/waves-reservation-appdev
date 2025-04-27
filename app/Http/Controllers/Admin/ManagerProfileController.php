@@ -9,10 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ManagerProfileController extends Controller
 {
-    public function view_reservation_list()
-    {
-        return view('admin.manager.reservations.reservation_list');
-    }
 
     public function view_all_reservations()
     {

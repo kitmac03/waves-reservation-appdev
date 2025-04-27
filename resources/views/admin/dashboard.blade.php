@@ -15,6 +15,17 @@
   <!-- NAVIGATION BAR SECTION -->
 
   <nav class="navbar">
+    @php
+      $user = \App\Models\Admin::find(Auth::id());
+
+      $calendar_route = $user && $user->role === 'Manager'
+          ? route('admin.reservation.list')
+          : route('admin.vendor.reservation_calendar');
+
+      $amenities_route = $user && $user->role === 'Manager'
+          ? route('admin.manager.amenities', ['type' => 'cottage'])
+          : route('admin.vendor.amenities', ['type' => 'cottage']);
+    @endphp
 
     <div class="left-side-nav">
       <a href="{{ route('admin.dashboard') }}">
@@ -22,12 +33,12 @@
           <i class="material-icons nav-icons">dashboard</i> Dashboard
         </button>
       </a>
-      <a href="{{ route('admin.cottages') }}">
+      <a href="{{ $amenities_route }}">
         <button class="ameneties" id="ameneties">
           <i class="material-icons nav-icons">holiday_village</i> Amenities
         </button>
       </a>
-      <a href="{{ route('admin.reservation.list') }}">
+      <a href="{{ $calendar_route }}">
         <button class="reservations" id="reservation">
           <i class="material-icons nav-icons">date_range</i> Reservations
         </button>
@@ -54,8 +65,6 @@
     </p>
 
   </main>
-
-  <script src="../js/navbutton.js"></script>
   
 </body>
 </html>
