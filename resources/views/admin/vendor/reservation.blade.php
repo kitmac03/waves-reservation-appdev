@@ -18,7 +18,7 @@
     <nav class="navbar">
 
         <div class="left-side-nav">
-          <a href="dashboard.html">
+          <a href="{{ route('admin.dashboard') }}">
             <button class="dashboard inactive" id="dashboard">
               <i class="material-icons nav-icons">dashboard</i> Dashboard
             </button>

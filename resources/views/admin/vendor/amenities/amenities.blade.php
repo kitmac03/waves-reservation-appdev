@@ -18,12 +18,12 @@
   <nav class="navbar">
 
     <div class="left-side-nav">
-      <a href="{{ url('dashboard') }}">
+      <a href="{{ route('admin.dashboard') }}">
         <button class="dashboard" id="dashboard">
           <i class="material-icons nav-icons">dashboard</i> Dashboard
         </button>
       </a>
-      <a href="{{ route('admin.vendor.amenities', ['type' => 'table']) }}">
+      <a href="{{ route('admin.vendor.amenities', ['type' => 'cottage']) }}">
         <button class="ameneties" id="ameneties-btn">
           <i class="material-icons nav-icons">holiday_village</i> Amenities
         </button>
@@ -67,16 +67,6 @@
           Tables
         </p>
       </div>
-
-        <div class="icon-container" id="cancel-tab">
-          <i class="material-icons side-icons">
-            close
-          </i>
-          <p class="icon-label">
-            Cancel
-          </p>
-      </div>
-
     </nav>
 
   <!----------------------- MAIN SECTION  ---------------------------->
