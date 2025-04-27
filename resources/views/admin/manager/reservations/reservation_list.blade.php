@@ -47,6 +47,15 @@
 		</button>
 		</a>
 	</div>
+	<div class="right-side-nav">
+      <a href="{{ route('admin.manager.profile') }}">
+        <button class="profile">
+          <i class="material-icons" style="font-size:45px; color: white">
+            account_circle
+          </i>
+        </button>
+      </a>
+    </div>
 
   </nav>
 

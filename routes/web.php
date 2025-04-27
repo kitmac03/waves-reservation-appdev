@@ -89,10 +89,12 @@ Route::middleware(ManagerMiddleware::class)->group(function () {
     ->name('admin.create.account.store');
     Route::get('admin/reservation-list', [ReservationRecordController::class, 'view_reservation'])
     ->name('admin.reservation.list');
-    Route::get('admin/all-reservations', [ManagerProfileController::class, 'view_all_reservations'])
+    Route::get('admin/all-reservations', [AdminDashboardController::class, 'view_all_reservations'])
     ->name('admin.all.reservations');
     Route::get('admin/manager-profile', [ManagerProfileController::class, 'view_profile'])
     ->name('admin.manager.profile');
+    Route::put('admin/manager-profile/{id}/update', [ManagerProfileController::class, 'update_profile'])
+    ->name('admin.manager.profile.update');
     Route::get('admin/vendors-list', [ManagerProfileController::class, 'view_vendors_list'])
     ->name('admin.vendors.list');
     Route::post('admin/vendors-list/{id}', [ManagerProfileController::class, 'update_vendors_list'])
