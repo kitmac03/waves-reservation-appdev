@@ -28,7 +28,7 @@
     $amenities_route = $user && $user->role === 'Manager'
       ? route('admin.manager.amenities', ['type' => 'cottage'])
       : route('admin.vendor.amenities', ['type' => 'cottage']);
-    @endphp
+  @endphp
 
     <div class="left-side-nav">
       <a href="{{ route('admin.dashboard') }}">
@@ -81,127 +81,285 @@
 
 
     <!-- RESERVATION COLUMNS -->
-    <div class="reservations-container">
-      <!-- Cancelled -->
-      <div class="column">
-        <h2>Cancelled</h2>
-        <div class="reservation cancelled-res">
-          <div class="details">#6 Maria Sanchez<br><small>2024-11-24</small></div>
-          <div class="time">8:00 AM</div>
-        </div>
-        <div class="reservation cancelled-res">
-          <div class="details">#2 Zuleika Yee<br><small>2023-01-20</small></div>
-          <div class="time">12:00 PM</div>
-        </div>
+    <div class="reservations-containeroverflow-y-auto">
+      <!-- Cancelled Column -->
+      <div class="reservation-column">
+        <h4>Cancelled</h4>
+        @if ($cancelledReservations->isEmpty())
+      <p class="text-center">No cancelled reservations.</p>
+    @else
+      @foreach ($cancelledReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+      @php
+    $date = new DateTime($reservation->date ?? now());
+    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+    $statusColor = match ($reservation->status) {
+      'pending' => 'orange',
+      'verified' => 'green',
+      'invalid', 'cancelled' => 'red',
+      'completed' => 'gray',
+      default => 'black',
+    };
+  @endphp
+      <div class="reservation-item" data-id="{{ $reservation->id }}" data-name="{{ $reservation->customer->name }}"
+      data-paidAmount="{{ $reservation->paidAmount }}" data-total="{{ $reservation->grandTotal }}"
+      data-balance="{{ $reservation->balance }}" data-date="{{ $reservation->date }}"
+      data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+      data-status="{{ $reservation->status }}" style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+      <strong>{{ $reservation->customer->name ?? 'Unknown' }}</strong><br>
+      @php
+
+    $date = new DateTime($reservation->date);
+    $startTime = new DateTime($reservation->startTime);
+    $endTime = new DateTime($reservation->endTime);
+  @endphp
+      {{ $date->format('Y-m-d') }} | {{ $startTime->format('g:i A') }} -
+      {{ $endTime->format('g:i A') }}
+      </div>
+    @endforeach
+  @endif
       </div>
 
-      <!-- Invalid -->
-      <div class="column">
-        <h2>Invalid</h2>
-        <div class="reservation cancelled-res">
-          <div class="details">#6 Maria Sanchez<br><small>2024-11-24</small></div>
-          <div class="time">8:00 AM</div>
-        </div>
-        <div class="reservation cancelled-res">
-          <div class="details">#2 Zuleika Yee<br><small>2023-01-20</small></div>
-          <div class="time">12:00 PM</div>
-        </div>
+      <!-- Invalid Column -->
+      <div class="reservation-column overflow-y-auto">
+        <h4>Invalid</h4>
+        @if ($invalidReservations->isEmpty())
+      <p class="text-center">No invalid reservations.</p>
+    @else
+      @foreach ($invalidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+      @php
+    $date = new DateTime($reservation->date ?? now());
+    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+    $statusColor = match ($reservation->status) {
+      'pending' => 'orange',
+      'verified' => 'green',
+      'invalid', 'cancelled' => 'red',
+      'completed' => 'gray',
+      default => 'black',
+    };
+  @endphp
+      <div class="reservation-item" data-id="{{ $reservation->id }}" data-name="{{ $reservation->customer->name }}"
+      data-paidAmount="{{ $reservation->paidAmount }}" data-total="{{ $reservation->grandTotal }}"
+      data-balance="{{ $reservation->balance }}" data-date="{{ $reservation->date }}"
+      data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+      data-status="{{ $reservation->status }}" style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+      <strong>{{ $reservation->customer->name ?? 'Unknown' }}</strong><br>
+      @php
+
+    $date = new DateTime($reservation->date);
+    $startTime = new DateTime($reservation->startTime);
+    $endTime = new DateTime($reservation->endTime);
+  @endphp
+      {{ $date->format('Y-m-d') }} | {{ $startTime->format('g:i A') }} -
+      {{ $endTime->format('g:i A') }}
+      </div>
+    @endforeach
+  @endif
       </div>
 
-      <!-- Current -->
-      <div class="column">
-        <h2>Current</h2>
-        <div class="reservation verified-res">
-          <div class="details" onclick="clickReservation()">#7 Manny Pacquiao<br><small>2024-10-18</small></div>
-          <div class="time">1:00 PM</div>
-        </div>
-        <div class="reservation pending-res">
-          <div class="details">#8 Erikka Yee<br><small>2024-10-19</small></div>
-          <div class="time">4:00 PM</div>
-        </div>
-        <div class="reservation pending-res">
-          <div class="details">#9 Tokkio Yee<br><small>2024-12-25</small></div>
-          <div class="time">6:00 PM</div>
-        </div>
-      </div>
+      <!-- Current Column -->
+      <div class="reservation-column overflow-y-auto">
+        <h4>Current</h4>
 
-      <!-- Completed -->
-      <div class="column">
-        <h2>Completed</h2>
-        <div class="reservation completed-res">
-          <div class="details">#5 Nikkita Yee<br><small>2024-09-09</small></div>
-          <div class="time">11:00 AM</div>
-        </div>
-        <div class="reservation completed-res">
-          <div class="details">#4 Olivia Rodrigo<br><small>2024-01-27</small></div>
-          <div class="time">9:00 AM</div>
-        </div>
-        <div class="reservation completed-res">
-          <div class="details">#3 Manny Pacquiao<br><small>2023-09-01</small></div>
-          <div class="time">10:00 AM</div>
-        </div>
-        <div class="reservation completed-res">
-          <div class="details">#1 Feranz Salonga<br><small>2022-02-11</small></div>
-          <div class="time">1:00 PM</div>
-        </div>
+        @if ($currentReservations->isEmpty())
+      <p class="text-center">No current reservations.</p>
+    @else
+      @foreach ($currentReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+      @php
+    $date = new DateTime($reservation->date ?? now());
+    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+    $statusColor = match ($reservation->status) {
+      'pending' => 'orange',
+      'verified' => 'green',
+      'invalid', 'cancelled' => 'red',
+      'completed' => 'gray',
+      default => 'black',
+    };
+  @endphp
+      <div class="reservation-item" data-id="{{ $reservation->id }}" data-name="{{ $reservation->customer->name }}"
+      data-paidAmount="{{ $reservation->paidAmount }}" data-total="{{ $reservation->grandTotal }}"
+      data-balance="{{ $reservation->balance }}" data-date="{{ $reservation->date }}"
+      data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+      data-status="{{ $reservation->status }}" style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+      <strong>{{ $reservation->customer->name ?? 'Unknown Customer' }}</strong><br>
+      {{ $date->format('Y-m-d') }} |
+      {{ $startTime->format('g:i A') }} -
+      {{ $endTime->format('g:i A') }}
+      </div>
+    @endforeach
+  @endif
+      </div>
+      <!-- Completed Column -->
+      <div class="reservation-column overflow-y-auto">
+        <h4>Completed</h4>
+        @if ($completedReservations->isEmpty())
+      <p class="text-center">No completed reservations.</p>
+    @else
+      @foreach ($completedReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+      @php
+    $date = new DateTime($reservation->date ?? now());
+    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
+    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
+    $statusColor = match ($reservation->status) {
+      'pending' => 'orange',
+      'verified' => 'green',
+      'invalid', 'cancelled' => 'red',
+      'completed' => 'gray',
+      default => 'black',
+    };
+  @endphp
+      <div class="reservation-item" data-id="{{ $reservation->id }}" data-name="{{ $reservation->customer->name }}"
+      data-paidAmount="{{ $reservation->paidAmount }}" data-total="{{ $reservation->grandTotal }}"
+      data-balance="{{ $reservation->balance }}" data-date="{{ $reservation->date }}"
+      data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+      data-status="{{ $reservation->status }}" style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+      <strong>{{ $reservation->customer->name ?? 'Unknown' }}</strong><br>
+      @php
+    $date = new DateTime($reservation->date);
+    $startTime = new DateTime($reservation->startTime);
+    $endTime = new DateTime($reservation->endTime);
+  @endphp
+      {{ $date->format('Y-m-d') }} | {{ $startTime->format('g:i A') }} -
+      {{ $endTime->format('g:i A') }}
+      </div>
+    @endforeach
+  @endif
       </div>
     </div>
-  </main>
-
-  <!-- MODAL SECTION -->
-  <dialog class="reservation-modal">
-    <div class="dialog-container">
-
-      <div class="dialog-header">
-        <div class="dialog-head-text">
-          <p class="id">#7</p>
-          <p class="name">Manny Pacquiao</p>
-          <p class="status">VERIFIED</p>
+    <section class="reservation-details hidden">
+      <div class="reservation-container">
+        <button class="ellipsis-btn">
+          <i class="fas fa-ellipsis-h"></i>
+        </button>
+        <button class="close-btn">&times;</button>
+        <div class="menu">
         </div>
+        <div class="downpayment-content">
+          <div class="reservation-summary">
+            <div class="placeholder-box"></div>
+          </div>
+          <div class="r-details ms-0 ps-0">
+            <p>
+              <strong><span class="reservation-name" id="name"></span></strong>
+              <span id="status" class="reservation-status"></span>
+            </p>
 
-        <div dialog-head-button>
-          <i class="material-icons more-icon">more_horiz</i>
-          <i class="material-icons close-icon" onclick="closeDialog()">close</i>
+            <p><span id="date"></span>
+            </p>
+            <p><span id="startTime"></span> - <span id="endTime"></span></p>
+            <ul id="modalAmenities"></ul>
+            <hr>
+            <p><strong id="grandTotal">Total: </strong>
+            </p>
+            <p><strong id="paidAmount">paid Amount:</strong></p>
+            <p><strong id="balance">Balance: </strong></p>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="dialog-details">
-        <p class>2024-10-18</p>
-        <p>1:00 PM</p>
-        <p>Full Cottage - <b class="price">1,000</b></p>
-        <p>Round Table w/3 chairs - <b>150</b></p>
-        <hr>
-      </div>
+    <!-- SCRIPT SECTION -->
 
-      <div class="dialog-figures">
-        <p>Total: Php 1,150</p>
-        <p>Down Payment: Php 575</p>
-        <p>Remaining Balance: Php 575</p>
-      </div>
+    <script>
 
-    </div>
-  </dialog>
+      @section('scripts')
+      < script >
+      document.addEventListener("DOMContentLoaded", function () {
+        const reservationItems = document.querySelectorAll(".reservation-item");
+        const amenities = @json($reservations->values()->all());
 
-  <!-- SCRIPT SECTION -->
+        reservationItems.forEach(item => {
+        item.addEventListener("click", function () {
+          const reservationId = item.getAttribute("data-id");
+          const reservationName = item.getAttribute("data-name");
+          const reservationpaidAmount = item.getAttribute("data-paidAmount");
+          const reservationgrandTotal = item.getAttribute("data-total");
+          const reservationbalance = item.getAttribute("data-balance");
+          const reservationDate = item.getAttribute("data-date");
+          const reservationStart = item.getAttribute("data-start");
+          const reservationEnd = item.getAttribute("data-end");
 
-  <script>
+          const reservationStatus = item.getAttribute("data-status");
+          const statusElement = document.getElementById("status");
 
-    const modal = document.querySelector('.reservation-modal');
+          if (statusElement) {
+          // Capitalize first letter
+          const capitalizedStatus = reservationStatus.charAt(0).toUpperCase() + reservationStatus.slice(1);
+          statusElement.textContent = capitalizedStatus;
 
-    function clickReservation() {
-      modal.showModal();
-    }
+          // Reset class/style
+          statusElement.className = "reservation-status";
 
-    function closeDialog() {
-      modal.close();
-    }
+          // Apply color
+          switch (reservationStatus) {
+            case "pending":
+            statusElement.style.color = "orange";
+            break;
+            case "verified":
+            statusElement.style.color = "green";
+            break;
+            case "invalid":
+            case "cancelled":
+            statusElement.style.color = "red";
+            break;
+            case "completed":
+            statusElement.style.color = "gray";
+            break;
+            default:
+            statusElement.style.color = "black";
+          }
+          }
 
+          // Format times to 24-hour format
+          const formatTo12Hour = (time) => {
+          const [hours, minutes] = time.split(':');
+          const period = hours >= 12 ? 'PM' : 'AM';
+          const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+          return `${formattedHours}:${minutes.padStart(2, '0')} ${period}`;
+          };
 
-  </script>
+          const formattedStartTime = reservationStart ? formatTo12Hour(reservationStart) : '';
+          const formattedEndTime = reservationEnd ? formatTo12Hour(reservationEnd) : '';
 
-  <script src="../js/navbutton.js"></script>
+          document.getElementById("name").textContent = reservationName || '';
+          document.getElementById("date").textContent = reservationDate || '';
+          document.getElementById("grandTotal").textContent = `Total: ₱${reservationgrandTotal || 0}`;
+          document.getElementById("paidAmount").textContent = `Paid Amount: ₱${reservationpaidAmount || 0}`;
+          document.getElementById("balance").textContent = `Balance: ₱${reservationbalance || 0}`;
+          document.getElementById("startTime").textContent = formattedStartTime;
+          document.getElementById("endTime").textContent = formattedEndTime;
+          console.log(reservationpaidAmount, reservationgrandTotal, reservationbalance);
 
+          const selectedReservation = amenities.find(r => r.id == reservationId);
 
+          if (selectedReservation) {
+          let amenitiesHtml = '';
+
+          selectedReservation.reserved_amenities.forEach(amenity => {
+            const amenityName = amenity.amenity.name;
+            const amenityPrice = amenity.amenity.price;
+            amenitiesHtml += `<li>${amenityName} - ₱${parseFloat(amenityPrice).toFixed(2)}</li>`;
+          });
+
+          document.getElementById("modalAmenities").innerHTML = amenitiesHtml;
+          }
+
+          document.querySelector(".reservation-details").classList.remove("hidden");
+        });
+        });
+
+        // Close button handler
+        const closeDetails = document.querySelector(".close-btn");
+        closeDetails.addEventListener("click", function () {
+        document.querySelector(".reservation-details").classList.add("hidden");
+        });
+      });
+    </script>
+  @endsection
+
+    </script>
 
 </body>
 
