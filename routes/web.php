@@ -89,7 +89,7 @@ Route::middleware(ManagerMiddleware::class)->group(function () {
         ->name('admin.create.account.store');
     Route::get('admin/reservation-list', [ReservationRecordController::class, 'view_reservation'])
         ->name('admin.reservation.list');
-    Route::get('admin/all-reservations', [AdminDashboardController::class, 'view_all_reservations'])
+    Route::get('admin/all-reservations', [ReservationRecordController::class, 'view_all_reservations'])
         ->name('admin.all.reservations');
     Route::get('admin/manager-profile', [ManagerProfileController::class, 'view_profile'])
         ->name('admin.manager.profile');
@@ -109,7 +109,7 @@ Route::middleware(VendorMiddleware::class)->group(function () {
         ->name('admin.vendor.amenities');
     Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
         ->name('admin.vendor.reservation_calendar');
-    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])
+    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_all_reservations'])
         ->name('admin.vendor.reservation_records');
     Route::get('admin/vendor/balance', [ReservationRecordController::class, 'view_balance'])
         ->name('admin.vendor.remainingbal');

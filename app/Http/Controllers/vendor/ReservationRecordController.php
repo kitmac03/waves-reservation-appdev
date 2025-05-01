@@ -58,10 +58,10 @@ class ReservationRecordController extends Controller
         return view('admin.vendor.remainingbal', compact('reservations'));
     }
     
-    public function view_history()
+    public function view_all_reservations()
     {
         $vendor = auth('admin')->user();
-
+    
         $reservations = Reservation::with([
                 'customer',
                 'reservedAmenities.amenity',
@@ -69,39 +69,91 @@ class ReservationRecordController extends Controller
                 'downPayment'
             ])
             ->get();
-
+    
+        // Add computed attributes
         $reservations->each(function ($reservation) {
             $bill = $reservation->bill;
-
             $grandTotal = optional($bill)->grand_total ?? 0;
-
-            // Sum only verified down payments
+    
             $paidAmount = DownPayment::where('res_num', $reservation->id)
                             ->where('status', 'verified')
                             ->sum('amount');
-
+    
             $reservation->paidAmount = $paidAmount;
             $reservation->grandTotal = $grandTotal;
-
             $reservation->balance = $grandTotal - $paidAmount;
         });
-
-        // Group reservations
-        $pendingReservations = $reservations->where('status', 'pending');
+    
+        // Filter reservations from the collection
+        $pendingReservationsWithDP = $reservations->filter(function ($res) {
+            return $res->status === 'pending' && $res->downPayment;
+        });
+    
+        $pendingReservationsWithoutDP = $reservations->filter(function ($res) {
+            return $res->status === 'pending' && !$res->downPayment;
+        });
+    
+        $reservationsWithFullyPaidBills = $reservations->filter(function ($res) {
+            return $res->status === 'verified' && optional($res->bill)->status === 'paid';
+        });
+    
+        $reservationsWithPartialBills = $reservations->filter(function ($res) {
+            return $res->status === 'verified' && optional($res->bill)->status === 'partially paid';
+        });
+    
+        $paidReservations = $reservationsWithFullyPaidBills->merge($reservationsWithPartialBills);
+    
         $cancelledReservations = $reservations->where('status', 'cancelled');
         $completedReservations = $reservations->where('status', 'completed');
         $verifiedReservations = $reservations->where('status', 'verified');
         $invalidReservations = $reservations->where('status', 'invalid');
+    
+        $redReservations = $cancelledReservations->merge($invalidReservations);
+        $pendingReservations = $pendingReservationsWithDP->merge($pendingReservationsWithoutDP);
+        $allReservations = $reservations;
 
-        $currentReservations = $pendingReservations->merge($verifiedReservations);
+        $userId = Auth::id();
+        $user = Admin::find($userId);
 
+        if ($user->role == 'Manager') {
+            return view('admin.manager.reservations.all_reservations', compact(
+                'vendor',
+                'pendingReservations',
+                'cancelledReservations',
+                'completedReservations',
+                'invalidReservations',
+                'allReservations',
+                'verifiedReservations',
+                'redReservations',
+                'paidReservations',
+                'reservations'
+            ));
+        } elseif ($user->role == 'Vendor') {
+            return view('admin.vendor.reservations.reservation_records', compact(
+                'vendor',
+                'pendingReservations',
+                'cancelledReservations',
+                'completedReservations',
+                'invalidReservations',
+                'allReservations',
+                'verifiedReservations',
+                'redReservations',
+                'paidReservations',
+                'reservations'
+            ));
+        }
+
+         // Default case
         return view('admin.vendor.reservations.reservation_records', compact(
+            'vendor',
             'pendingReservations',
             'cancelledReservations',
             'completedReservations',
-            'verifiedReservations',
             'invalidReservations',
-            'currentReservations',
+            'allReservations',
+            'verifiedReservations',
+            'redReservations',
+            'paidReservations',
             'reservations'
         ));
     }
