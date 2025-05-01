@@ -11,30 +11,29 @@
 	<h2 class="head-title">All Reservations</h2>
 
 	<div class="status-bar">
-		<span style="color: green;">● Verified</span>
-		<span style="color: orange;">● Pending</span>
-		<span style="color: red;">● Cancelled</span>
-		<span style="color: gray;">● Completed</span>
+		<span style="color: blue;">● Fully Paid</span>
+		<span style="color: lightgreen;">● Partially Paid</span>
+		<span style="color: orange;">● With Downpayment</span>
+		<span style="color: yellow;">● No Downpayment</span>
+		<span style="color: red;">● Cancelled/Invalid</span>
+		<span style="color: rgb(51, 51, 51);">● Past</span>
 	</div>
 
-	<div class="reservations-container overflow-y-auto">
+	<div class="reservations-container">
 		<!-- Cancelled Column -->
-		<div class="reservation-column">
-				<h4>Cancelled</h4>
-				@if ($cancelledReservations->isEmpty())
-					<p class="text-center">No cancelled reservations.</p>
-				@else
-					@foreach ($cancelledReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+		<div class="reservation-column overflow-y-auto">
+			<h4>Cancelled</h4>
+			@if ($redReservations->isEmpty())
+				<p class="text-center">No cancelled reservations.</p>
+			@else
+				@foreach ($redReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
 					@php
 						$date = new DateTime($reservation->date ?? now());
 						$startTime = new DateTime($reservation->startTime ?? '00:00:00');
 						$endTime = new DateTime($reservation->endTime ?? '00:00:00');
 						$statusColor = match ($reservation->status) {
-								'pending' => 'orange',
-								'verified' => 'green',
-								'invalid', 'cancelled' => 'red',
-								'completed' => 'gray',
-								default => 'black',
+							'invalid', 'cancelled' => 'red',
+							default => 'black'
 						};
 					@endphp
 					<div class="reservation-item" 
@@ -64,22 +63,19 @@
 
 		<!-- Invalid Column -->
 		<div class="reservation-column overflow-y-auto">
-				<h4>Invalid</h4>
-				@if ($invalidReservations->isEmpty())
-					<p class="text-center">No invalid reservations.</p>
-				@else
-					@foreach ($invalidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+			<h4>Pending</h4>
+			@if ($pendingReservations->isEmpty())
+				<p class="text-center">No invalid reservations.</p>
+			@else
+				@foreach ($pendingReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
 					@php
 						$date = new DateTime($reservation->date ?? now());
 						$startTime = new DateTime($reservation->startTime ?? '00:00:00');
 						$endTime = new DateTime($reservation->endTime ?? '00:00:00');
-						$statusColor = match ($reservation->status) {
-								'pending' => 'orange',
-								'verified' => 'green',
-								'invalid', 'cancelled' => 'red',
-								'completed' => 'gray',
-								default => 'black',
-						};
+						$statusColor = 'black';
+
+                        // Check for down payment
+                        $statusColor = $reservation->downPayment ? 'orange' : 'yellow';
 					@endphp
 					<div class="reservation-item" 
 						data-id="{{ $reservation->id }}" 
@@ -109,40 +105,33 @@
 		<!-- Current Column -->
 		<div class="reservation-column overflow-y-auto">
 			<h4>Current</h4>
-		
-			@if ($currentReservations->isEmpty())
-					<p class="text-center">No current reservations.</p>
+
+			@if ($verifiedReservations->isEmpty())
+				<p class="text-center">No current reservations.</p>
 			@else
-					@foreach ($currentReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
-						@php
-							$date = new DateTime($reservation->date ?? now());
-							$startTime = new DateTime($reservation->startTime ?? '00:00:00');
-							$endTime = new DateTime($reservation->endTime ?? '00:00:00');
-										$statusColor = match ($reservation->status) {
-												'pending' => 'orange',
-												'verified' => 'green',
-												'invalid', 'cancelled' => 'red',
-												'completed' => 'gray',
-												default => 'black',
-										};
-						@endphp
-									<div class="reservation-item" 
-										data-id="{{ $reservation->id }}" 
-										data-name="{{ $reservation->customer->name }}" 
-										data-paidAmount="{{ $reservation->paidAmount }}"
-										data-total="{{ $reservation->grandTotal }}" 
-										data-balance="{{ $reservation->balance }}" 
-										data-date="{{ $reservation->date }}"
-										data-start="{{ $reservation->startTime }}" 
-										data-end="{{ $reservation->endTime }}"
-										data-status="{{ $reservation->status }}"
-										style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-							<strong>{{ $reservation->customer->name ?? 'Unknown Customer' }}</strong><br>
-							{{ $date->format('Y-m-d') }} |
-							{{ $startTime->format('g:i A') }} -
-							{{ $endTime->format('g:i A') }}
-						</div>
-					@endforeach
+				@foreach ($verifiedReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+					@php
+						$date = new DateTime($reservation->date ?? now());
+						$startTime = new DateTime($reservation->startTime ?? '00:00:00');
+						$endTime = new DateTime($reservation->endTime ?? '00:00:00');
+						$statusColor = match ($reservation->bill->status) {
+							'paid' => 'blue',
+							'partially paid' => 'green',
+							default => 'black'
+						};
+					@endphp
+					<div class="reservation-item" data-id="{{ $reservation->id }}" data-name="{{ $reservation->customer->name }}"
+						data-paidAmount="{{ $reservation->paidAmount }}" data-total="{{ $reservation->grandTotal }}"
+						data-balance="{{ $reservation->balance }}" data-date="{{ $reservation->date }}"
+						data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
+						data-status="{{ $reservation->status }}"
+						style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
+						<strong>{{ $reservation->customer->name ?? 'Unknown Customer' }}</strong><br>
+						{{ $date->format('Y-m-d') }} |
+						{{ $startTime->format('g:i A') }} -
+						{{ $endTime->format('g:i A') }}
+					</div>
+				@endforeach
 			@endif
 		</div>
 		<!-- Completed Column -->
@@ -157,11 +146,8 @@
 						$startTime = new DateTime($reservation->startTime ?? '00:00:00');
 						$endTime = new DateTime($reservation->endTime ?? '00:00:00');
 						$statusColor = match ($reservation->status) {
-								'pending' => 'orange',
-								'verified' => 'green',
-								'invalid', 'cancelled' => 'red',
-								'completed' => 'gray',
-								default => 'black',
+							'completed' => 'gray',
+							default => 'black'
 						};
 					@endphp
 					<div class="reservation-item" 

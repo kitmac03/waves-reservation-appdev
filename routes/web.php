@@ -88,9 +88,9 @@ Route::middleware(ManagerMiddleware::class)->group(function () {
     Route::post('admin/create-account', [AdminDashboardController::class, 'store'])
     ->name('admin.create.account.store');
     Route::get('admin/reservation-list', [ReservationRecordController::class, 'view_reservation'])
-    ->name('admin.reservation.list');
-    Route::get('admin/all-reservations', [ManagerProfileController::class, 'view_all_reservations'])
-    ->name('admin.all.reservations');
+        ->name('admin.reservation.list');
+    Route::get('admin/all-reservations', [ReservationRecordController::class, 'view_all_reservations'])
+        ->name('admin.all.reservations');
     Route::get('admin/manager-profile', [ManagerProfileController::class, 'view_profile'])
     ->name('admin.manager.profile');
     Route::get('admin/vendors-list', [ManagerProfileController::class, 'view_vendors_list'])
@@ -106,9 +106,9 @@ Route::middleware(VendorMiddleware::class)->group(function () {
     Route::get('admin/vendor/amenities/{type?}', [AmenitiesController::class, 'view_amenities'])
     ->name('admin.vendor.amenities');
     Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
-    ->name('admin.vendor.reservation_calendar');
-    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_history'])
-    ->name('admin.vendor.reservation_records');
+        ->name('admin.vendor.reservation_calendar');
+    Route::get('admin/vendor/reservation', [ReservationRecordController::class, 'view_all_reservations'])
+        ->name('admin.vendor.reservation_records');
     Route::get('admin/vendor/balance', [ReservationRecordController::class, 'view_balance'])
     ->name('admin.vendor.remainingbal');
     Route::get('admin/vendor/calendar', [ReservationRecordController::class, 'view_reservation'])
