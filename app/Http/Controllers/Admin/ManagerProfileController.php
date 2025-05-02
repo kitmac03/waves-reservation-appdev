@@ -32,9 +32,6 @@ class ManagerProfileController extends Controller
 
     public function update_profile(Request $request, $id)
     {
-        // Debug: Log start of update process
-        Log::info('🛠️ Manager Profile Update: STARTED');
-
         // Get the currently authenticated admin (modify as needed)
         $admin = Admin::findOrFail($id);
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ManagerProfileController;
 use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\vendor\ReservationRecordController;
 use App\Http\Controllers\Vendor\PaymentController;
+use App\Http\Controllers\Vendor\VendorProfileController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
@@ -125,4 +126,10 @@ Route::middleware(VendorMiddleware::class)->group(function () {
         ->name('admin.vendor.walk_in.store');
     Route::get('admin/vendor/payment/{reservation}', [ReservationRecordController::class, 'payment_show'])
         ->name('admin.vendor.reservations.payment.show');
+    Route::get('admin/vendor/profile', [VendorProfileController::class, 'view_profile'])
+        ->name('admin.vendor.profile');
+    Route::get('admin/vendor/profile/{id}/edit', [VendorProfileController::class, 'edit_profile'])
+        ->name('admin.vendor.profile.edit');
+    Route::patch('admin/vendor/profile/{id}/update', [VendorProfileController::class, 'update_profile'])
+        ->name('admin.vendor.profile.update');
 });
