@@ -107,23 +107,49 @@
     </div>
 
     <script>
-        // Confirmation before editing
         function confirmEdit() {
-            const name = document.querySelector('input[name="name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const number = document.querySelector('input[name="number"]').value;
-
-            const confirmed = confirm("Are you sure you want to save the changes?");
-            return confirmed;
+            document.getElementById('saveModal').style.display = 'flex';
+            return false; // prevent default form submission
         }
 
-        // Handle Cancel button
         function cancelEdit() {
-            if (confirm("Are you sure you want to cancel the changes?")) {
-                window.location.href = "{{ route('customer.profile') }}"; // Redirect to the profile page
-            }
+            document.getElementById('cancelModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function submitForm() {
+            document.getElementById('profile-form').submit();
+        }
+
+        function redirectToProfile() {
+            window.location.href = "{{ route('customer.profile') }}";
         }
     </script>
+    <!-- Save Confirmation Modal -->
+    <div id="saveModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to save the changes?</p>
+            <div class="modal-buttons">
+                <button class="btn confirm" onclick="submitForm()">Yes</button>
+                <button class="btn cancel" onclick="closeModal('saveModal')">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to cancel the changes?</p>
+            <div class="modal-buttons">
+                <button class="btn confirm" onclick="redirectToProfile()">Yes</button>
+                <button class="btn cancel" onclick="closeModal('cancelModal')">No</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

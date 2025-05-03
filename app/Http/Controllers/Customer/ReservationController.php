@@ -262,10 +262,9 @@ class ReservationController extends Controller
             $reservation->status = 'cancelled';
             $reservation->save();
 
-            return response()->json(['message' => 'Reservation cancelled successfully.']);
         }
 
-        return response()->json(['message' => 'Reservation already cancelled.'], 400);
+        return redirect()->route('customer.reservation.records')->with('success', 'Reservation cancelled successfully.');
     }
 
     public function sendReminder(Request $request)

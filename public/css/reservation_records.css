@@ -199,6 +199,7 @@ body {
     padding: 10px;
     text-align: center;
     background: rgb(234, 235, 237); 
+    overflow-y: auto;
 }
 
 .reservation-column h4{

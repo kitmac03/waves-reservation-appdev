@@ -215,9 +215,9 @@
 
                 <ul id="modalAmenities"></ul>
                 <hr>
-                <p><strong>Total: <span id="grandTotal"></span></strong></p>
-                <p><strong>Paid Amount: <span id="paidAmount"></span></strong></p>
-                <p><strong>Balance: <span id="balance"></span></strong></p>
+                <p><strong><span id="grandTotal"></span></strong></p>
+                <p><strong><span id="paidAmount"></span></strong></p>
+                <p><strong><span id="balance"></span></strong></p>
             </div>
 
         </div>
@@ -403,38 +403,54 @@
             });
         });
 
-        // Cancel reservation with confirmation
-        // Cancel reservation with confirmation
         const cancelButtons = document.querySelectorAll(".cancel-reservation");
+    const cancelModal = document.getElementById("cancelModal");
+    const cancelYesBtn = document.getElementById("cancelYes");
+    const cancelNoBtn = document.getElementById("cancelNo");
 
-        cancelButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                const reservationId = document.querySelector(".reservation-id").textContent;
+    let selectedReservationId = null;
 
-                if (confirm("Are you sure you want to cancel this reservation?")) {
-                    fetch(`/customer/reservation-records/${reservationId}/cancel`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ id: this.reservationId })
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                alert("Reservation cancelled successfully.");
-                                location.reload();
-                            } else {
-                                alert("Failed to cancel reservation.");
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            alert("An error occurred.");
-                        });
-                }
-            });
+    cancelButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            selectedReservationId = document.querySelector(".reservation-id").textContent;
+            cancelModal.classList.remove("hidden");
         });
+    });
+
+    cancelYesBtn.addEventListener("click", function () {
+        if (!selectedReservationId) return;
+
+        fetch(`/customer/reservation-records/${selectedReservationId}/cancel`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id: selectedReservationId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    showSuccessToast("Reservation cancelled successfully.");
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+
+                } else {
+                    alert("Failed to cancel reservation.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred.");
+            })
+            .finally(() => {
+                cancelModal.classList.add("hidden");
+            });
+    });
+
+    cancelNoBtn.addEventListener("click", function () {
+        cancelModal.classList.add("hidden");
+    });
 
 
 
@@ -442,6 +458,10 @@
         const closeDetails = document.querySelector(".close-btn");
         closeDetails.addEventListener("click", function () {
             document.querySelector(".reservation-details").classList.add("hidden");
+        const dropdownMenu = document.querySelector(".dropdown-menu");
+    if (dropdownMenu && !dropdownMenu.classList.contains("hidden")) {
+        dropdownMenu.classList.add("hidden");
+    }
         });
 
         // Close the edit modal when the close button is clicked
@@ -457,10 +477,41 @@
                 editModal.classList.add("hidden");
             }
         });
+
+        function showSuccessToast(message = "Action completed successfully.") {
+    const toast = document.getElementById("successToast");
+    const msg = document.getElementById("successMessage");
+    msg.textContent = message;
+    toast.classList.remove("hidden");
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+        toast.classList.add("hidden");
+    }, 10000);
+}
+
     });
 
 
 </script>
+
+<div id="cancelModal" class="fixed inset-0 z-[9999] bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg p-6 shadow-xl w-full max-w-sm mx-auto">
+        <h2 class="text-lg font-semibold text-gray-800 mb-3">Cancel Reservation</h2>
+        <p class="text-sm text-gray-600 mb-4">Are you sure you want to cancel this reservation? This action cannot be undone.</p>
+        <div class="flex justify-end gap-3">
+            <button id="cancelNo" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 text-sm">No</button>
+            <button id="cancelYes" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm">Yes, Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast Modal -->
+<div id="successToast" class="fixed bottom-6 right-6 z-[9999] bg-green-500 text-white px-6 py-3 rounded shadow-lg flex items-center gap-3 hidden">
+    <i class="fas fa-check-circle text-xl"></i>
+    <span id="successMessage" class="text-sm font-medium">Reservation cancelled successfully.</span>
+</div>
+
 </body>
 
 </html>

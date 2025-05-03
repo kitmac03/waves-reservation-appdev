@@ -20,6 +20,7 @@
                     <span>Back to main</span>
                 </a>
             </div>
+
             <div class="customer-profile">
                 <div class="avatar">
                     <i class="fas fa-user-circle"></i>
@@ -31,9 +32,9 @@
                 <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i>
                     Reservations</a>
 
-            <!-- nag add kog button ani for acc balance -->
+                <!-- nag add kog button ani for acc balance -->
 
-            <!-- <a href="#"><i class="fas fa-wallet"></i> Account Balance</a> -->
+                <!-- <a href="#"><i class="fas fa-wallet"></i> Account Balance</a> -->
 
             </nav>
 
@@ -61,6 +62,9 @@
                         <i class="fas fa-user-circle"></i>
                     </div>
                     <div class="profile-details">
+                        @if(session('success'))
+                            <div style="text-xs color: green;">{{ session('success') }}</div>
+                        @endif
                         <div class="detail-item name">
                             <span>{{ $customer->name }}</span>
                         </div>
@@ -76,7 +80,8 @@
                     </div>
                 </div>
                 <div class="profile-actions">
-                    <a href="{{ route('profile.edit', ['id' => $customer->id]) }}" class="btn edit-btn" style="text-decoration: none ;">
+                    <a href="{{ route('profile.edit', ['id' => $customer->id]) }}" class="btn edit-btn"
+                        style="text-decoration: none ;">
                         <i class="fas fa-pencil-alt"></i> Edit Profile
                     </a>
                     <button class="btn delete-btn" id="deleteAccountBtn">
@@ -116,72 +121,72 @@
 
     <!-- Modal Script -->
     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
-    const deleteModal = document.getElementById('deleteModal');
-    const cancelDelete = document.getElementById('cancelDelete');
-    const confirmDelete = document.getElementById('confirmDelete');
-    const deleteReason = document.getElementById('deleteReason');
-    const otherReason = document.getElementById('otherReason');
-    const closeBtn = document.querySelector('.close');
-    
-    // Open modal
-    deleteAccountBtn.addEventListener('click', function() {
-        deleteModal.style.display = 'flex';
-    });
-    
-    // Toggle other reason textarea
-    deleteReason.addEventListener('change', function() {
-        if (this.value === 'other') {
-            otherReason.style.display = 'block';
-            otherReason.required = true;
-        } else {
-            otherReason.style.display = 'none';
-            otherReason.required = false;
-        }
-    });
-    
-    // Close modal
-    function closeModal() {
-        deleteModal.style.display = 'none';
-        deleteReason.selectedIndex = 0;
-        otherReason.value = '';
-        otherReason.style.display = 'none';
-    }
-    
-    closeBtn.addEventListener('click', closeModal);
-    cancelDelete.addEventListener('click', closeModal);
-    
-    // Click outside modal to close
-    window.addEventListener('click', function(event) {
-        if (event.target === deleteModal) {
-            closeModal();
-        }
-    });
-    
-    // Confirm delete
-    confirmDelete.addEventListener('click', function() {
-        let reason;
-        
-        if (deleteReason.value === 'other') {
-            reason = otherReason.value.trim();
-            if (!reason) {
-                alert('Please specify your reason for deletion');
-                return;
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+            const deleteModal = document.getElementById('deleteModal');
+            const cancelDelete = document.getElementById('cancelDelete');
+            const confirmDelete = document.getElementById('confirmDelete');
+            const deleteReason = document.getElementById('deleteReason');
+            const otherReason = document.getElementById('otherReason');
+            const closeBtn = document.querySelector('.close');
+
+            // Open modal
+            deleteAccountBtn.addEventListener('click', function () {
+                deleteModal.style.display = 'flex';
+            });
+
+            // Toggle other reason textarea
+            deleteReason.addEventListener('change', function () {
+                if (this.value === 'other') {
+                    otherReason.style.display = 'block';
+                    otherReason.required = true;
+                } else {
+                    otherReason.style.display = 'none';
+                    otherReason.required = false;
+                }
+            });
+
+            // Close modal
+            function closeModal() {
+                deleteModal.style.display = 'none';
+                deleteReason.selectedIndex = 0;
+                otherReason.value = '';
+                otherReason.style.display = 'none';
             }
-        } else {
-            reason = deleteReason.value;
-            if (!reason) {
-                alert('Please select a reason for deletion');
-                return;
-            }
-        }
-        
-        console.log('Account deletion requested. Reason:', reason);
-        alert('Your deletion request has been sent for review.');
-        closeModal();
-    });
-});
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelDelete.addEventListener('click', closeModal);
+
+            // Click outside modal to close
+            window.addEventListener('click', function (event) {
+                if (event.target === deleteModal) {
+                    closeModal();
+                }
+            });
+
+            // Confirm delete
+            confirmDelete.addEventListener('click', function () {
+                let reason;
+
+                if (deleteReason.value === 'other') {
+                    reason = otherReason.value.trim();
+                    if (!reason) {
+                        alert('Please specify your reason for deletion');
+                        return;
+                    }
+                } else {
+                    reason = deleteReason.value;
+                    if (!reason) {
+                        alert('Please select a reason for deletion');
+                        return;
+                    }
+                }
+
+                console.log('Account deletion requested. Reason:', reason);
+                alert('Your deletion request has been sent for review.');
+                closeModal();
+            });
+        });
     </script>
 </body>
 
