@@ -172,11 +172,41 @@ class ReservationController extends Controller
             ->with(['reservedAmenities.amenity', 'downPayment'])
             ->get();
 
+        $pendingReservationsWithDP->each(function ($reservation) {
+            $bill = $reservation->bill;
+
+            $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
+            $paidAmount = DownPayment::where('res_num', $reservation->id)
+                ->where('status', 'verified')
+                ->sum('amount');
+
+            $reservation->paidAmount = $paidAmount;
+            $reservation->grandTotal = $grandTotal;
+            $reservation->balance = $grandTotal - $paidAmount;
+        });
+
         $pendingReservationsWithoutDP = $customer->reservations()
             ->where('status', 'pending')
             ->whereDoesntHave('downPayment') // no down payment
             ->with(['reservedAmenities.amenity', 'bill']) // no need to load downPayment
             ->get();
+
+        $pendingReservationsWithoutDP->each(function ($reservation) {
+            $bill = $reservation->bill;
+
+            $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
+            $paidAmount = DownPayment::where('res_num', $reservation->id)
+                ->where('status', 'verified')
+                ->sum('amount');
+
+            $reservation->paidAmount = $paidAmount;
+            $reservation->grandTotal = $grandTotal;
+            $reservation->balance = $grandTotal - $paidAmount;
+        });
 
         $reservationsWithFullyPaidBills = $customer->reservations()
             ->where('status', 'verified')
@@ -186,6 +216,21 @@ class ReservationController extends Controller
             ->with(['reservedAmenities.amenity', 'bill'])
             ->get();
 
+        $reservationsWithFullyPaidBills->each(function ($reservation) {
+            $bill = $reservation->bill;
+
+            $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
+            $paidAmount = DownPayment::where('res_num', $reservation->id)
+                ->where('status', 'verified')
+                ->sum('amount');
+
+            $reservation->paidAmount = $paidAmount;
+            $reservation->grandTotal = $grandTotal;
+            $reservation->balance = $grandTotal - $paidAmount;
+        });
+
         $reservationsWithPartialBills = $customer->reservations()
             ->where('status', 'verified')
             ->whereHas('bill', function ($query) {
@@ -193,6 +238,21 @@ class ReservationController extends Controller
             })
             ->with(['reservedAmenities.amenity', 'bill'])
             ->get();
+
+        $reservationsWithPartialBills->each(function ($reservation) {
+            $bill = $reservation->bill;
+
+            $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
+            $paidAmount = DownPayment::where('res_num', $reservation->id)
+                ->where('status', 'verified')
+                ->sum('amount');
+
+            $reservation->paidAmount = $paidAmount;
+            $reservation->grandTotal = $grandTotal;
+            $reservation->balance = $grandTotal - $paidAmount;
+        });
 
 
         $paidReservations = $reservationsWithFullyPaidBills->merge($reservationsWithPartialBills);

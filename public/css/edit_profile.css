@@ -322,3 +322,84 @@ body {
     align-items: center;
     gap: 10px;
 }
+
+/* Modal Styles for Logout */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+}
+
+.modal-header {
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.modal-header p {
+    color: #777;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.modal-footer .btn {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-footer .secondary-btn {
+    background-color: #ccc;
+    color: #333;
+    border-radius: 5px;
+}
+
+.modal-footer .primary-btn {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+.modal-footer .btn:hover {
+    opacity: 0.8;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

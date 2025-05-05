@@ -36,7 +36,7 @@
                 </a>
             </div>
 
-            <!-- logout -->
+            <!-- Logout Button -->
             <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf <!-- CSRF Token for security -->
             </form>
@@ -44,12 +44,6 @@
             <button id="logoutButton" class="logout">
                 <i class="fas fa-sign-out-alt"></i> Log Out
             </button>
-
-            <script>
-                document.getElementById('logoutButton').addEventListener('click', function () {
-                    document.getElementById('logoutForm').submit();
-                });
-            </script>
         </div>
 
         <!-- Main Content -->
@@ -128,6 +122,7 @@
             window.location.href = "{{ route('customer.profile') }}";
         }
     </script>
+
     <!-- Save Confirmation Modal -->
     <div id="saveModal" class="modal">
         <div class="modal-content">
@@ -150,6 +145,58 @@
         </div>
     </div>
 
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogoutModal">&times;</span>
+            <div class="modal-header">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
+                <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Logout Modal Logic
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogout = document.getElementById('cancelLogout');
+            const confirmLogout = document.getElementById('confirmLogout');
+            const closeLogoutBtn = document.getElementById('closeLogoutModal');
+
+            // Open modal on logout button click
+            logoutButton.addEventListener('click', function () {
+                logoutModal.style.display = 'flex';
+            });
+
+            // Close modal when clicking on the cancel button
+            cancelLogout.addEventListener('click', function () {
+                logoutModal.style.display = 'none';
+            });
+
+            // Close modal when clicking on the close button (×)
+            closeLogoutBtn.addEventListener('click', function () {
+                logoutModal.style.display = 'none';
+            });
+
+            // Confirm logout action (submit logout form only when Confirm is clicked)
+            confirmLogout.addEventListener('click', function () {
+                document.getElementById('logoutForm').submit();
+                logoutModal.style.display = 'none'; // Close modal after confirming
+            });
+
+            // Close modal if clicked outside
+            window.addEventListener('click', function (event) {
+                if (event.target === logoutModal) {
+                    logoutModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

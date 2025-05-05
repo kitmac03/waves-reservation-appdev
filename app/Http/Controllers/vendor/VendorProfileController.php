@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Rules\UniqueEmailAcrossTables;
 
 class VendorProfileController extends Controller
 {
@@ -30,7 +30,7 @@ class VendorProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|regex:/^[0-9]{11}$/',
-            'email' => 'required|string|email|max:255|unique:admins,email,' . $vendor->id,
+            'email' => ['required', 'string', 'email', 'max:255', new UniqueEmailAcrossTables($vendor->id)],
         ]);
 
         // Update the customer profile

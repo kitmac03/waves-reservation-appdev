@@ -46,14 +46,8 @@
             <button id="logoutButton" class="logout">
                 <i class="fas fa-sign-out-alt"></i> Log Out
             </button>
-
-            <script>
-                document.getElementById('logoutButton').addEventListener('click', function () {
-                    document.getElementById('logoutForm').submit();
-                });
-            </script>
-
         </aside>
+
         <main class="profile-section">
             <div class="profile-card">
                 <div class="profile-header"></div>
@@ -95,7 +89,7 @@
     <!-- Delete Account Modal -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" id="closeDeleteModal">&times;</span>
             <div class="modal-header">
                 <h3>Why do you want to delete your account?</h3>
                 <p>We're sorry to see you go. Please let us know why you're leaving.</p>
@@ -119,55 +113,57 @@
         </div>
     </div>
 
-    <!-- Modal Script -->
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogoutModal">&times;</span>
+            <div class="modal-header">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
+                <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Modal functions
+            function openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'flex';
+            }
+
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'none';
+            }
+
+            // Delete Account Modal
             const deleteAccountBtn = document.getElementById('deleteAccountBtn');
             const deleteModal = document.getElementById('deleteModal');
             const cancelDelete = document.getElementById('cancelDelete');
             const confirmDelete = document.getElementById('confirmDelete');
+            const closeDeleteBtn = document.getElementById('closeDeleteModal');
             const deleteReason = document.getElementById('deleteReason');
             const otherReason = document.getElementById('otherReason');
-            const closeBtn = document.querySelector('.close');
 
-            // Open modal
             deleteAccountBtn.addEventListener('click', function () {
-                deleteModal.style.display = 'flex';
+                openModal('deleteModal');
             });
 
-            // Toggle other reason textarea
-            deleteReason.addEventListener('change', function () {
-                if (this.value === 'other') {
-                    otherReason.style.display = 'block';
-                    otherReason.required = true;
-                } else {
-                    otherReason.style.display = 'none';
-                    otherReason.required = false;
-                }
+            cancelDelete.addEventListener('click', function () {
+                closeModal('deleteModal');
             });
 
-            // Close modal
-            function closeModal() {
-                deleteModal.style.display = 'none';
-                deleteReason.selectedIndex = 0;
-                otherReason.value = '';
-                otherReason.style.display = 'none';
-            }
-
-            closeBtn.addEventListener('click', closeModal);
-            cancelDelete.addEventListener('click', closeModal);
-
-            // Click outside modal to close
-            window.addEventListener('click', function (event) {
-                if (event.target === deleteModal) {
-                    closeModal();
-                }
+            closeDeleteBtn.addEventListener('click', function () {
+                closeModal('deleteModal');
             });
 
-            // Confirm delete
+            // Confirm deletion logic (handling form submission or alert)
             confirmDelete.addEventListener('click', function () {
                 let reason;
-
                 if (deleteReason.value === 'other') {
                     reason = otherReason.value.trim();
                     if (!reason) {
@@ -181,10 +177,41 @@
                         return;
                     }
                 }
-
-                console.log('Account deletion requested. Reason:', reason);
                 alert('Your deletion request has been sent for review.');
-                closeModal();
+                closeModal('deleteModal');
+            });
+
+            // Logout Modal
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogout = document.getElementById('cancelLogout');
+            const confirmLogout = document.getElementById('confirmLogout');
+            const closeLogoutBtn = document.getElementById('closeLogoutModal');
+
+            logoutButton.addEventListener('click', function () {
+                openModal('logoutModal');
+            });
+
+            cancelLogout.addEventListener('click', function () {
+                closeModal('logoutModal');
+            });
+
+            closeLogoutBtn.addEventListener('click', function () {
+                closeModal('logoutModal');
+            });
+
+            confirmLogout.addEventListener('click', function () {
+                document.getElementById('logoutForm').submit();
+                closeModal('logoutModal');
+            });
+
+            // Close modal when clicking outside of it
+            window.addEventListener('click', function (event) {
+                if (event.target === deleteModal) {
+                    closeModal('deleteModal');
+                } else if (event.target === logoutModal) {
+                    closeModal('logoutModal');
+                }
             });
         });
     </script>

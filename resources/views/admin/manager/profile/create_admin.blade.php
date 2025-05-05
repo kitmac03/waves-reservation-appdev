@@ -59,6 +59,10 @@
 
       <p class="head-title">ADMIN ACCOUNT CREATION</p>
 
+      @if(session('success'))
+      <div style="text-xs color: green;">{{ session('success') }}</div>
+    @endif
+    
       <form class="input-container" action="{{ route('admin.create.account.store') }}" method="POST">
         @csrf
 

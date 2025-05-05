@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Rules\UniqueEmailAcrossTables;
 
 class ManagerProfileController extends Controller
 {
@@ -35,28 +35,13 @@ class ManagerProfileController extends Controller
         // Get the currently authenticated admin (modify as needed)
         $admin = Admin::findOrFail($id);
 
-        // Debug: Log current admin data before update
-        Log::debug('👤 Current Admin Data:', $admin->toArray());
-
-        Log::debug('📥 Incoming Request Data:', $request->all());
-        // Validate the request
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|regex:/^[0-9]{11}$/',
-            'email' => 'required|string|email|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', new UniqueEmailAcrossTables($admin->id)],
         ]);
 
-        // Debug: Log validated data
-        Log::info('✅ Validated Data:', $validated);
-
-        // Update the admin record
         $admin->update($validated);
-
-        // Debug: Log updated admin data
-        Log::info('✅ Admin Updated Successfully:', $admin->toArray());
-
-        // Debug: Log end of update process
-        Log::info('🏁 Manager Profile Update: COMPLETED');
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
@@ -67,11 +52,12 @@ class ManagerProfileController extends Controller
             $vendor->role = $request->role;
             $vendor->save();
 
-            return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'message' => 'Role updated successfully.']);
         } else {
-            return response()->json(['success' => false]);
+            return response()->json(['success' => false, 'message' => 'Vendor not found.']);
         }
     }
+
 
     public function view_del_req()
     {

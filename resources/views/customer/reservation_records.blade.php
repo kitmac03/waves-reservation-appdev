@@ -256,6 +256,20 @@
     </div>
 </div>
 
+    <!-- Logout Confirmation Modal -->
+    <!-- <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogoutModal">&times;</span>
+            <div class="modal-header">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
+                <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
+            </div>
+        </div>
+    </div> -->
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const reservationItems = document.querySelectorAll(".reservation-item");
@@ -403,7 +417,7 @@
             });
         });
 
-        const cancelButtons = document.querySelectorAll(".cancel-reservation");
+    const cancelButtons = document.querySelectorAll(".cancel-reservation");
     const cancelModal = document.getElementById("cancelModal");
     const cancelYesBtn = document.getElementById("cancelYes");
     const cancelNoBtn = document.getElementById("cancelNo");

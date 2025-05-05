@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Log;
+use App\Rules\UniqueEmailAcrossTables;
 
 class ProfileController extends Controller
 {
@@ -28,7 +28,7 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|regex:/^[0-9]{11}$/',
-            'email' => 'required|string|email|max:255|unique:customers,email,' . $customer->id, 
+            'email' => ['required', 'string', 'email', 'max:255', new UniqueEmailAcrossTables($customer->id)],
         ]);
 
         // Update the customer profile

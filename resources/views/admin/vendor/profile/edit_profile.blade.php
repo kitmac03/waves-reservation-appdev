@@ -9,16 +9,10 @@
         <div class="profile-container">
             <div class="profile-card">
                 <h2>Edit Profile</h2>
-                <!-- Success Message (only shown if session has success) -->
-                @if(session('success'))
-                    <div class="alert alert-success" style="color: green; font-size: 18px;">
-                        <i class="fas fa-check-circle"></i> {{ session('success') }}
-                    </div>
-                @endif
 
                 <!-- Error Messages (e.g., email already taken) -->
                 @if($errors->any())
-                    <div class="alert alert-error" style="color: red; font-size: 18px;">
+                    <div class="alert alert-error" style="color: red; font-size: 18px; margin-bottom: 15px;">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
