@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
     Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
     Route::post('customer/reservation-records/{reservation}/cancel', [ReservationController::class, 'cancel_reservation'])
         ->name('cancel.reservation');
+    Route::patch('customer/profile/{id}/delete', [ProfileController::class, 'delete_profile'])
+        ->name('profile.delete');
 });
 
 // Downpayment routes
@@ -102,6 +104,11 @@ Route::middleware(ManagerMiddleware::class)->group(function () {
         ->name('admin.vendors.list.promote');
     Route::get('admin/delete-requests', [ManagerProfileController::class, 'view_del_req'])
         ->name('admin.delete.requests');
+    Route::get('admin/delete-requests/{id}', [ManagerProfileController::class, 'view_del_acc_details'])
+        ->name('admin.delete.requests.details');
+    Route::patch('admin/delete-request/{id}/approve', [ManagerProfileController::class, 'approveRequest'])->name('admin.delete.approve');
+    Route::patch('admin/delete-request/{id}/decline', [ManagerProfileController::class, 'declineRequest'])->name('admin.delete.decline');
+
 });
 
 //  Vendor Routes

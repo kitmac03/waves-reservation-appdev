@@ -29,12 +29,12 @@ class UserAuthController extends Controller
         ]);
 
         if ($this->attemptLogin(Admin::class, $request)) {
-            return redirect()->intended('admin/dashboard'); 
+            return redirect()->intended('admin/dashboard');
         }
 
         // If not found, check in the Customers table
         if ($this->attemptLogin(Customer::class, $request)) {
-            return redirect()->intended('customer/reservation'); 
+            return redirect()->intended('customer/reservation');
         }
 
         return back()->withErrors([
@@ -45,6 +45,11 @@ class UserAuthController extends Controller
     private function attemptLogin($model, $request)
     {
         $user = $model::where('email', $request->email)->first();
+
+        // If checking a Customer, ensure they are active
+        if ($model === Customer::class && $user && $user->is_active == 0) {
+            return false;
+        }
 
         if ($user && \Hash::check($request->password, $user->password)) {
             Auth::login($user);

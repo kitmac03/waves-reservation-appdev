@@ -57,6 +57,9 @@
     <div class="main-content">
 
       <h1>ACCOUNT DELETION REQUESTS</h1>
+      @if(session('success'))
+      <div class="alert success">{{ session('success') }}</div>
+    @endif
       <table>
         <thead>
           <tr>
@@ -66,66 +69,42 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              Maria Sanchez
-              <button class="view-account" onclick="openDialog()">View account</button>
-            </td>
-            <td>I'll make a new one</td>
-            <td>
-              <button class="accept" onclick="showAcceptDeletion()">Accept</button>
-              <button class="decline" onclick="showDeclineDeletion()">Decline</button>
-            </td>
-          </tr>
+          @forelse ($pendingRequests as $request)
+        <tr>
+        <td>
+          {{ $request->customer->name }}
+          <a href="{{ route('admin.delete.requests.details', $request->customer->id) }}" class="view-account">
+          View account
+          </a>
+
+        </td>
+        <td>{{ $request->deletion_reason }}</td>
+        <td>
+          <form action="{{ route('admin.delete.approve', $request->id) }}" method="POST" style="display:inline;">
+          @csrf
+          @method('PATCH')
+          <button type="submit" class="accept">Accept</button>
+          </form>
+
+          <form action="{{ route('admin.delete.decline', $request->id) }}" method="POST" style="display:inline;">
+          @csrf
+          @method('PATCH')
+          <button type="submit" class="decline">Decline</button>
+          </form>
+        </td>
+
+        </tr>
+      @empty
+        <tr>
+        <td colspan="3">No pending deletion requests.</td>
+        </tr>
+      @endforelse
         </tbody>
+
       </table>
 
     </div>
   </div>
-
-  <!--------------------- DIALOG SECTION ------------------------>
-
-  <!--- RESERVATION DIALOG SECTION -->
-
-  <dialog class="reservation-dialog">
-    <div class="dialog-header">
-      <button class="close-dialog-button" onclick="closeDialog()">&times;</button>
-    </div>
-    <div class="dialog-content">
-      <div class="profile-section">
-        <div class="profile-pic"></div>
-        <p class="profile-name">Maria Sanchez</p>
-        <p class="profile-email">sanchezm@gmail.com</p>
-        <p class="profile-phone">09206754432</p>
-      </div>
-      <div class="reservations-section">
-        <h1 class="reservations-title">Customer’s Reservations</h1>
-        <div class="legend">
-          <span class="legend-item verified">Verified</span>
-          <span class="legend-item pending">Pending</span>
-          <span class="legend-item cancelled">Cancelled</span>
-          <span class="legend-item completed">Completed</span>
-        </div>
-        <div class="columns">
-          <div class="column cancelled-column">
-            <h2 class="column-title">Cancelled</h2>
-            <div class="reservation">
-              <span class="reservation-id">#6</span>
-              <span class="reservation-detail">Right Side</span>
-              <span class="reservation-date">2024-11-24</span>
-              <span class="reservation-time">8:00 AM</span>
-            </div>
-          </div>
-          <div class="column current-column">
-            <h2 class="column-title">Current</h2>
-          </div>
-          <div class="column completed-column">
-            <h2 class="column-title">Completed</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dialog>
 
   <!--- ACCEPT ACCOUNT DELETION DIALOG SECTION -->
 
@@ -171,7 +150,10 @@
     const acceptDeletion = document.querySelector('.accept-deletion');
     const declineDeletion = document.querySelector('.decline-deletion');
 
-    function openDialog() {
+    function openDialogWithData(name, email, phone) {
+      document.querySelector('.profile-name').textContent = name;
+      document.querySelector('.profile-email').textContent = email;
+      document.querySelector('.profile-phone').textContent = phone;
       reservationDialog.showModal();
     }
     function closeDialog() {

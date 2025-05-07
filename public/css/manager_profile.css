@@ -15,17 +15,20 @@ a, p, hr, input {
 .container {
   display: flex;
   height: 100vh;
+  overflow: hidden; /* prevent full page scrolling */
   background-color: #e6f5ff;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 20%;
-  background-color: #d1e8f3;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
+  .sidebar {
+    width: 20%;
+    height: 100vh;         /* Full viewport height */
+    overflow: auto;        /* Optional, in case sidebar grows too much */
+    background-color: #d1e8f3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    flex-shrink: 0;
+  }
 
 .back-to-main {
   display: flex;
@@ -85,9 +88,12 @@ a, p, hr, input {
 /* Main Content */
 .main-content {
   flex-grow: 1;
+  overflow-y: auto;          /* Enables scrolling */
+  padding: 40px 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 
 .profile-section {
@@ -96,6 +102,7 @@ a, p, hr, input {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  overflow-y: auto; 
 }
 
 .profile-card {

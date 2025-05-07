@@ -40,7 +40,7 @@
 
             <!-- logout -->
             <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf <!-- CSRF Token for security -->
+                @csrf
             </form>
 
             <button id="logoutButton" class="logout">
@@ -75,13 +75,21 @@
                 </div>
                 <div class="profile-actions">
                     <a href="{{ route('profile.edit', ['id' => $customer->id]) }}" class="btn edit-btn"
-                        style="text-decoration: none ;">
+                        style="text-decoration: none;">
                         <i class="fas fa-pencil-alt"></i> Edit Profile
                     </a>
-                    <button class="btn delete-btn" id="deleteAccountBtn">
-                        <i class="fas fa-trash-alt"></i> Delete Account
-                    </button>
+
+                    @if ($pendingRequest)
+                        <button class="btn delete-btn" disabled style="background-color: grey; cursor: not-allowed;">
+                            <i class="fas fa-hourglass-half"></i> Deletion Request Pending
+                        </button>
+                    @else
+                        <button class="btn delete-btn" id="deleteAccountBtn">
+                            <i class="fas fa-trash-alt"></i> Delete Account
+                        </button>
+                    @endif
                 </div>
+
             </div>
         </main>
     </div>
@@ -95,21 +103,27 @@
                 <p>We're sorry to see you go. Please let us know why you're leaving.</p>
             </div>
 
-            <select class="reason-select" id="deleteReason">
-                <option value="" disabled selected>Select a reason...</option>
-                <option value="no-longer-need">I no longer need this account</option>
-                <option value="privacy-concerns">I have privacy concerns</option>
-                <option value="poor-experience">I had a poor experience</option>
-                <option value="found-better-service">I found a better service</option>
-                <option value="other">Other reason</option>
-            </select>
+            <form id="deleteForm" method="POST" action="{{ route('profile.delete', ['id' => $customer->id]) }}">
+                @csrf
+                @method('PATCH')
 
-            <textarea class="other-reason" id="otherReason" placeholder="Please specify your reason..."></textarea>
+                <select class="reason-select" id="deleteReason" name="reason">
+                    <option value="" disabled selected>Select a reason...</option>
+                    <option value="no-longer-need">I no longer need this account</option>
+                    <option value="privacy-concerns">I have privacy concerns</option>
+                    <option value="poor-experience">I had a poor experience</option>
+                    <option value="found-better-service">I found a better service</option>
+                    <option value="other">Other reason</option>
+                </select>
 
-            <div class="modal-footer">
-                <button class="btn secondary-btn" id="cancelDelete">Cancel</button>
-                <button class="btn primary-btn" id="confirmDelete">Submit Request</button>
-            </div>
+                <textarea class="other-reason" id="otherReason" name="other_reason"
+                    placeholder="Please specify your reason..."></textarea>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn secondary-btn" id="cancelDelete">Cancel</button>
+                    <button type="submit" class="btn primary-btn" id="confirmDelete">Submit Request</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -149,9 +163,21 @@
             const deleteReason = document.getElementById('deleteReason');
             const otherReason = document.getElementById('otherReason');
 
-            deleteAccountBtn.addEventListener('click', function () {
-                openModal('deleteModal');
+            deleteReason.addEventListener('change', function () {
+                if (deleteReason.value === 'other') {
+                    otherReason.style.display = 'block';
+                } else {
+                    otherReason.style.display = 'none';
+                    otherReason.value = '';
+                }
             });
+
+
+            if (deleteAccountBtn) {
+                deleteAccountBtn.addEventListener('click', function () {
+                    openModal('deleteModal');
+                });
+            }
 
             cancelDelete.addEventListener('click', function () {
                 closeModal('deleteModal');
