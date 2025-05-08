@@ -27,6 +27,7 @@ Route::get('/register', [RegisteredUserController::class, 'create'])->name('regi
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 Route::post('/send-reminder', [ReservationController::class, 'sendReminder'])->name('send-reminder');
+Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
 
 // Customer Routes
 Route::middleware('auth')->group(function () {
@@ -51,7 +52,6 @@ Route::middleware('auth')->group(function () {
         ->name('customer.reservation.records');
     Route::get('customer/balance', [ReservationController::class, 'view_balance'])
         ->name('customer.reservation.balance');
-    Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
     Route::post('customer/reservation-records/{reservation}/cancel', [ReservationController::class, 'cancel_reservation'])
         ->name('cancel.reservation');
     Route::patch('customer/profile/{id}/delete', [ProfileController::class, 'delete_profile'])
