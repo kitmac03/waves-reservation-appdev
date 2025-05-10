@@ -34,15 +34,14 @@
 
           <div class="start-end-time-container">
             <div>
-              <label for="start-time">Start Time:</label>
-              <input class="px-4 py-2" type="time" name="startTime" id="startTime" required>
+                <label for="startTime">Start Time</label>
+                <input type="time" id="startTime" name="startTime" min="07:00" max="21:00" required>
             </div>
             <div>
-              <label for="end-time">End Time:</label>
-              <input class="px-4 py-2" type="time" name="endTime" id="endTime" required>
+                <label for="endTime">End Time</label>
+                <input type="time" id="endTime" name="endTime" min="07:00" max="21:00" required>
             </div>
           </div>
-        </div>
 
 		  <div class="flex space-x-4 mb-4">
 
@@ -80,11 +79,14 @@
 									</label>
 								@endif
 						@endforeach
-               @endif
+                    @endif
 				</div>
 			</div>
-	  
 	  </div>
+      <!-- Error Message Container -->
+            <div id="error-message" style="color: red; font-size: 14px; display: none; margin-bottom: 10px;">
+                <!-- Error messages will be displayed here -->
+            </div>
         <div class="button-wrapper">
           <button type="submit" class="payment-button">Proceed to payment</button>
         </div>
@@ -101,19 +103,50 @@
             const cottageChecked = cottages.length > 0;
             const tableChecked = tables.length > 0;
 
+            const startTime = document.getElementById("startTime").value;
+            const endTime = document.getElementById("endTime").value;
+            const errorMessageContainer = document.getElementById("error-message");
+            let errorMessages = [];
+
+            // Validate if start and end times are within the allowed range
+            if (startTime < "07:00" || startTime > "21:00") {
+                errorMessages.push("Start time must be between 07:00 AM and 09:00 PM.");
+            }
+
+            if (endTime < "07:00" || endTime > "21:00") {
+                errorMessages.push("End time must be between 07:00 AM and 09:00 PM.");
+            }
+
+            // Validate if end time is after start time
+            if (endTime <= startTime && endTime !== "") {
+                errorMessages.push("End time must be later than the start time.");
+            }
+
+            // If neither cottage nor table is selected
             if (!cottageChecked && !tableChecked) {
-                alert("Please select at least one Cottage or Table before submitting.");
+                errorMessages.push("Please select at least one Cottage or Table before submitting.");
+            }
+
+            // If there are any error messages, display them
+            if (errorMessages.length > 0) {
+                errorMessageContainer.style.display = "block"; // Show the error message container
+                errorMessageContainer.innerHTML = errorMessages.join("<br>"); // Display all error messages
                 return false; // Prevent form submission
             }
 
+            // If no errors, hide the error message container
+            errorMessageContainer.style.display = "none";
             return true; // Allow form submission
         }
         document.addEventListener("DOMContentLoaded", function () {
             // Function to update the minimum date and start time dynamically
             function updateDateAndTime() {
+                // Adjust for (UTC +8)
                 const now = new Date();
-                const currentDate = now.toISOString().split('T')[0];
-                const currentTime = now.toTimeString().split(' ')[0].slice(0, 5); // Get current time in HH:MM format
+                const timezoneOffset = 8 * 60;
+                const localDate = new Date(now.getTime() + timezoneOffset * 60000);
+                const currentDate = localDate.toISOString().split('T')[0];
+                const currentTime = localDate.toTimeString().split(' ')[0].slice(0, 5); // Get current time in HH:MM format
 
                 // Update the minimum date to today
                 const dateInput = document.getElementById("date");

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReservationRecordController extends Controller
 {
@@ -309,9 +310,29 @@ class ReservationRecordController extends Controller
             ]
         );
 
+        $currentDate = Carbon::now('Asia/Manila')->format('Ymd');
+
+        // Find latest reservation ID that starts with today's date
+        $latestReservation = DB::table('reservations')
+            ->where('id', 'like', "RES-{$currentDate}%")
+            ->orderByDesc('id')
+            ->first();
+
+        // Get next increment number
+        $nextNumber = 1;
+        if ($latestReservation) {
+            // Extract the last 3 digits from the ID
+            $lastId = $latestReservation->id;
+            $lastNumber = (int) substr($lastId, -3);  // Last 3 digits
+            $nextNumber = $lastNumber + 1;
+        }
+
+        // Format new ID like RES-20250510001
+        $newId = 'RES-' . $currentDate . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+
         // Create the reservation
         $reservation = Reservation::create([
-            'id' => Str::uuid(),
+            'id' => $newId,
             'customer_id' => $customer->id,
             'date' => $request->date,
             'startTime' => Carbon::parse($request->startTime)->format('H:i:s'),

@@ -209,10 +209,6 @@
         </div>
         <div class="ellipsis-menu hidden text-xs">
             <button class="edit-reservation"
-            data-id="{{ $reservation->id }}"
-            data-date="{{ $reservation->date }}"
-            data-start="{{ $startTimeFormatted }}"
-            data-end="{{ $endTimeFormatted }}"
             >Edit Reservation</button>
             <hr>
             <button class="pay-reservation">Pay</button>
@@ -376,6 +372,14 @@
         return 'Invalid Time';
     }
    document.addEventListener("DOMContentLoaded", function () {
+    const now = new Date();
+    const timezoneOffset = 8 * 60; // Philippines is UTC +8
+    const localDate = new Date(now.getTime() + timezoneOffset * 60000);
+    const currentDate = localDate.toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+
+    // Set the minimum date to today for the date input field, but do not set it as the value
+    const dateInput = document.getElementById("date");
+    dateInput.setAttribute("min", currentDate);
     const reservationItems = document.querySelectorAll(".reservation-item");
     const amenities = @json($allReservations->values()->all());
 

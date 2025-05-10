@@ -37,10 +37,10 @@ Route::middleware('auth')->group(function () {
         ->name('customer.dashboard');
     Route::get('customer/reservation', [ReservationController::class, 'create'])
         ->name('customer.reservation');
-    Route::post('customer/reservation/store', [ReservationController::class, 'store'])
+    Route::post('customer/reservation/store', [ReservationController::class, 'createReservation'])
         ->middleware('auth')
         ->name('reservation.store');
-    Route::post('customer/dashboard/reserve', [ReservationController::class, 'store'])
+    Route::post('customer/dashboard/reserve', [ReservationController::class, 'createReservation'])
         ->name('customer.reserve');
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
         ->name('customer.profile');
