@@ -135,7 +135,7 @@
     
             <!-- Current Reservations -->
             <div class="reservation-list" id="current-reservations">
-                @foreach ($currentReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
+                @foreach ($paidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
                 @php
                     $statusColor = match ($reservation->bill->status) {
                         'paid' => 'blue',
