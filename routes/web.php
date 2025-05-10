@@ -56,13 +56,19 @@ Route::middleware('auth')->group(function () {
         ->name('cancel.reservation');
     Route::patch('customer/profile/{id}/delete', [ProfileController::class, 'delete_profile'])
         ->name('profile.delete');
+    Route::get('customer/reservation-records/edit-amenities', [ReservationController::class, 'edit_amenities']);
+    Route::post('/customer/update-reservation', [ReservationController::class, 'updateReservation'])
+    ->name('customer.updateReservation');
+
 });
 
 // Downpayment routes
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
-    Route::get('/downpayment/{reservation}', [DownpaymentController::class, 'show'])
+    Route::get('/downpayment/{reservation}', [DownpaymentController::class, 'showReceipt'])
         ->name('downpayment.show');
-    Route::post('/downpayment/{reservation}', [DownpaymentController::class, 'store'])
+        Route::get('/payment/{reservation}', [DownpaymentController::class, 'billing'])
+        ->name('payment.show');
+    Route::post('/downpayment/{reservation}', [DownpaymentController::class, 'storePayment'])
         ->name('downpayment.store');
 });
 

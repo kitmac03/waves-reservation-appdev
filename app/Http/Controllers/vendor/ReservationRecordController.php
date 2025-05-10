@@ -189,7 +189,7 @@ class ReservationRecordController extends Controller
             $events = $reservations->map(function ($reservation) {
                 $statusColors = [
                     'verified' => ['bg' => '#def2df', 'border' => '#33884d'],
-                    'pending' => ['bg' => '#fdf0bf', 'border' => '##a96715'],
+                    'pending' => ['bg' => '#fdf0bf', 'border' => '#a96715'],
                     'cancelled' => ['bg' => '#fce1e1', 'border' => '#c23a3a'],
                     'invalid' => ['bg' => '#fce1e1', 'border' => '#c23a3a'],
                     'completed' => ['bg' => '#f3ebed', 'border' => '#475569']

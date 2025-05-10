@@ -320,7 +320,7 @@
 				events: '/api/events',
 				headerToolbar: {
 						start: 'title',
-						center: 'reservationsButton walkInRequestButton monthSelect yearSelect editRequestButton remainingBalanceButton',
+						center: 'reservationsButton walkInRequestButton monthSelect yearSelect remainingBalanceButton',
 						end: '',
 				},
 				customButtons: {
