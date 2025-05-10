@@ -196,10 +196,6 @@
         </div>
         <div class="ellipsis-menu hidden text-xs">
             <button class="edit-reservation"
-              data-id="" 
-        data-date="" 
-        data-start="" 
-        data-end=""
             >Edit Reservation</button>
             <hr>
             <button class="pay-reservation">Pay</button>
