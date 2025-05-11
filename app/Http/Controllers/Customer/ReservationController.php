@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -46,6 +47,12 @@ class ReservationController extends Controller
         // Step 4: Conflict check
         $reservedAmenities = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
             ->where('reservations.date', $date)
+            ->where(function ($q) {
+                $q->where('reservations.status', 'verified')
+                ->orWhereHas('downPayment', function ($q2) {
+                    $q2->whereIn('status', ['verified', 'pending']);
+                });
+            })
             ->where(function ($query) use ($startTime, $endTime) {
                 $query->where('reservations.starttime', '<', $endTime)
                     ->where('reservations.endtime', '>', $startTime);
@@ -341,7 +348,7 @@ class ReservationController extends Controller
 
             // Sum only verified down payments
             $paidAmount = DownPayment::where('res_num', $reservation->id)
-                ->where('status', 'verified')
+                ->where('status', '!=', 'invalid')
                 ->sum('amount');
 
             $reservation->paidAmount = $paidAmount;
@@ -440,42 +447,48 @@ class ReservationController extends Controller
         ));
     }
 
-    public function checkAvailability(Request $request)
-    {
-        $date = $request->input('date');
-        $startTime = $request->input('startTime');
-        $endTime = $request->input('endTime');
+  public function checkAvailability(Request $request)
+{
+    $date = $request->input('date');
+    $startTime = $request->input('startTime');
+    $endTime = $request->input('endTime');
 
-        // Fetch reserved amenities that are NOT reactivated
-        $reservedAmenities = ReservedAmenity::where('reactivated', false)
-            ->whereHas('reservation', function ($query) use ($date, $startTime, $endTime) {
-                $query->where('date', $date)
-                    ->where(function ($query) use ($startTime, $endTime) {
-                        $query->whereBetween('startTime', [$startTime, $endTime])
-                            ->orWhereBetween('endTime', [$startTime, $endTime])
-                            ->orWhere(function ($query) use ($startTime, $endTime) {
-                                $query->where('startTime', '<=', $startTime)
-                                    ->where('endTime', '>=', $endTime);
-                            });
-                    });
-            })
-            ->pluck('amenity_id');
+    // Fetch reserved amenities from verified reservations with downPayment status pending or verified
+    $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($query) use ($date, $startTime, $endTime) {
+    $query->where('reservations.date', $date)
+        ->where(function ($q) {
+            $q->where('reservations.status', 'verified')
+            ->orWhereHas('downPayment', function ($q2) {
+                $q2->whereIn('status', ['verified', 'pending']);
+            });
+        })
+        ->where(function ($query) use ($startTime, $endTime) {
+            $query->whereBetween('reservations.startTime', [$startTime, $endTime])
+                ->orWhereBetween('reservations.endTime', [$startTime, $endTime])
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('reservations.startTime', '<=', $startTime)
+                            ->where('reservations.endTime', '>=', $endTime);
+            });
+        });
+    })->pluck('amenity_id');
 
-        $availableCottages = Amenities::where('type', 'cottage')
-            ->where('is_active', true)
-            ->whereNotIn('id', $reservedAmenities)
-            ->get();
 
-        $availableTables = Amenities::where('type', 'table')
-            ->where('is_active', true)
-            ->whereNotIn('id', $reservedAmenities)
-            ->get();
+    // Fetch available cottages and tables (not among reserved and still active)
+    $availableCottages = Amenities::where('type', 'cottage')
+        ->where('is_active', true)
+        ->whereNotIn('id', $reservedAmenities)
+        ->get();
 
-        return response()->json([
-            'availableCottages' => $availableCottages,
-            'availableTables' => $availableTables,
-        ]);
-    }
+    $availableTables = Amenities::where('type', 'table')
+        ->where('is_active', true)
+        ->whereNotIn('id', $reservedAmenities)
+        ->get();
+
+    return response()->json([
+        'availableCottages' => $availableCottages,
+        'availableTables' => $availableTables,
+    ]);
+}
 
     public function cancel_reservation(Request $request, $reservationId)
     {

@@ -247,7 +247,7 @@ class ReservationRecordController extends Controller
         }
     }
 
-    public function create_walkIn(Request $request)
+    public function amenitiesAvailability(Request $request)
     {
         // Fetch only active cottages and tables
         $cottages = Amenities::where('type', 'cottage')->where('is_active', 1)->get();
@@ -260,7 +260,12 @@ class ReservationRecordController extends Controller
             // Get all reserved amenities for the selected date
             $reservedCottages = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
                 ->where('reservations.date', $date)
-                ->where('reservations.status', '!=', 'cancelled') // Make sure we are only considering active reservations
+                 ->where(function ($q) {
+                    $q->where('reservations.status', 'verified')
+                    ->orWhereHas('downPayment', function ($q2) {
+                        $q2->whereIn('status', ['verified', 'pending']);
+                    });
+                })
                 ->whereHas('amenity', function ($query) {
                     $query->where('type', 'cottage');
                 })
@@ -269,7 +274,12 @@ class ReservationRecordController extends Controller
 
             $reservedTables = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
                 ->where('reservations.date', $date)
-                ->where('reservations.status', '!=', 'cancelled')
+                ->where(function ($q) {
+                    $q->where('reservations.status', 'verified')
+                    ->orWhereHas('downPayment', function ($q2) {
+                        $q2->whereIn('status', ['verified', 'pending']);
+                    });
+                })
                 ->whereHas('amenity', function ($query) {
                     $query->where('type', 'table');
                 })
