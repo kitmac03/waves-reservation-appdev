@@ -284,20 +284,21 @@ class ReservationController extends Controller
         $startTime = $request->input('startTime');
         $endTime = $request->input('endTime');
 
-        // Fetch all reserved amenities for the given date and overlapping time range
-        $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($query) use ($date, $startTime, $endTime) {
-            $query->where('date', $date)
-                ->where(function ($query) use ($startTime, $endTime) {
-                    $query->whereBetween('startTime', [$startTime, $endTime])
-                        ->orWhereBetween('endTime', [$startTime, $endTime])
-                        ->orWhere(function ($query) use ($startTime, $endTime) {
-                            $query->where('startTime', '<=', $startTime)
-                                ->where('endTime', '>=', $endTime);
-                        });
-                });
-        })->pluck('amenity_id');
+        // Fetch reserved amenities that are NOT reactivated
+        $reservedAmenities = ReservedAmenity::where('reactivated', false)
+            ->whereHas('reservation', function ($query) use ($date, $startTime, $endTime) {
+                $query->where('date', $date)
+                    ->where(function ($query) use ($startTime, $endTime) {
+                        $query->whereBetween('startTime', [$startTime, $endTime])
+                            ->orWhereBetween('endTime', [$startTime, $endTime])
+                            ->orWhere(function ($query) use ($startTime, $endTime) {
+                                $query->where('startTime', '<=', $startTime)
+                                    ->where('endTime', '>=', $endTime);
+                            });
+                    });
+            })
+            ->pluck('amenity_id');
 
-        // Fetch available cottages and tables
         $availableCottages = Amenities::where('type', 'cottage')
             ->where('is_active', true)
             ->whereNotIn('id', $reservedAmenities)
