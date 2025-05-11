@@ -221,6 +221,9 @@
             </div>
 
             <div class="r-details">
+                <div id="invalidMessage" class="bg-red-100 text-red-500 rounded-md text-xs p-2">
+                    <h2>Down payment is invalid. Please submit it again.</h2>
+                </div>
                 <p>
                     <strong><span id="name" class="reservation-id"></span></strong>
                     <span id="status" class="reservation-status"></span>
@@ -297,7 +300,7 @@
                 </div>
             </div>
              <!-- Error Message Container -->
-             <div id="error-message" style="color: red; font-size: 14px; display: none; margin-bottom: 10px;">
+             <div id="error-message" class="text-red-600 text-sm hidden mb-2">
                 Please select at least one Cottage or Table before submitting.
             </div>
             <div class="buttons">
@@ -458,28 +461,45 @@
             const editBtn = document.querySelector(".edit-reservation");
             const cancelBtn = document.querySelector(".cancel-reservation");
             const ellipsisBtn = document.querySelector(".ellipsis-btn");
+            const invalidMessage = document.getElementById('invalidMessage');
 
-            // Reset all buttons first
+           // Reset all buttons and message first
             payBtn.classList.add("hidden");
             editBtn.classList.add("hidden");
             cancelBtn.classList.add("hidden");
             ellipsisBtn.classList.add("hidden");
+            invalidMessage.classList.add("hidden");
 
-            // Set buttons based on status
+            // Set buttons based on reservation status
             if (selectedReservation) {
+                const dpStatus = selectedReservation.down_payment?.status;
+
                 if (selectedReservation.status === 'pending') {
-                    payBtn.classList.remove("hidden");
-                    editBtn.classList.remove("hidden");
                     cancelBtn.classList.remove("hidden");
                     ellipsisBtn.classList.remove("hidden");
 
-                    if (selectedReservation.down_payment) {
-                        editBtn.classList.add("hidden");
-                        payBtn.classList.add("hidden");
+                    if (dpStatus === 'invalid') {
+                        invalidMessage.classList.remove("hidden");
+                        payBtn.classList.remove("hidden");
+                        editBtn.classList.remove("hidden");
+                    } else if (dpStatus === 'verified') {
+                        // Hide pay and edit buttons if already verified
+                        // (already hidden by default reset)
+                    } else {
+                        // Down payment is either null or pending
+                        payBtn.classList.remove("hidden");
+
+                        if (!dpStatus) {
+                            // Allow editing only if down payment is null (not yet submitted)
+                            editBtn.classList.remove("hidden");
+                        } else {
+                            // Editing is not allowed if down payment is pending
+                            editBtn.classList.add("hidden");
+                        }
                     }
-                }
-                else if (selectedReservation.status === 'verified') {
+                } else if (selectedReservation.status === 'verified') {
                     cancelBtn.classList.remove("hidden");
+                    payBtn.classList.remove("hidden");
                     ellipsisBtn.classList.remove("hidden");
                 }
             }
@@ -506,55 +526,71 @@
                             cottageContainer.innerHTML = '';
                             tableContainer.innerHTML = '';
 
-                            data.cottages.forEach(cottage => {
-                                const wrapper = document.createElement('div');
-                                wrapper.className = 'form-check d-flex align-items-center mb-2';
+                            // Display cottages
+                            if (data.cottages.length === 0) {
+                                const noCottageMsg = document.createElement('p');
+                                noCottageMsg.className = 'text-sm text-gray-500 italic';
+                                noCottageMsg.textContent = 'No available cottages';
+                                cottageContainer.appendChild(noCottageMsg);
+                            } else {
+                                data.cottages.forEach(cottage => {
+                                    const wrapper = document.createElement('div');
+                                    wrapper.className = 'form-check d-flex align-items-center mb-2';
 
-                                const checkbox = document.createElement('input');
-                                checkbox.type = 'checkbox';
-                                checkbox.className = 'form-check-input p-2 me-2';
-                                checkbox.name = 'cottages[]';
-                                checkbox.value = cottage.id;
-                                checkbox.id = `cottage-${cottage.id}`;
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox';
+                                    checkbox.className = 'form-check-input p-2 me-2';
+                                    checkbox.name = 'cottages[]';
+                                    checkbox.value = cottage.id;
+                                    checkbox.id = `cottage-${cottage.id}`;
 
-                                if (data.selectedCottages.includes(cottage.id)) {
-                                    checkbox.checked = true;
-                                }
+                                    if (data.selectedCottages.includes(cottage.id)) {
+                                        checkbox.checked = true;
+                                    }
 
-                                const label = document.createElement('label');
-                                label.className = 'form-check-label m-0 p-0';
-                                label.htmlFor = checkbox.id;
-                                label.textContent = `${cottage.name} - ₱${cottage.price.toFixed(2)}`;
+                                    const label = document.createElement('label');
+                                    label.className = 'form-check-label m-0 p-0';
+                                    label.htmlFor = checkbox.id;
+                                    label.textContent = `${cottage.name} - ₱${cottage.price.toFixed(2)}`;
 
-                                wrapper.appendChild(checkbox);
-                                wrapper.appendChild(label);
-                                cottageContainer.appendChild(wrapper);
-                            });
+                                    wrapper.appendChild(checkbox);
+                                    wrapper.appendChild(label);
+                                    cottageContainer.appendChild(wrapper);
+                                });
+                            }
 
-                            data.tables.forEach(table => {
-                                const wrapper = document.createElement('div');
-                                wrapper.className = 'form-check d-flex align-items-center mb-2';
+                            // Display tables
+                            if (data.tables.length === 0) {
+                                const noTableMsg = document.createElement('p');
+                                noTableMsg.className = 'text-sm text-gray-500 italic';
+                                noTableMsg.textContent = 'No available tables';
+                                tableContainer.appendChild(noTableMsg);
+                            } else {
+                                data.tables.forEach(table => {
+                                    const wrapper = document.createElement('div');
+                                    wrapper.className = 'form-check d-flex align-items-center mb-2';
 
-                                const checkbox = document.createElement('input');
-                                checkbox.type = 'checkbox';
-                                checkbox.className = 'form-check-input p-2 me-2';
-                                checkbox.name = 'tables[]';
-                                checkbox.value = table.id;
-                                checkbox.id = `table-${table.id}`;
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox';
+                                    checkbox.className = 'form-check-input p-2 me-2';
+                                    checkbox.name = 'tables[]';
+                                    checkbox.value = table.id;
+                                    checkbox.id = `table-${table.id}`;
 
-                                if (data.selectedTables.includes(table.id)) {
-                                    checkbox.checked = true;
-                                }
+                                    if (data.selectedTables.includes(table.id)) {
+                                        checkbox.checked = true;
+                                    }
 
-                                const label = document.createElement('label');
-                                label.className = 'form-check-label m-0 p-0';
-                                label.htmlFor = checkbox.id;
-                                label.textContent = `${table.name} - ₱${table.price.toFixed(2)}`;
+                                    const label = document.createElement('label');
+                                    label.className = 'form-check-label m-0 p-0';
+                                    label.htmlFor = checkbox.id;
+                                    label.textContent = `${table.name} - ₱${table.price.toFixed(2)}`;
 
-                                wrapper.appendChild(checkbox);
-                                wrapper.appendChild(label);
-                                tableContainer.appendChild(wrapper);
-                            });
+                                    wrapper.appendChild(checkbox);
+                                    wrapper.appendChild(label);
+                                    tableContainer.appendChild(wrapper);
+                                });
+                            }
                         })
                         .catch(error => console.error('Fetch error:', error));
                     };

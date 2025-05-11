@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ReservationController extends Controller
 {
@@ -46,11 +47,17 @@ class ReservationController extends Controller
         // Step 4: Conflict check
         $reservedAmenities = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
             ->where('reservations.date', $date)
+            ->where(function ($q) {
+                $q->where('reservations.status', 'verified')
+                ->orWhereHas('downPayment', function ($q2) {
+                    $q2->whereIn('status', ['verified', 'pending']);
+                });
+            })
             ->where(function ($query) use ($startTime, $endTime) {
                 $query->where('reservations.starttime', '<', $endTime)
                     ->where('reservations.endtime', '>', $startTime);
             })
-            ->where('reservations.status', '=', 'verified')
+            ->where('reservations.status', '!=', 'cancelled')
             ->where('reservations.id', '!=', $resNum)
             ->pluck('reserved_amenity.amenity_id')
             ->toArray();
@@ -305,17 +312,20 @@ class ReservationController extends Controller
         return redirect()->route('customer.downpayment.show', $reservation);
     }
 
-   public function view_reservations()
+    public function view_reservations()
     {
         $customer = auth()->user();
 
         $allReservations = $customer->reservations()
-            ->with(['reservedAmenities.amenity', 'bill.balance'])
+            ->with(['reservedAmenities.amenity', 'bill.balance', 'downPayment'])
             ->get();
 
         $allReservations->each(function ($reservation) {
             $bill = $reservation->bill;
+
             $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
             $paidAmount = DownPayment::where('res_num', $reservation->id)
                 ->where('status', 'verified')
                 ->sum('amount');
@@ -325,20 +335,20 @@ class ReservationController extends Controller
             $reservation->balance = $grandTotal - $paidAmount;
         });
 
-        // Pending reservations with bills
-        $pendingReservationsWithBill = $customer->reservations()
+        $pendingReservationsWithDP = $customer->reservations()
             ->where('status', 'pending')
-            ->whereHas('bill', function ($query) {
-                $query->where('status', 'unpaid');
-            })
-            ->with(['reservedAmenities.amenity', 'bill'])
+            ->whereHas('downPayment')
+            ->with(['reservedAmenities.amenity', 'downPayment'])
             ->get();
 
-        $pendingReservationsWithBill->each(function ($reservation) {
+        $pendingReservationsWithDP->each(function ($reservation) {
             $bill = $reservation->bill;
+
             $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
             $paidAmount = DownPayment::where('res_num', $reservation->id)
-                ->where('status', 'verified')
+                ->where('status', '!=', 'invalid')
                 ->sum('amount');
 
             $reservation->paidAmount = $paidAmount;
@@ -346,16 +356,18 @@ class ReservationController extends Controller
             $reservation->balance = $grandTotal - $paidAmount;
         });
 
-        // Pending reservations without down payment (no dp)
         $pendingReservationsWithoutDP = $customer->reservations()
             ->where('status', 'pending')
-            ->whereDoesntHave('downPayment') // No down payment
-            ->with(['reservedAmenities.amenity', 'bill'])
+            ->whereDoesntHave('downPayment') // no down payment
+            ->with(['reservedAmenities.amenity', 'bill']) // no need to load downPayment
             ->get();
 
         $pendingReservationsWithoutDP->each(function ($reservation) {
             $bill = $reservation->bill;
+
             $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
             $paidAmount = DownPayment::where('res_num', $reservation->id)
                 ->where('status', 'verified')
                 ->sum('amount');
@@ -365,7 +377,6 @@ class ReservationController extends Controller
             $reservation->balance = $grandTotal - $paidAmount;
         });
 
-        // Reservations with fully paid bills
         $reservationsWithFullyPaidBills = $customer->reservations()
             ->where('status', 'verified')
             ->whereHas('bill', function ($query) {
@@ -376,7 +387,10 @@ class ReservationController extends Controller
 
         $reservationsWithFullyPaidBills->each(function ($reservation) {
             $bill = $reservation->bill;
+
             $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
             $paidAmount = DownPayment::where('res_num', $reservation->id)
                 ->where('status', 'verified')
                 ->sum('amount');
@@ -386,7 +400,6 @@ class ReservationController extends Controller
             $reservation->balance = $grandTotal - $paidAmount;
         });
 
-        // Reservations with partially paid bills
         $reservationsWithPartialBills = $customer->reservations()
             ->where('status', 'verified')
             ->whereHas('bill', function ($query) {
@@ -397,7 +410,10 @@ class ReservationController extends Controller
 
         $reservationsWithPartialBills->each(function ($reservation) {
             $bill = $reservation->bill;
+
             $grandTotal = optional($bill)->grand_total ?? 0;
+
+            // Sum only verified down payments
             $paidAmount = DownPayment::where('res_num', $reservation->id)
                 ->where('status', 'verified')
                 ->sum('amount');
@@ -407,20 +423,16 @@ class ReservationController extends Controller
             $reservation->balance = $grandTotal - $paidAmount;
         });
 
-        // Merge fully paid and partially paid reservations
+
         $paidReservations = $reservationsWithFullyPaidBills->merge($reservationsWithPartialBills);
 
-        // Separate reservations by status
         $cancelledReservations = $allReservations->where('status', 'cancelled');
         $completedReservations = $allReservations->where('status', 'completed');
         $verifiedReservations = $allReservations->where('status', 'verified');
         $invalidReservations = $allReservations->where('status', 'invalid');
 
-        // Combine cancelled and invalid reservations
         $redReservations = $cancelledReservations->merge($invalidReservations);
-
-        // Combine pending reservations with and without down payment
-        $pendingReservations = $pendingReservationsWithBill->merge($pendingReservationsWithoutDP);
+        $pendingReservations = $pendingReservationsWithDP->merge($pendingReservationsWithoutDP);
 
         return view('customer.reservation_records', compact(
             'customer',
@@ -435,26 +447,31 @@ class ReservationController extends Controller
         ));
     }
 
-
- public function checkAvailability(Request $request)
+  public function checkAvailability(Request $request)
 {
     $date = $request->input('date');
     $startTime = $request->input('startTime');
     $endTime = $request->input('endTime');
 
-    // Fetch reserved amenities ONLY from reservations that are NOT verified
+    // Fetch reserved amenities from verified reservations with downPayment status pending or verified
     $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($query) use ($date, $startTime, $endTime) {
-        $query->where('reservations.date', $date)
-              ->where('reservations.status', '=', 'verified') // Exclude verified reservations
-              ->where(function ($query) use ($startTime, $endTime) {
-                  $query->whereBetween('reservations.startTime', [$startTime, $endTime])
-                        ->orWhereBetween('reservations.endTime', [$startTime, $endTime])
-                        ->orWhere(function ($query) use ($startTime, $endTime) {
-                            $query->where('reservations.startTime', '<=', $startTime)
-                                  ->where('reservations.endTime', '>=', $endTime);
-                        });
-              });
+    $query->where('reservations.date', $date)
+        ->where(function ($q) {
+            $q->where('reservations.status', 'verified')
+            ->orWhereHas('downPayment', function ($q2) {
+                $q2->whereIn('status', ['verified', 'pending']);
+            });
+        })
+        ->where(function ($query) use ($startTime, $endTime) {
+            $query->whereBetween('reservations.startTime', [$startTime, $endTime])
+                ->orWhereBetween('reservations.endTime', [$startTime, $endTime])
+                ->orWhere(function ($query) use ($startTime, $endTime) {
+                    $query->where('reservations.startTime', '<=', $startTime)
+                            ->where('reservations.endTime', '>=', $endTime);
+            });
+        });
     })->pluck('amenity_id');
+
 
     // Fetch available cottages and tables (not among reserved and still active)
     $availableCottages = Amenities::where('type', 'cottage')
