@@ -145,4 +145,8 @@ Route::middleware(VendorMiddleware::class)->group(function () {
         ->name('admin.vendor.profile.edit');
     Route::patch('admin/vendor/profile/{id}/update', [VendorProfileController::class, 'update_profile'])
         ->name('admin.vendor.profile.update');
+    Route::get('admin/vendor/cancel', [AmenitiesController::class, 'showCancelledAmenities'])
+        ->name('admin.vendor.cancel');
+    Route::post('admin/vendor/activate-amenity', [AmenitiesController::class, 'activateAmenity'])
+        ->name('admin.vendor.activate');
 });
