@@ -38,7 +38,7 @@ class AdminDashboardController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('admin.create.account');
+        return redirect()->back()->with('success', 'Account created successfully.');        
     }
 
 

@@ -59,6 +59,10 @@
 
       <p class="head-title">ADMIN ACCOUNT CREATION</p>
 
+      @if(session('success'))
+      <div style="text-xs color: green;">{{ session('success') }}</div>
+    @endif
+    
       <form class="input-container" action="{{ route('admin.create.account.store') }}" method="POST">
         @csrf
 
@@ -68,8 +72,8 @@
     @endif
         <input class="contact-input" name="number" type="number" placeholder="Contact No." value="{{ old('contact') }}"
           required>
-        @if ($errors->has('contact'))
-      <div class="error-message">{{ $errors->first('contact') }}</div>
+        @if ($errors->has('number'))
+      <div class="error-message">{{ $errors->first('number') }}</div>
     @endif
         <input class="email-input" name="email" placeholder="Email" value="{{ old('email') }}" required>
         @if ($errors->has('email'))

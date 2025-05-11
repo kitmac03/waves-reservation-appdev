@@ -58,6 +58,7 @@
     <div class="main-content">
 
       <p class="head-title">LIST OF VENDORS</p>
+      <div id="flash-message" style="display:none; padding:10px; margin-bottom:10px; border-radius:5px;"></div>
       <table>
         <thead>
           <tr>
@@ -168,21 +169,33 @@
       })
         .then(response => response.json())
         .then(data => {
+          const messageDiv = document.getElementById('flash-message');
           if (data.success) {
-            alert('Role updated successfully!');
-            location.reload();
+            messageDiv.innerText = data.message;
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = '#d4edda';
+            messageDiv.style.color = '#155724';
           } else {
-            alert('Failed to update role.');
+            messageDiv.innerText = data.message || 'Failed to update role.';
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = '#f8d7da';
+            messageDiv.style.color = '#721c24';
           }
+
+          // Optional: auto-hide after 3 seconds
+          setTimeout(() => {
+            messageDiv.style.display = 'none';
+            location.reload(); // reload after message disappears
+          }, 2000);
         })
         .catch(error => {
           console.error('Error:', error);
-          alert('Something went wrong.');
         });
 
       confirmModal.close();
       changeAdminModal.close();
     }
+
 
     function exitDialog() {
       confirmModal.close();

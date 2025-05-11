@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\UniqueEmailAcrossTables;
 
 class RegisteredUserController extends Controller
 {
@@ -33,10 +34,11 @@ class RegisteredUserController extends Controller
 
     protected function validator(array $data)
     {
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'number' => 'required|regex:/^[0-9]{11}$/',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
+            'email' => ['required', 'string', 'email', 'max:255', new UniqueEmailAcrossTables()],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }

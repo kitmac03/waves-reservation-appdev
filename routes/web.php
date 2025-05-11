@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ManagerProfileController;
 use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\vendor\ReservationRecordController;
 use App\Http\Controllers\Vendor\PaymentController;
+use App\Http\Controllers\Vendor\VendorProfileController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
@@ -26,6 +27,7 @@ Route::get('/register', [RegisteredUserController::class, 'create'])->name('regi
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust.register');
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 Route::post('/send-reminder', [ReservationController::class, 'sendReminder'])->name('send-reminder');
+Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
 
 // Customer Routes
 Route::middleware('auth')->group(function () {
@@ -35,10 +37,10 @@ Route::middleware('auth')->group(function () {
         ->name('customer.dashboard');
     Route::get('customer/reservation', [ReservationController::class, 'create'])
         ->name('customer.reservation');
-    Route::post('customer/reservation/store', [ReservationController::class, 'store'])
+    Route::post('customer/reservation/store', [ReservationController::class, 'createReservation'])
         ->middleware('auth')
         ->name('reservation.store');
-    Route::post('customer/dashboard/reserve', [ReservationController::class, 'store'])
+    Route::post('customer/dashboard/reserve', [ReservationController::class, 'createReservation'])
         ->name('customer.reserve');
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
         ->name('customer.profile');
@@ -50,16 +52,23 @@ Route::middleware('auth')->group(function () {
         ->name('customer.reservation.records');
     Route::get('customer/balance', [ReservationController::class, 'view_balance'])
         ->name('customer.reservation.balance');
-    Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
     Route::post('customer/reservation-records/{reservation}/cancel', [ReservationController::class, 'cancel_reservation'])
         ->name('cancel.reservation');
+    Route::patch('customer/profile/{id}/delete', [ProfileController::class, 'delete_profile'])
+        ->name('profile.delete');
+    Route::get('customer/reservation-records/edit-amenities', [ReservationController::class, 'edit_amenities']);
+    Route::post('/customer/update-reservation', [ReservationController::class, 'updateReservation'])
+    ->name('customer.updateReservation');
+
 });
 
 // Downpayment routes
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
-    Route::get('/downpayment/{reservation}', [DownpaymentController::class, 'show'])
+    Route::get('/downpayment/{reservation}', [DownpaymentController::class, 'showReceipt'])
         ->name('downpayment.show');
-    Route::post('/downpayment/{reservation}', [DownpaymentController::class, 'store'])
+        Route::get('/payment/{reservation}', [DownpaymentController::class, 'billing'])
+        ->name('payment.show');
+    Route::post('/downpayment/{reservation}', [DownpaymentController::class, 'storePayment'])
         ->name('downpayment.store');
 });
 
@@ -101,6 +110,11 @@ Route::middleware(ManagerMiddleware::class)->group(function () {
         ->name('admin.vendors.list.promote');
     Route::get('admin/delete-requests', [ManagerProfileController::class, 'view_del_req'])
         ->name('admin.delete.requests');
+    Route::get('admin/delete-requests/{id}', [ManagerProfileController::class, 'view_del_acc_details'])
+        ->name('admin.delete.requests.details');
+    Route::patch('admin/delete-request/{id}/approve', [ManagerProfileController::class, 'approveRequest'])->name('admin.delete.approve');
+    Route::patch('admin/delete-request/{id}/decline', [ManagerProfileController::class, 'declineRequest'])->name('admin.delete.decline');
+
 });
 
 //  Vendor Routes
@@ -125,4 +139,14 @@ Route::middleware(VendorMiddleware::class)->group(function () {
         ->name('admin.vendor.walk_in.store');
     Route::get('admin/vendor/payment/{reservation}', [ReservationRecordController::class, 'payment_show'])
         ->name('admin.vendor.reservations.payment.show');
+    Route::get('admin/vendor/profile', [VendorProfileController::class, 'view_profile'])
+        ->name('admin.vendor.profile');
+    Route::get('admin/vendor/profile/{id}/edit', [VendorProfileController::class, 'edit_profile'])
+        ->name('admin.vendor.profile.edit');
+    Route::patch('admin/vendor/profile/{id}/update', [VendorProfileController::class, 'update_profile'])
+        ->name('admin.vendor.profile.update');
+    Route::get('admin/vendor/cancel', [AmenitiesController::class, 'showCancelledAmenities'])
+        ->name('admin.vendor.cancel');
+    Route::post('admin/vendor/activate-amenity', [AmenitiesController::class, 'activateAmenity'])
+        ->name('admin.vendor.activate');
 });

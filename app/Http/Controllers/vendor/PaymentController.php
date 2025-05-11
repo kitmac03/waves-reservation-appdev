@@ -19,7 +19,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'payment_amount' => 'required|numeric|min:0',
-            'reservation_id' => 'required|uuid',
+            'reservation_id' => 'required|string|regex:/^RES-\d{8}\d{3}$/', 
             'bill_id' => 'required|uuid',
             'status' => 'required|string|in:verified,invalid,completed',
         ]);
@@ -117,35 +117,38 @@ class PaymentController extends Controller
         }
     }
 
-    public function invalidPayment(Request $request)
-    {
-        $validated = Validator::make($request->all(), [
-            'reservation_id' => 'required|exists:reservations,id',
-            'dp_id' => 'required|exists:down_payment,id', 
-            'bill_id' => 'required|exists:bills,id',
-            'status' => 'required|in:invalid',
+public function invalidPayment(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'reservation_id' => 'required|exists:reservations,id',
+        'dp_id' => 'required|exists:down_payment,id', 
+        'bill_id' => 'required|exists:bills,id',
+        'status' => 'required|in:invalid',
+    ]);
+
+    $validated = $validator->validated();
+
+    try {
+        DB::beginTransaction();
+
+        // Update down payment status
+        $downpayment = DownPayment::findOrFail($validated['dp_id']);
+        $downpayment->update([
+            'status' => 'invalid',
+            'verified_by' => Auth::id()
         ]);
-    
-        try {
-            DB::beginTransaction();
-    
-            // Update down payment status
-            $downpayment = DownPayment::findOrFail($validated['dp_id']);
-            $downpayment->update([
-                'status' => 'invalid',
-                'verified_by' => Auth::id()
-            ]);
-    
-            DB::commit();
-    
-            return redirect()->back()
-                ->with('error', 'Payment marked as invalid.')
-                ->with('invalid_payment', true);
-    
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()
-                ->with('error', 'Failed to mark payment as invalid. Please try again.');
-        }
+
+        DB::commit();
+
+        return redirect()->back()
+            ->with('error', 'Payment marked as invalid.')
+            ->with('invalid_payment', true);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()
+            ->with('error', 'Failed to mark payment as invalid. Please try again.');
     }
+}
+
 }

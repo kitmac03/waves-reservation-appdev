@@ -47,7 +47,7 @@ table {
 /******* NAVIGATION BAR STYLE ***********/
 
 .navbar {
-  background-color: #002044;
+  background-color: #002044;;
 
   height: 10vh;
   width: 100vw;
@@ -67,9 +67,9 @@ table {
   justify-content: center;
   align-items: center;
 }
-.ameneties {
-  background-color: white;
-  color: #002044;
+.dashboard {
+  background-color: #002044;
+  color: white;
   font: 400 16px poppins;
   cursor: pointer;
 
@@ -87,8 +87,8 @@ table {
 .nav-icons {
   margin-right: 8px;
 }
-.dashboard, .reservations {
-  background-color:#002044;
+.ameneties, .reservations {
+  background-color:#002044;;
   color: white;
   font: 400 16px poppins;
   cursor: pointer;
@@ -117,174 +117,180 @@ table {
   align-items: center;
 }
 .profile {
-  background-color: #002044;
+  background-color: rgba(255, 255, 255, 0.126);
+  color: #002044;
   border: 0 solid black;
   cursor: pointer;
 }
 
 .inactive {
-  background-color: #002044;
+  background-color: #002044;;
   color: white;
 }
 .active {
   background-color: white;
-  color: #002044;
+  color: #002044;;
 }
-
-.container {
+/* Main Content Styles */
+.main-content {
   margin-top: 10vh;
-}
-
-/******* SIDE BAR STYLE ***********/
-
-.sidebar {
-
+  padding: 40px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: fixed;
-
-  height: 90vh;
-  width: 5vw;
-
-  padding: 2vh 1vw 2vh 1vw;
-
+  justify-content: center;
+  align-items: flex-start;
+  height: fit-content ;
+  font-family: 'Poppins', sans-serif;
 }
-.icon-container {
+
+.profile-container {
+  width: 100%;
+  max-width: 600px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  width: 95px;
-  height: 95px;
+  justify-content: center;
 }
-.icon-container:hover {
-  background-color: #ecf0f1;
+
+.profile-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 30px;
+}
+
+.profile-card h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #002044;
+  margin-bottom: 30px;
+}
+
+.form-section {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+.form-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  gap: 12px;
+}
+
+.input-item:focus-within {
+  border-color: rgba(49, 105, 109, 0.751);
+  box-shadow: 0 0 0 2px rgba(49, 105, 109, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cancel {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-save {
+  background-color: #002044;
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #002044;
+}
+
+/*modal na mag appear*/
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 999; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.5); 
+  font-family: 'Poppins', sans-serif;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: fit-content;
+  text-align: center;
   border-radius: 10px;
 }
-.icon-label {
-  font: 500 14px poppins;
-  color: #002044;
-  cursor: pointer;
-}
-.side-icons {
-  color: #002044; 
-  font-size: 65px !important;
-  margin-top: 8px; 
-  cursor: pointer;
-}
 
-/*******************  MAIN BODY  *****************************/
-
-.main {
-  background-color: #ecf0f1;
-  height: 90vh;
-  width: 95vw;
-  overflow-y: auto;
+.modal-buttons {
+  margin-top: 20px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 45px;
-
-  margin-left: 7vw;
-  position: fixed;
-}
-.label {
-  text-align: left;
-  font: 700 35px poppins;
-  margin-bottom: 18px;
-  width: 86vw;
-}
-.table {
-  width: 80vw;
-  margin-left: 0;
-  margin-right: 100px;
-  text-align: center;
-
-  padding: 30px 30px 30px 30px;
-
-}
-th {
-  font: 700 18px poppins;
-  padding: 12px 50px 12px 70px;;
-}
-td {
-  text-align: center;
-  border-bottom: 2px solid #ccc;
-  border-top: 2px solid #ccc;
-  padding: 12px 50px 12px 70px;
-  font: 300 18px poppins;
-}
-.button-wrapper {
-  margin-left: 100px;
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
-.edit-icon {
-  color: #002044;
-}
-.archive-button {
-  border: none;
-  background-color: #002044;
-  color: white;
-  border-radius: 8px;
-  font: 300 12px poppins;
-  padding: 8px 16px 8px 16px;
-}
-
-.add-items-container {
-  width: 86vw;
-  display: flex;
-  align-items: center;
-  margin-top: 18px;
-  gap: 8px;
-}
-.add-icon, .add-text {
-  color: #002044;
-  font: 500 12px poppins;
-}
-
-.modal {
-  height: 25vh;
-  width: 30vw;
-
-  border: none;
-  border-radius: 12px;
-}
-.modal-wrapper {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-}
-.modal-heading {
-  font: 700 18px poppins;
-}
-.modal-text {
-  font: 400 16px poppins;
-  padding: 6px 30px 12px 30px;
-}
-.modal-button-wrapper {
-  display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 10px;
+}
 
-  width: 100%;
-}
-.cancel-button {
-  color: red;
-  font: 400 16px poppins;
+.modal-buttons button {
+  padding: 8px 20px;
   border: none;
-  background: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
 }
-.confirm-button {
-  background-color: #002044;
+
+.btn-yes {
+  background-color: #4CAF50;
   color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 20px 4px 20px;
-  font: 400 16px poppins;
+}
+
+.btn-cancel-modal {
+  background-color: #f44336;
+  color: white;
 }

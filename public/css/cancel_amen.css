@@ -47,7 +47,7 @@ table {
 /******* NAVIGATION BAR STYLE ***********/
 
 .navbar {
-  background-color: #002044;
+  background-color: #263b49;
 
   height: 10vh;
   width: 100vw;
@@ -69,7 +69,7 @@ table {
 }
 .ameneties {
   background-color: white;
-  color: #002044;
+  color: #263b49;
   font: 400 16px poppins;
   cursor: pointer;
 
@@ -87,8 +87,8 @@ table {
 .nav-icons {
   margin-right: 8px;
 }
-.reservations, .dashboard {
-  background-color:#002044;
+.dashboard, .reservations {
+  background-color:#263b49;
   color: white;
   font: 400 16px poppins;
   cursor: pointer;
@@ -117,18 +117,18 @@ table {
   align-items: center;
 }
 .profile {
-  background-color: #002044;
+  background-color: #263b49;
   border: 0 solid black;
   cursor: pointer;
 }
 
 .inactive {
-  background-color: #002044;
+  background-color: #263b49;
   color: white;
 }
 .active {
   background-color: white;
-  color: #002044;
+  color: #263b49;
 }
 
 .container {
@@ -164,11 +164,11 @@ table {
 }
 .icon-label {
   font: 500 14px poppins;
-  color: #002044;
+  color: #263b49;
   cursor: pointer;
 }
 .side-icons {
-  color: #002044; 
+  color: #263b49; 
   font-size: 65px !important;
   margin-top: 8px; 
   cursor: pointer;
@@ -233,7 +233,7 @@ table {
   }
   
   .availability-table th {
-    background-color: #002044;
+    background-color: #3498db;
     color: white;
   }
   
@@ -287,7 +287,7 @@ table {
   
 
   .icon-container.active {
-    background-color: #002044; /* green background */
+    background-color: #263b49; /* green background */
     color: white; /* white icon and text */
     border-radius: 10px;
   }
@@ -313,3 +313,188 @@ table {
     background-color: #fbeaea;
   }
   
+  /*mao naning added cancel*/
+  /* CANCEL SECTION STYLES */
+.cancel-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .cancel-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+
+  }
+  
+  .cancel-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .filter-group label {
+    font-weight: 500;
+  }
+  
+  .filter-group select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .search-btn {
+    padding: 8px 20px;
+    background-color: #4a668e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .search-btn:hover {
+    background-color: #3a5a8f;
+  }
+  
+  .cancel-list {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .cancel-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr 1fr 1fr 1fr 1fr;
+    background-color: #4a668e;
+    color: white;
+    padding: 12px 15px;
+    font-weight: 500;
+
+  }
+  
+  .cancel-items {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  .cancel-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr 1fr 1fr 1fr 1fr;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+  }
+  
+  .cancel-item:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .item-detail {
+    padding: 5px;
+  }
+  
+  .status-processed {
+    color: #28a745;
+    font-weight: 500;
+  }
+  
+  .status-pending {
+    color: #ffc107;
+    font-weight: 500;
+  }
+  
+  .status-denied {
+    color: #dc3545;
+    font-weight: 500;
+  }
+  
+  .view-btn {
+    padding: 6px 12px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .view-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  .cancel-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .page-btn {
+    padding: 8px 15px;
+    background-color: #4a668e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .page-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .page-number {
+    font-weight: 500;
+  }
+
+  /*view det*/
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 8px;
+    width: 60%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover {
+    color: #333;
+  }
