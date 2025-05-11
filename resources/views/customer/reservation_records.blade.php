@@ -185,7 +185,7 @@
         </div>
     </div>
 
-<section class="reservation-details hidden">
+<<section class="reservation-details hidden">
     <div class="reservation-container">
         <button class="ellipsis-btn">
             <i class="fas fa-ellipsis-h"></i>
