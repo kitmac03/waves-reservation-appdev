@@ -527,7 +527,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     width: 400px;
-    text-align: center;
+    text-align: left; /* Changed from center to left */
 }
 
 .modal-header {
@@ -535,37 +535,41 @@ body {
 }
 
 .modal-header h3 {
-    font-size: 24px;
+    font-size: 15px;
     color: #333;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .modal-header p {
     color: #777;
+    font-size: 14px;
 }
 
 .modal-footer {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end; /* Aligns buttons to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px;
 }
 
 .modal-footer .btn {
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    min-width: 80px;
 }
 
 .modal-footer .secondary-btn {
     background-color: #ccc;
     color: #333;
-    border-radius: 5px;
 }
 
 .modal-footer .primary-btn {
     background-color: #007bff;
     color: white;
-    border-radius: 5px;
 }
 
 .modal-footer .btn:hover {
