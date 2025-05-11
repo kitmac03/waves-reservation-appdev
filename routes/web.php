@@ -133,7 +133,7 @@ Route::middleware(VendorMiddleware::class)->group(function () {
         ->name('admin.vendor.invalid-payment');
     Route::get('admin/vendor/edit-reservations', [ReservationRecordController::class, 'view_edit_reservations'])
         ->name('admin.vendor.edit-res-req');
-    Route::get('/admin/vendor/walk-in', [ReservationRecordController::class, 'create_walkIn'])
+    Route::get('/admin/vendor/walk-in', [ReservationRecordController::class, 'amenitiesAvailability'])
         ->name('admin.vendor.walk_in');
     Route::post('/admin/vendor/walk-in', [ReservationRecordController::class, 'custom_walkIn'])
         ->name('admin.vendor.walk_in.store');

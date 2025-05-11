@@ -145,9 +145,9 @@
                                 @php
                                     $date = new DateTime($reservation->date ?? now());
                                     $startTime = new DateTime($reservation->startTime ?? '00:00:00');
-                                    $startTimeFormatted = $startTime->format('H:i:s');  // Format the start time
+                                    $startTimeFormatted = $startTime->format('h:i A'); // Format the start time
                                     $endTime = new DateTime($reservation->endTime ?? '00:00:00');
-                                    $endTimeFormatted = $endTime->format('H:i:s');  // Format the end time
+                                    $endTimeFormatted = $endTime->format('h:i A');   // Format the end time
                                     $statusColor = match ($reservation->bill->status) {
                                         'paid' => 'blue',
                                         'partially paid' => 'green',
