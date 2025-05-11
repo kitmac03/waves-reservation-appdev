@@ -98,8 +98,6 @@
                                 <p class="upload-instruction">After completing the payment, please enter the following
                                     information of the Gcash account you used to proceed with your reservation
                                     verification:</p>
-                                <input type="text" name="full_name" placeholder="Enter your full name" id="full_name"
-                                    required>
 
                                 <input type="text" name="ref_number" placeholder="Enter reference number"
                                     id="ref_number" required>

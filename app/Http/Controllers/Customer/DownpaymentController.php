@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DownpaymentController extends Controller
 {
-    public function show(Reservation $reservation)
+    public function showReceipt(Reservation $reservation)
     {
         // Eager load bill (singular), not bills (plural)
         $reservation->load('reservedAmenities.amenity', 'bill');
@@ -27,11 +27,25 @@ class DownpaymentController extends Controller
 
         return view('customer.downpayment', compact('reservation', 'bill'));
     }
+    public function billing(Reservation $reservation)
+    {
+        $customer = auth()->user();
+        // Eager load bill (singular), not bills (plural)
+        $reservation->load('reservedAmenities.amenity', 'bill');
 
-    public function store(Request $request, $reservationId)
+        // Access the bill directly from the relationship
+        $bill = $reservation->bill;
+
+        if (!$bill) {
+            return back()->withErrors(['bill' => 'No billing information found. Please contact support.']);
+        }
+
+        return view('customer.payment', compact('customer', 'reservation', 'bill'));
+    }
+
+    public function storePayment(Request $request, $reservationId)
     {
         $request->validate([
-            'full_name' => 'required|string|max:255',
             'ref_number' => 'required|string|max:20',
             'payment_proof' => 'required|image|max:2048',
         ]);

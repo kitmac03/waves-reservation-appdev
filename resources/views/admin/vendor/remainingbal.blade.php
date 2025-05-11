@@ -22,7 +22,7 @@
 		x-transition:leave="transition ease-in duration-300"
 		x-transition:leave-start="opacity-100 translate-y-0"
 		x-transition:leave-end="opacity-0 translate-y-2"
-		class="fixed top-4 right-4 z-[9999]" 
+		class="fixed bottom-4 right-4" 
 		x-cloak>
 		<div x-bind:class="{
 				'bg-green-500': toastType === 'success',
