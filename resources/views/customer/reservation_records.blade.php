@@ -65,140 +65,127 @@
         </script>
     </div>
 
-    <div class="content">
-        <div class="title-container">
-        <div class="content-card">
-            <div class="content-header">
-        <h2>Your Reservations</h2>
-
-        <div class="status-bar">
-            <span style="color: blue;">● Fully Paid</span>
-            <span style="color: lightgreen;">● Partially Paid</span>
-            <span style="color: orange;">● With Downpayment</span>
-            <span style="color: yellow;">● No Downpayment</span>
-            <span style="color: red;">● Cancelled/Invalid</span>
-            <span style="color: rgb(51, 51, 51);">● Past</span>
-            </div>
+    <div class="reservations-container">
+        <div class="content-header">
+            <h2>Your Reservations</h2>
+            <div class="status-tabs">
+                <button class="status-tab active" data-status="cancelled">Cancelled/Invalid</button>
+                <button class="status-tab" data-status="pending">Pending</button>
+                <button class="status-tab" data-status="current">Current</button>
+                <button class="status-tab" data-status="completed">Completed</button>
             </div>
             
-        <div class="reservations">
-            <div class="reservation-column">
-                <h4>Cancelled / Invalid</h4>
-                @foreach ($redReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
-                                @php
-                                    $date = new DateTime($reservation->date ?? now());
-                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
-                                    $startTimeFormatted = $startTime->format('h:i A');
-                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
-                                    $endTimeFormatted = $endTime->format('h:i A'); 
-                                    $statusColor = match ($reservation->status) {
-                                        'pending' => 'orange',
-                                        'verified' => 'green',
-                                        'invalid', 'cancelled' => 'red',
-                                        'completed' => 'gray',
-                                        default => 'black',
-                                    };
-                                @endphp
-                                <div class="reservation-item" data-id="{{ $reservation->id }}"
-                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
-                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
-                                    data-date="{{ $reservation->date }}" data-start="{{ $startTimeFormatted }}"
-                                    data-end="{{ $endTimeFormatted }}" data-status="{{ $reservation->status }}"
-                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-                                    <strong>#{{ $reservation->id }}</strong><br>
-                                    {{ $reservation->date }} | {{ $startTimeFormatted }} - {{ $endTimeFormatted }}
-                                </div>
+            <div class="status-legend">
+                <span class="legend-item" style="--color: blue;">Fully Paid</span>
+                <span class="legend-item" style="--color: lightgreen;"> Partially Paid</span>
+                <span class="legend-item" style="--color: orange;"> With Downpayment</span>
+                <span class="legend-item" style="--color: yellow;"> No Downpayment</span>
+                <span class="legend-item" style="--color: red;">Cancelled/Invalid</span>
+                <span class="legend-item" style="--color: rgb(51, 51, 51);">Past</span>
+            </div>
+        </div>
+    
+        <div class="reservations-content">
+            <!-- Cancelled/Invalid Reservations -->
+            <div class="reservation-list active" id="cancelled-reservations">
+            @foreach ($cancelledReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                    data-name="{{ $reservation->customer->name }}" 
+                    data-paidAmount="{{ $reservation->paidAmount }}"
+                    data-total="{{ $reservation->grandTotal }}" 
+                    data-balance="{{ $reservation->balance }}"
+                    data-date="{{ $reservation->date }}" 
+                    data-start="{{ $reservation->startTime }}"
+                    data-end="{{ $reservation->endTime }}" 
+                    data-status="{{ $reservation->status }}"
+                    style="border-left: 5px solid red;">
+                    <div class="reservation-id">#{{ $reservation->id }}</div>
+                    <div class="reservation-date">{{ $reservation->date }}</div>
+                    <div class="reservation-time">{{ $reservation->startTime }} - {{ $reservation->endTime }}</div>
+                    <div class="reservation-name">{{ $reservation->customer->name }}</div>
+                    <div class="reservation-status cancelled">Cancelled</div>
+                </div>
                 @endforeach
             </div>
-
-            <div class="reservation-column">
-                <h4>Pending</h4>
+    
+            <!-- Pending Reservations -->
+            <div class="reservation-list" id="pending-reservations">
                 @foreach ($pendingReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
-                                @php
-                                    $date = new DateTime($reservation->date ?? now());
-                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
-                                    $startTimeFormatted = $startTime->format('h:i A');
-                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
-                                    $endTimeFormatted = $endTime->format('h:i A'); 
-                                    // Default color
-                                    $statusColor = 'black';
-
-                                    // Check for down payment
-                                    $statusColor = $reservation->downPayment ? 'orange' : 'yellow';
-                                @endphp
-
-                                <div class="reservation-item" data-id="{{ $reservation->id }}"
-                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
-                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
-                                    data-date="{{ $reservation->date }}" data-start="{{ $startTimeFormatted }}"
-                                    data-end="{{ $endTimeFormatted }}" data-status="{{ $reservation->status }}"
-                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-                                    <strong>#{{ $reservation->id }}</strong><br>
-                                    {{ $reservation->date }} | {{ $startTimeFormatted }} - {{ $endTimeFormatted }}
-                                </div>
+                @php
+                    $statusColor = $reservation->downPayment ? 'orange' : 'yellow';
+                @endphp
+                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                    data-name="{{ $reservation->customer->name }}" 
+                    data-paidAmount="{{ $reservation->paidAmount }}"
+                    data-total="{{ $reservation->grandTotal }}" 
+                    data-balance="{{ $reservation->balance }}"
+                    data-date="{{ $reservation->date }}" 
+                    data-start="{{ $reservation->startTime }}"
+                    data-end="{{ $reservation->endTime }}" 
+                    data-status="{{ $reservation->status }}"
+                    style="border-left: 5px solid {{ $statusColor }};">
+                    <div class="reservation-id">#{{ $reservation->id }}</div>
+                    <div class="reservation-date">{{ $reservation->date }}</div>
+                    <div class="reservation-time">{{ $reservation->startTime }} - {{ $reservation->endTime }}</div>
+                    <div class="reservation-name">{{ $reservation->customer->name }}</div>
+                    <div class="reservation-status pending">Pending</div>
+                </div>
                 @endforeach
             </div>
-
-            <div class="reservation-column">
-                <h4>Current</h4>
+            
+    
+            <!-- Current Reservations -->
+            <div class="reservation-list" id="current-reservations">
                 @foreach ($paidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
-                                @php
-                                    $date = new DateTime($reservation->date ?? now());
-                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
-                                    $startTimeFormatted = $startTime->format('h:i A'); // Format the start time
-                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
-                                    $endTimeFormatted = $endTime->format('h:i A');   // Format the end time
-                                    $statusColor = match ($reservation->bill->status) {
-                                        'paid' => 'blue',
-                                        'partially paid' => 'green',
-                                    };
-                                @endphp
-                                <div class="reservation-item" data-id="{{ $reservation->id }}"
-                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
-                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
-                                    data-date="{{ $reservation->date }}" data-start="{{ $startTimeFormatted }}"
-                                    data-end="{{ $endTimeFormatted }}" data-status="{{ $reservation->status }}"
-                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-                                    <strong>#{{ $reservation->id }}</strong><br>
-                                    {{ $reservation->date }} | {{ $startTimeFormatted }} - {{ $endTimeFormatted }}
-                                </div>
+                @php
+                    $statusColor = match ($reservation->bill->status) {
+                        'paid' => 'blue',
+                        'partially paid' => 'lightgreen',
+                    };
+                @endphp
+                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                    data-name="{{ $reservation->customer->name }}" 
+                    data-paidAmount="{{ $reservation->paidAmount }}"
+                    data-total="{{ $reservation->grandTotal }}" 
+                    data-balance="{{ $reservation->balance }}"
+                    data-date="{{ $reservation->date }}" 
+                    data-start="{{ $reservation->startTime }}"
+                    data-end="{{ $reservation->endTime }}" 
+                    data-status="{{ $reservation->status }}"
+                    style="border-left: 5px solid {{ $statusColor }};">
+                    <div class="reservation-id">#{{ $reservation->id }}</div>
+                    <div class="reservation-date">{{ $reservation->date }}</div>
+                    <div class="reservation-time">{{ $reservation->startTime }} - {{ $reservation->endTime }}</div>
+                    <div class="reservation-name">{{ $reservation->customer->name }}</div>
+                    <div class="reservation-status current">Current</div>
+                </div>
                 @endforeach
             </div>
-
-            <div class="reservation-column">
-                <h4>Completed</h4>
+    
+            <!-- Completed Reservations -->
+            <div class="reservation-list" id="completed-reservations">
                 @foreach ($completedReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
-                                @php
-                                    $date = new DateTime($reservation->date ?? now());
-                                    $startTime = new DateTime($reservation->startTime ?? '00:00:00');
-                                    $startTimeFormatted = $startTime->format('h:i A');
-                                    $endTime = new DateTime($reservation->endTime ?? '00:00:00');
-                                    $endTimeFormatted = $endTime->format('h:i A'); 
-                                    $statusColor = match ($reservation->status) {
-                                        'pending' => 'orange',
-                                        'verified' => 'green',
-                                        'invalid', 'cancelled' => 'red',
-                                        'completed' => 'gray',
-                                        default => 'black',
-                                    };
-                                @endphp
-                                <div class="reservation-item" data-id="{{ $reservation->id }}"
-                                    data-name="{{ $reservation->customer->name }}" data-paidAmount="{{ $reservation->paidAmount }}"
-                                    data-total="{{ $reservation->grandTotal }}" data-balance="{{ $reservation->balance }}"
-                                    data-date="{{ $reservation->date }}" data-start="{{ $startTimeFormatted }}"
-                                    data-end="{{ $endTimeFormatted }}" data-status="{{ $reservation->status }}"
-                                    style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-                                    <strong>#{{ $reservation->id }}</strong><br>
-                                    {{ $reservation->date }} | {{ $startTimeFormatted }} - {{ $endTimeFormatted }}
-                                </div>
+                <div class="reservation-item" data-id="{{ $reservation->id }}"
+                    data-name="{{ $reservation->customer->name }}" 
+                    data-paidAmount="{{ $reservation->paidAmount }}"
+                    data-total="{{ $reservation->grandTotal }}" 
+                    data-balance="{{ $reservation->balance }}"
+                    data-date="{{ $reservation->date }}" 
+                    data-start="{{ $reservation->startTime }}"
+                    data-end="{{ $reservation->endTime }}" 
+                    data-status="{{ $reservation->status }}"
+                    style="border-left: 5px solid gray;">
+                    <div class="reservation-id">#{{ $reservation->id }}</div>
+                    <div class="reservation-date">{{ $reservation->date }}</div>
+                    <div class="reservation-time">{{ $reservation->startTime }} - {{ $reservation->endTime }}</div>
+                    <div class="reservation-name">{{ $reservation->customer->name }}</div>
+                    <div class="reservation-status completed">Completed</div>
+                </div>
                 @endforeach
             </div>
-
         </div>
     </div>
-</div>
 
-<section class="reservation-details hidden">
+<<section class="reservation-details hidden">
     <div class="reservation-container">
         <button class="ellipsis-btn">
             <i class="fas fa-ellipsis-h"></i>
@@ -221,9 +208,6 @@
             </div>
 
             <div class="r-details">
-                <div id="invalidMessage" class="bg-red-100 text-red-500 rounded-md text-xs p-2">
-                    <h2>Down payment is invalid. Please submit it again.</h2>
-                </div>
                 <p>
                     <strong><span id="name" class="reservation-id"></span></strong>
                     <span id="status" class="reservation-status"></span>
@@ -300,7 +284,7 @@
                 </div>
             </div>
              <!-- Error Message Container -->
-             <div id="error-message" class="text-red-600 text-sm hidden mb-2">
+             <div id="error-message" style="color: red; font-size: 14px; display: none; margin-bottom: 10px;">
                 Please select at least one Cottage or Table before submitting.
             </div>
             <div class="buttons">
@@ -375,14 +359,6 @@
         return 'Invalid Time';
     }
    document.addEventListener("DOMContentLoaded", function () {
-    const now = new Date();
-    const timezoneOffset = 8 * 60; // Philippines is UTC +8
-    const localDate = new Date(now.getTime() + timezoneOffset * 60000);
-    const currentDate = localDate.toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
-
-    // Set the minimum date to today for the date input field, but do not set it as the value
-    const dateInput = document.getElementById("date");
-    dateInput.setAttribute("min", currentDate);
     const reservationItems = document.querySelectorAll(".reservation-item");
     const amenities = @json($allReservations->values()->all());
 
@@ -461,45 +437,28 @@
             const editBtn = document.querySelector(".edit-reservation");
             const cancelBtn = document.querySelector(".cancel-reservation");
             const ellipsisBtn = document.querySelector(".ellipsis-btn");
-            const invalidMessage = document.getElementById('invalidMessage');
 
-           // Reset all buttons and message first
+            // Reset all buttons first
             payBtn.classList.add("hidden");
             editBtn.classList.add("hidden");
             cancelBtn.classList.add("hidden");
             ellipsisBtn.classList.add("hidden");
-            invalidMessage.classList.add("hidden");
 
-            // Set buttons based on reservation status
+            // Set buttons based on status
             if (selectedReservation) {
-                const dpStatus = selectedReservation.down_payment?.status;
-
                 if (selectedReservation.status === 'pending') {
+                    payBtn.classList.remove("hidden");
+                    editBtn.classList.remove("hidden");
                     cancelBtn.classList.remove("hidden");
                     ellipsisBtn.classList.remove("hidden");
 
-                    if (dpStatus === 'invalid') {
-                        invalidMessage.classList.remove("hidden");
-                        payBtn.classList.remove("hidden");
-                        editBtn.classList.remove("hidden");
-                    } else if (dpStatus === 'verified') {
-                        // Hide pay and edit buttons if already verified
-                        // (already hidden by default reset)
-                    } else {
-                        // Down payment is either null or pending
-                        payBtn.classList.remove("hidden");
-
-                        if (!dpStatus) {
-                            // Allow editing only if down payment is null (not yet submitted)
-                            editBtn.classList.remove("hidden");
-                        } else {
-                            // Editing is not allowed if down payment is pending
-                            editBtn.classList.add("hidden");
-                        }
+                    if (selectedReservation.down_payment) {
+                        editBtn.classList.add("hidden");
+                        payBtn.classList.add("hidden");
                     }
-                } else if (selectedReservation.status === 'verified') {
+                }
+                else if (selectedReservation.status === 'verified') {
                     cancelBtn.classList.remove("hidden");
-                    payBtn.classList.remove("hidden");
                     ellipsisBtn.classList.remove("hidden");
                 }
             }
@@ -526,71 +485,55 @@
                             cottageContainer.innerHTML = '';
                             tableContainer.innerHTML = '';
 
-                            // Display cottages
-                            if (data.cottages.length === 0) {
-                                const noCottageMsg = document.createElement('p');
-                                noCottageMsg.className = 'text-sm text-gray-500 italic';
-                                noCottageMsg.textContent = 'No available cottages';
-                                cottageContainer.appendChild(noCottageMsg);
-                            } else {
-                                data.cottages.forEach(cottage => {
-                                    const wrapper = document.createElement('div');
-                                    wrapper.className = 'form-check d-flex align-items-center mb-2';
+                            data.cottages.forEach(cottage => {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'form-check d-flex align-items-center mb-2';
 
-                                    const checkbox = document.createElement('input');
-                                    checkbox.type = 'checkbox';
-                                    checkbox.className = 'form-check-input p-2 me-2';
-                                    checkbox.name = 'cottages[]';
-                                    checkbox.value = cottage.id;
-                                    checkbox.id = `cottage-${cottage.id}`;
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.className = 'form-check-input p-2 me-2';
+                                checkbox.name = 'cottages[]';
+                                checkbox.value = cottage.id;
+                                checkbox.id = `cottage-${cottage.id}`;
 
-                                    if (data.selectedCottages.includes(cottage.id)) {
-                                        checkbox.checked = true;
-                                    }
+                                if (data.selectedCottages.includes(cottage.id)) {
+                                    checkbox.checked = true;
+                                }
 
-                                    const label = document.createElement('label');
-                                    label.className = 'form-check-label m-0 p-0';
-                                    label.htmlFor = checkbox.id;
-                                    label.textContent = `${cottage.name} - ₱${cottage.price.toFixed(2)}`;
+                                const label = document.createElement('label');
+                                label.className = 'form-check-label m-0 p-0';
+                                label.htmlFor = checkbox.id;
+                                label.textContent = `${cottage.name} - ₱${cottage.price.toFixed(2)}`;
 
-                                    wrapper.appendChild(checkbox);
-                                    wrapper.appendChild(label);
-                                    cottageContainer.appendChild(wrapper);
-                                });
-                            }
+                                wrapper.appendChild(checkbox);
+                                wrapper.appendChild(label);
+                                cottageContainer.appendChild(wrapper);
+                            });
 
-                            // Display tables
-                            if (data.tables.length === 0) {
-                                const noTableMsg = document.createElement('p');
-                                noTableMsg.className = 'text-sm text-gray-500 italic';
-                                noTableMsg.textContent = 'No available tables';
-                                tableContainer.appendChild(noTableMsg);
-                            } else {
-                                data.tables.forEach(table => {
-                                    const wrapper = document.createElement('div');
-                                    wrapper.className = 'form-check d-flex align-items-center mb-2';
+                            data.tables.forEach(table => {
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'form-check d-flex align-items-center mb-2';
 
-                                    const checkbox = document.createElement('input');
-                                    checkbox.type = 'checkbox';
-                                    checkbox.className = 'form-check-input p-2 me-2';
-                                    checkbox.name = 'tables[]';
-                                    checkbox.value = table.id;
-                                    checkbox.id = `table-${table.id}`;
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.className = 'form-check-input p-2 me-2';
+                                checkbox.name = 'tables[]';
+                                checkbox.value = table.id;
+                                checkbox.id = `table-${table.id}`;
 
-                                    if (data.selectedTables.includes(table.id)) {
-                                        checkbox.checked = true;
-                                    }
+                                if (data.selectedTables.includes(table.id)) {
+                                    checkbox.checked = true;
+                                }
 
-                                    const label = document.createElement('label');
-                                    label.className = 'form-check-label m-0 p-0';
-                                    label.htmlFor = checkbox.id;
-                                    label.textContent = `${table.name} - ₱${table.price.toFixed(2)}`;
+                                const label = document.createElement('label');
+                                label.className = 'form-check-label m-0 p-0';
+                                label.htmlFor = checkbox.id;
+                                label.textContent = `${table.name} - ₱${table.price.toFixed(2)}`;
 
-                                    wrapper.appendChild(checkbox);
-                                    wrapper.appendChild(label);
-                                    tableContainer.appendChild(wrapper);
-                                });
-                            }
+                                wrapper.appendChild(checkbox);
+                                wrapper.appendChild(label);
+                                tableContainer.appendChild(wrapper);
+                            });
                         })
                         .catch(error => console.error('Fetch error:', error));
                     };
@@ -760,6 +703,49 @@ function updateButtonText(button, checkboxes) {
             : 'Select Tables';
     }
 }
+
+    // added Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.status-tab');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.reservation-list').forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Show corresponding content
+            const status = this.getAttribute('data-status');
+            document.getElementById(`${status}-reservations`).classList.add('active');
+        });
+    });
+    
+    // Optional: Add click handler for reservation items
+    const reservationItems = document.querySelectorAll('.reservation-item');
+    reservationItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Handle reservation item click (show details modal, etc.)
+            const reservationId = this.getAttribute('data-id');
+            console.log('Reservation clicked:', reservationId);
+            // You would implement your modal opening logic here
+        });
+    });
+});
+document.querySelectorAll('.reservation-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const editBtn = document.querySelector('.edit-reservation');
+
+            editBtn.dataset.id = item.dataset.id;
+            editBtn.dataset.date = item.dataset.date;
+            editBtn.dataset.start = item.dataset.start;
+            editBtn.dataset.end = item.dataset.end;
+
+            document.querySelector('.reservation-details').classList.remove('hidden');
+        });
+    });
 
 
 </script>
