@@ -483,7 +483,7 @@
             const editBtn = document.querySelector(".edit-reservation");
             const cancelBtn = document.querySelector(".cancel-reservation");
             const ellipsisBtn = document.querySelector(".ellipsis-btn");
-             const invalidMessage = document.getElementById('invalidMessage');
+            const invalidMessage = document.getElementById('invalidMessage');
 
             // Reset all buttons and message first
             payBtn.classList.add("hidden");
@@ -495,37 +495,45 @@
             // Set buttons based on reservation status
             if (selectedReservation) {
                 const dpStatus = selectedReservation.down_payment?.status;
+                const billStatus = selectedReservation.bill?.status;
+                const shouldHideCancel = dpStatus === 'verified' || dpStatus === 'pending';
+
+                if (dpStatus === 'verified' && billStatus === 'unpaid') {
+                    payBtn.classList.remove("hidden");
+                    ellipsisBtn.classList.remove("hidden");
+                }
 
                 if (selectedReservation.status === 'pending') {
-                    cancelBtn.classList.remove("hidden");
-                    ellipsisBtn.classList.remove("hidden");
+                    if (!shouldHideCancel) {
+                        cancelBtn.classList.remove("hidden");
+                    }
+
+                    if (billStatus !== 'paid') {
+                        ellipsisBtn.classList.remove("hidden");
+                    }
 
                     if (dpStatus === 'invalid') {
                         invalidMessage.classList.remove("hidden");
                         payBtn.classList.remove("hidden");
                         editBtn.classList.remove("hidden");
-                    } else if (dpStatus === 'verified') {
-                        // Hide pay and edit buttons if already verified
-                        // (already hidden by default reset)
-                    } else {
-                        // Down payment is either null or pending
+                    } else if (!dpStatus) {
                         payBtn.classList.remove("hidden");
-
-                        if (!dpStatus) {
-                            // Allow editing only if down payment is null (not yet submitted)
-                            editBtn.classList.remove("hidden");
-                        } else {
-                            // Editing is not allowed if down payment is pending
-                            editBtn.classList.add("hidden");
-                        }
+                        editBtn.classList.remove("hidden");
+                    } else if (dpStatus === 'pending') {
+                        payBtn.classList.remove("hidden");
                     }
                 } else if (selectedReservation.status === 'verified') {
-                    cancelBtn.classList.remove("hidden");
+                    if (!shouldHideCancel) {
+                        cancelBtn.classList.remove("hidden");
+                    }
+
                     payBtn.classList.remove("hidden");
-                    ellipsisBtn.classList.remove("hidden");
+
+                    if (billStatus !== 'paid') {
+                        ellipsisBtn.classList.remove("hidden");
+                    }
                 }
             }
-
             // Update edit button to use current reservation ID
             editBtn.onclick = function () {
                 // Set values from the existing reservation
