@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
         ->name('profile.delete');
     Route::get('customer/reservation-records/edit-amenities', [ReservationController::class, 'edit_amenities']);
     Route::post('/customer/update-reservation', [ReservationController::class, 'updateReservation'])
-    ->name('customer.updateReservation');
+        ->name('customer.updateReservation');
 
 });
 
@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/downpayment/{reservation}', [DownpaymentController::class, 'showReceipt'])
         ->name('downpayment.show');
-        Route::get('/payment/{reservation}', [DownpaymentController::class, 'billing'])
+    Route::get('/payment/{reservation}', [DownpaymentController::class, 'billing'])
         ->name('payment.show');
     Route::post('/downpayment/{reservation}', [DownpaymentController::class, 'storePayment'])
         ->name('downpayment.store');
