@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
 
@@ -48,12 +50,16 @@
             </button>
         </aside>
 
+        <!--- MAIN CONTENT SECTION -->
         <main class="profile-section">
             <div class="profile-card">
-                <div class="profile-header"></div>
+                <h2 class="profile-title">Your Profile</h2>
+
                 <div class="profile-content">
                     <div class="profile-avatar">
-                        <i class="fas fa-user-circle"></i>
+                        <div class="avatar-circle">
+                            <i class="fas fa-user"></i>
+                        </div>
                     </div>
                     <div class="profile-details">
                         @if(session('success'))
@@ -70,9 +76,9 @@
                             <i class="fas fa-phone"></i>
                             <span>{{ $customer->number }}</span>
                         </div>
-
                     </div>
                 </div>
+
                 <div class="profile-actions">
                     <a href="{{ route('profile.edit', ['id' => $customer->id]) }}" class="btn edit-btn"
                         style="text-decoration: none;">
