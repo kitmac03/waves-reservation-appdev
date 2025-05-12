@@ -61,6 +61,7 @@
                             <i class="fas fa-user"></i>
                         </div>
                     </div>
+                    
                     <div class="profile-details">
                         @if(session('success'))
                             <div style="text-xs color: green;">{{ session('success') }}</div>
