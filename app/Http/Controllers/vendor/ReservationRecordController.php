@@ -402,12 +402,6 @@ class ReservationRecordController extends Controller
             'status' => 'unpaid',
         ]);
 
-        return view('admin.vendor.reservations.payment', compact('reservation', 'total'));
-    }
-
-    public function payment_show($id)
-    {
-        $reservation = Reservation::with(['customer', 'reserved_amenities.amenity', 'bill'])->findOrFail($id);
-        return view('admin.vendor.reservations.payment', compact('reservation'));
+        return redirect()->route('vendor.payment.page', ['reservation' => $reservation->id]);
     }
 }

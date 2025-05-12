@@ -137,8 +137,8 @@ Route::middleware(VendorMiddleware::class)->group(function () {
         ->name('admin.vendor.walk_in');
     Route::post('/admin/vendor/walk-in', [ReservationRecordController::class, 'custom_walkIn'])
         ->name('admin.vendor.walk_in.store');
-    Route::get('admin/vendor/payment/{reservation}', [ReservationRecordController::class, 'payment_show'])
-        ->name('admin.vendor.reservations.payment.show');
+    Route::get('/vendor/reservation/payment/{reservation}', [VendorProfileController::class, 'showPaymentPage'])
+    ->name('vendor.payment.page');
     Route::get('admin/vendor/profile', [VendorProfileController::class, 'view_profile'])
         ->name('admin.vendor.profile');
     Route::get('admin/vendor/profile/{id}/edit', [VendorProfileController::class, 'edit_profile'])

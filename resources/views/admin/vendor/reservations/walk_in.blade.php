@@ -84,11 +84,11 @@
 			</div>
 	  </div>
       <!-- Error Message Container -->
-            <div id="error-message" style="color: red; font-size: 14px; display: none; margin-bottom: 10px;">
+            <div id="error-message" class="text-red-600 text-sm mb-2 hidden"></div>
                 <!-- Error messages will be displayed here -->
             </div>
         <div class="button-wrapper">
-          <button type="submit" class="payment-button">Proceed to payment</button>
+          <button type="submit" id="paymentButton" class="payment-button">Proceed to payment</button>
         </div>
       </form>
     </section>
@@ -100,12 +100,13 @@
         function validateSelection() {
             const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
             const tables = document.querySelectorAll('input[name="tables[]"]:checked');
+            const button = document.getElementById("paymentButton");
+            const errorMessageContainer = document.getElementById("error-message");
             const cottageChecked = cottages.length > 0;
             const tableChecked = tables.length > 0;
 
             const startTime = document.getElementById("startTime").value;
             const endTime = document.getElementById("endTime").value;
-            const errorMessageContainer = document.getElementById("error-message");
             let errorMessages = [];
 
             // Validate if start and end times are within the allowed range
@@ -134,10 +135,17 @@
                 return false; // Prevent form submission
             }
 
+            // 🔒 Disable the button to prevent multiple submissions
+            if (button) {
+                button.disabled = true;
+                button.textContent = "Processing..."; // Optional
+            }
+
             // If no errors, hide the error message container
             errorMessageContainer.style.display = "none";
             return true; // Allow form submission
         }
+
         document.addEventListener("DOMContentLoaded", function () {
             // Function to update the minimum date and start time dynamically
             function updateDateAndTime() {
@@ -155,14 +163,6 @@
                 // If the selected date is in the past, reset it to today
                 if (!dateInput.value || dateInput.value < currentDate) {
                     dateInput.value = currentDate;
-                }
-
-                // Update the minimum start time if the selected date is today
-                const startTimeInput = document.getElementById("startTime");
-                if (dateInput.value === currentDate) {
-                    startTimeInput.setAttribute("min", currentTime);
-                } else {
-                    startTimeInput.removeAttribute("min"); // Remove restriction for future dates
                 }
             }
 
@@ -201,20 +201,6 @@
                         dropdownMenu.classList.add('hidden');
                     }
                 });
-            });
-
-            // Update minimum end time based on selected start time
-            document.getElementById("startTime").addEventListener("change", function () {
-                let startTime = this.value;
-                document.getElementById("endTime").setAttribute("min", startTime);
-
-                // Fetch updated amenities based on the new start and end times
-                fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
-            });
-
-            document.getElementById("endTime").addEventListener("change", function () {
-                // Fetch updated amenities based on the new end time
-                fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
             });
 
             // Fetch and update available amenities when a date is selected
