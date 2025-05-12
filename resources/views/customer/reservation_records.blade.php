@@ -574,7 +574,7 @@
 
     cancelButtons.forEach(button => {
         button.addEventListener("click", function () {
-            selectedReservationId = document.querySelector(".reservation-id").textContent;
+            selectedReservationId = document.querySelector(".reservation-id").textContent.replace('#', '');
             cancelModal.classList.remove("hidden");
         });
     });
