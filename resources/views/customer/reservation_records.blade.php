@@ -43,7 +43,7 @@
                 <span>Profile</span>
             </a>
             <a href="{{ route('customer.reservation.records') }}" class="active">
-                <i class="fas fa-calendar-alt"></i>
+                <i class="fas fa-calendar-check"></i>
                 <span>Reservation</span>
             </a>
 
@@ -65,6 +65,7 @@
         </script>
     </div>
 
+  <div class="main-content">
     <div class="reservations-container">
         <div class="content-header">
             <h2>Your Reservations</h2>
@@ -74,18 +75,28 @@
                 <button class="status-tab" data-status="completed">Completed</button>
                 <button class="status-tab" data-status="cancelled">Cancelled/Invalid</button>
             </div>
-            
-            <div class="status-legend">
-                <span class="legend-item" style="--color: blue;">Fully Paid</span>
-                <span class="legend-item" style="--color: lightgreen;"> Partially Paid</span>
-                <span class="legend-item" style="--color: orange;"> With Downpayment</span>
-                <span class="legend-item" style="--color: yellow;"> No Downpayment</span>
-                <span class="legend-item" style="--color: red;">Cancelled/Invalid</span>
-                <span class="legend-item" style="--color: rgb(51, 51, 51);">Past</span>
-            </div>
         </div>
-    
-        <div class="reservations-content max-h-[500px] overflow-y-auto">
+            <!-- Line that spans full container width -->
+            <div class="full-width-line"></div>
+            
+            <!-- Legend content that matches main container width -->
+                    <div class="legend-section">
+                    <div class="status-legend">
+                    <span class="legend-item" style="--color: blue;">Fully Paid</span>
+                    <span class="legend-item" style="--color: lightgreen;">Partially Paid</span>
+                    <span class="legend-item" style="--color: orange;">With Downpayment</span>
+                    <span class="legend-item" style="--color: yellow;">No Downpayment</span>
+                    <span class="legend-item" style="--color: red;">Cancelled/Invalid</span>
+                    <span class="legend-item" style="--color: rgb(51, 51, 51);">Past</span>
+                </div>
+            </div>
+                <div class="full-width-line"></div>
+
+
+       
+
+        <!-- This is where the reservation items should be - INSIDE the container -->
+        <div class="reservations-content">
             <!-- Current Reservations -->
             <div class="reservation-list active" id="current-reservations">
                 @forelse ($paidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
@@ -220,7 +231,7 @@
             </div>
         </div>
     </div>
-
+</div>
 <section class="reservation-details hidden">
     <div class="reservation-container">
         <button class="ellipsis-btn">
