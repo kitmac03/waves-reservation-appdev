@@ -64,7 +64,7 @@
 <!-- home section -->
    <section id="home">
     <div class="content">
-      <h3>Start Your Day With a <br> Fresh Coffee</h3>
+      <h3>Beach days are the best days <br> Seas your moment</h3>
       <p>Feel you summer and relaxing moment with your family and friends
          <br>It's time to feel the summer vibe.
       </p>
