@@ -29,10 +29,10 @@ body {
 .container {
     display: flex;
     min-height: 100vh;
-
+    margin: 0;
+    padding: 0;
 }
 
-/* Sidebar Styles */
 .sidebar {
     width: 280px;
     background: var(--white);
@@ -40,8 +40,13 @@ body {
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow);
-    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
 }
+
 
 .back-button {
     display: flex;
@@ -133,12 +138,12 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.8rem;
+    padding: 0.5rem;
     background: rgba(49, 105, 109, 0.751);
     color: var(--white);
     border: none;
     border-radius: var(--radius);
-    font-weight: 500;
+    font-weight: normal;
     cursor: pointer;
     transition: var(--transition);
 }
@@ -166,24 +171,30 @@ body {
     --border-color: #e2e8f0;
 }
 
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    margin-left: 280px; /* Same as sidebar width */
+    width: calc(100% - 280px); /* Subtract sidebar width */
+}
+
+/* Update the reservations container to remove the extra margin */
 .reservations-container {
     width: 100%;
     max-width: 930px;
-    margin: 2rem auto;
+    margin: 0 auto; /* This will now properly center the container */
     font-family: 'Inter', -apple-system, sans-serif;
     color: var(--text-primary);
     background: var(--bg-color);
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(103, 102, 102, 0.803);
-  
 }
-
 .content-header {
     padding: 1rem 2rem;
     background: var(--card-bg);
     border-bottom: 1px solid var(--border-color);
-
 }
 
 .content-header h2 {
@@ -211,7 +222,6 @@ body {
     transition: all 0.2s ease;
     font-weight: 500;
 }
-
 .status-tab:hover {
     background: #f1f5f9;
     color: var(--primary);
@@ -223,28 +233,54 @@ body {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+/* Full-width line styling */
+.full-width-line {
+    width: 100%;
+    height: 1px;
+    background-color: #e0e0e0; /* Light gray */
+    margin: 0;
+}
+
+/* Legend section styling */
+.legend-section {
+    padding: 1rem 2rem;
+    background: var(--card-bg);
+}
+
+.legend-heading {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
 .status-legend {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin: 0.5rem 2rem 1rem; /* Match padding with header */
-    padding-left: 0.25rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
+
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
 }
 
 .legend-item::before {
-    content: "●";
-    color: var(--color);
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--color);
 }
 
-
 .reservations-content {
-    padding: 0 2rem 2rem;
+    padding: 1rem 2rem;
+    max-height: 500px;
+    overflow-y: auto;
+    
 }
 
 .reservation-list {

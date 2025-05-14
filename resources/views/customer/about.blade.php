@@ -20,6 +20,7 @@
             <h1 class="title">WAVES <span>Resort</span></h1>
         </div>
         <nav>
+            
             <a href="{{ route('customer.about') }}">About</a>
             <a href="{{ route('customer.reservation') }}">Book</a>
 
@@ -44,6 +45,7 @@
             Our friendly staff is dedicated to ensuring your visit is comfortable and enjoyable, with personalized
             service that makes you feel right at home.
         </section>
+        
     </main>
 </body>
 

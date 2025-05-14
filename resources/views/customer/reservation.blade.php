@@ -113,6 +113,8 @@
         </div>
     </section>
 
+    
+
     <footer class="site-footer">
     <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
 </footer>

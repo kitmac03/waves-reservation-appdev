@@ -34,10 +34,6 @@
                 <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i>
                     Reservations</a>
 
-                <!-- nag add kog button ani for acc balance -->
-
-                <!-- <a href="#"><i class="fas fa-wallet"></i> Account Balance</a> -->
-
             </nav>
 
             <!-- logout -->
