@@ -50,7 +50,6 @@
         <a href="{{ route('admin.delete.requests') }}">
           <li class="menu-item">
             Account Deletion Requests
-            <span class="notification">1</span>
           </li>
         </a>
       </ul>
