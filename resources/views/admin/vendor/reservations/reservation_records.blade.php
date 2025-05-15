@@ -163,9 +163,6 @@
 	</div>
 	<section class="reservation-details hidden">
 		<div class="reservation-container">
-			<button class="ellipsis-btn">
-				<i class="fas fa-ellipsis-h"></i>
-			</button>
 			<button class="close-btn">&times;</button>
 			<div class="menu">
 			</div>

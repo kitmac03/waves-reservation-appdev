@@ -290,13 +290,14 @@ a {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  text-align: left; /* Align text to the left */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Align items to the left */
   max-height: 90vh;
   overflow-y: auto;
 }
+
 .receipt-container h2 {
   font-size: 24px;
   color: #002147;
@@ -325,9 +326,8 @@ a {
   font-size: 12px;
   display: flex;
   flex-direction: column;
-  text-align: left;
   gap: 8px;
-
+  width: 100%; /* Make the section full width to fit the content */
 }
 
 .r-details hr {
@@ -337,7 +337,11 @@ a {
 }
 
 .r-details strong {
-  color: black; 
+  color: black;
+}
+
+.r-details p {
+  margin: 0; /* Remove any unwanted margin in paragraphs */
 }
 
 
