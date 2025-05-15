@@ -5,7 +5,17 @@
     position: relative;
     font-family: 'Poppins', sans-serif;
   }
-  
+  html, body {
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    flex: 1;
+}
+
   body {
     width:100vw;
     height: 100vh;
@@ -18,6 +28,19 @@
     align-items: center;
     padding-top: 80px;
 }
+.site-footer {
+    background: linear-gradient(90deg, #7CB9BC 0%, #FEF5DB 100%);
+    color: #002147;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 60px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: relative;
+}
+
 
 header {
     display: flex;
@@ -70,6 +93,8 @@ nav {
     align-items: center;
     gap: 30px;
     font-size: 20px;
+     margin-left: 600px;
+
 }
 
 nav a {
@@ -252,6 +277,29 @@ nav i {
     font-weight: bold;
     margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+    .booking {
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+        padding: 20px 0;
+    }
+
+    .booking-form {
+        width: 100%;
+        max-width: none;
+    }
+
+    .start-end-time-container {
+        flex-direction: column;
+    }
+
+    .cottage-table-container {
+        flex-direction: column;
+    }
+}
+
 .image-carousel {
     display: flex;
     justify-content: center;
@@ -260,6 +308,8 @@ nav i {
     width: 50%; /* Ensures image stays on the right */
     max-width: 500px;
     position: relative;
+    padding: 0 30px; /* Reserve space inside for arrows */
+
 }
 
 .image-carousel img {
@@ -279,6 +329,8 @@ nav i {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 10;
+    padding: 5px;
 }
 .image-carousel .prev {
     left: -40px; /* Position left arrow */
@@ -287,6 +339,46 @@ nav i {
 .image-carousel .next {
     right: -40px; /* Position right arrow */
 }
+@media (max-width: 768px) {
+    .image-carousel {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 20px;
+    }
+
+    .image-carousel img {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .image-carousel .prev {
+        font-size: 24px;
+        left: 10px;
+        right: auto; /* Avoid conflict */
+    }
+
+    .image-carousel .next {
+        font-size: 24px;
+        right: 10px;
+        left: auto; /* Avoid conflict */
+    }
+}
+
+@media (max-width: 480px) {
+    .image-carousel .prev {
+        font-size: 20px;
+        left: 5px;
+        right: auto;
+    }
+
+    .image-carousel .next {
+        font-size: 20px;
+        right: 5px;
+        left: auto;
+    }
+}
+
+
 
 .dropdown-menu {
     display: none;
@@ -389,3 +481,22 @@ nav i {
     margin-bottom: 20px;
 }
 
+.welcome-text {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.welcome-text p {
+    font-size: 20px;
+    font-weight: 500;
+    color: #006994; /* A calming blue to match a beach theme */
+}

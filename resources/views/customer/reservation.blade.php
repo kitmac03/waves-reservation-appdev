@@ -17,11 +17,12 @@
     <header>
         <div class="logo">
             <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo">
-            <h1 class="title">WAVES <span>Beach Resort</span></h1>
+            <h1 class="title">WAVES <span>Resort</span></h1>
         </div>
         <nav>
-            <a href="#">Book Now</a>
-            <a href="#">About Us</a>
+            <a href="{{ route('customer.about') }}">About</a>
+            <a href="{{ route('customer.reservation') }}">Book</a>
+
             <div class="profile-container">
                 <a href="{{ route('customer.profile') }}">
                     <i class="fas fa-user-circle" id="profile-icon" style="font-size: 32px; cursor: pointer;"></i>
@@ -111,6 +112,12 @@
             <button class="next">&#10095;</button>
         </div>
     </section>
+
+    
+
+    <footer class="site-footer">
+    <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
+</footer>
 
 <script>
     // Validation before form submission

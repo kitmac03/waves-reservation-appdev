@@ -205,49 +205,54 @@ a {
   text-decoration: none;
 }
 
-.reservations-container{
+.reservations-container {
   display: flex;
-    justify-content: space-between; 
-    align-items: stretch;
-    padding:10px;
-    border-radius: 5px;
-    height: 100vh;
-    width: 95;
-    background-color: #263b49;
-
-    
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 10px;
+  border-radius: 5px;
+  height: 100vh;
+  width: 95vw; /* FIXED: added unit */
+  background-color: #263b49;
+  overflow-x: auto; /* Optional: allows horizontal scroll if needed */
+  gap: 20px; /* Adds spacing between columns */
 }
 
 .reservation-column {
-    flex: 1;
-    max-width: 300px;
-    min-width: 370px;
-    height: auto;
-    border: 2px solid #263b49;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    justify-content: flex-start;
-    background-color: white;
+  flex: 1;
+  max-width: 300px;
+  min-width: 280px; /* Reduced min-width to avoid overflow */
+  height: auto;
+  border: 2px solid #263b49;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: flex-start;
+  background-color: white;
+  box-sizing: border-box; /* ensures padding doesn’t increase size */
 }
-.reservation-column h4 {
-    text-align: center;
-    color: #000; 
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-.reservation-item {
-    background: #cdced0;
-  color: #000; 
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 1.4;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
+.reservation-column h4 {
+  text-align: center;
+  color: #000;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
+
+.reservation-item {
+  background: #cdced0;
+  color: #000;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%; /* Ensures it doesn't overflow column */
+  box-sizing: border-box;
+}
+
 .reservation-item.cancelled {
     border-left: 4px solid red;
   }
@@ -285,13 +290,14 @@ a {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  text-align: left; /* Align text to the left */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Align items to the left */
   max-height: 90vh;
   overflow-y: auto;
 }
+
 .receipt-container h2 {
   font-size: 24px;
   color: #002147;
@@ -320,9 +326,8 @@ a {
   font-size: 12px;
   display: flex;
   flex-direction: column;
-  text-align: left;
   gap: 8px;
-
+  width: 100%; /* Make the section full width to fit the content */
 }
 
 .r-details hr {
@@ -332,7 +337,11 @@ a {
 }
 
 .r-details strong {
-  color: black; 
+  color: black;
+}
+
+.r-details p {
+  margin: 0; /* Remove any unwanted margin in paragraphs */
 }
 
 
