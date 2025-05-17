@@ -35,14 +35,8 @@
                     Reservations</a>
 
             </nav>
+</aside>
 
-            <!-- logout -->
-            <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-
-           
-        </aside>
 
         <!--- MAIN CONTENT SECTION -->
         <main class="profile-section">
@@ -241,6 +235,8 @@
                 }
             });
         });
+
+        
     </script>
 </body>
 
