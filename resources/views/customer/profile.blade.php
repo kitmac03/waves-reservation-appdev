@@ -206,7 +206,6 @@
                         return;
                     }
                 }
-                alert('Your deletion request has been sent for review.');
                 closeModal('deleteModal');
             });
 
