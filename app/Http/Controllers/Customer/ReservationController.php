@@ -45,22 +45,22 @@ class ReservationController extends Controller
         $selectedAmenities = array_merge($selectedCottages, $selectedTables);
 
         // Step 4: Conflict check
-        $reservedAmenities = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
-            ->where('reservations.date', $date)
+        $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($q) use ($date, $startTime, $endTime, $resNum) {
+            $q->where('date', $date)
             ->where(function ($q) {
-                $q->where('reservations.status', 'verified')
+                $q->where('status', 'verified')
                     ->orWhereHas('downPayment', function ($q2) {
                         $q2->whereIn('status', ['verified', 'pending']);
                     });
             })
+            ->where('status', '!=', 'cancelled')
+            ->where('id', '!=', $resNum)
             ->where(function ($query) use ($startTime, $endTime) {
-                $query->where('reservations.starttime', '<', $endTime)
-                    ->where('reservations.endtime', '>', $startTime);
-            })
-            ->where('reservations.status', '!=', 'cancelled')
-            ->where('reservations.id', '!=', $resNum)
-            ->pluck('reserved_amenity.amenity_id')
-            ->toArray();
+                $query->where('starttime', '<', $endTime)
+                        ->where('endtime', '>', $startTime);
+            });
+        })->pluck('amenity_id')->toArray();
+
 
         $conflicts = array_intersect($selectedAmenities, $reservedAmenities);
 
