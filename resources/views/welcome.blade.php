@@ -55,7 +55,7 @@
            <div class="profile-container">
                <a href="{{ route('customer.profile') }}">
                      <i class="fas fa-user-circle" id="profile-icon" style="font-size: 32px; cursor: pointer;"></i>
-         
+              </a>
       </div>
     </div>
   </nav>
