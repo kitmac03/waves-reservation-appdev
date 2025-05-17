@@ -41,9 +41,7 @@
                 @csrf
             </form>
 
-            <button id="logoutButton" class="logout">
-                <i class="fas fa-sign-out-alt"></i> Log Out
-            </button>
+           
         </aside>
 
         <!--- MAIN CONTENT SECTION -->
