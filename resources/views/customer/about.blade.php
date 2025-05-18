@@ -14,39 +14,81 @@
 </head>
 
 <body>
-    <header>
-        <div class="logo">
-            <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo">
-            <h1 class="title">WAVES <span>Resort</span></h1>
-        </div>
-        <nav>
-            
-            <a href="{{ route('customer.about') }}">About</a>
-            <a href="{{ route('customer.reservation') }}">Book</a>
+    <header class="navbar">
+  <div class="logo">
+    <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo" />
+    <div class="logo-text">
+      <h1 class="title">WAVES</h1>
+      <p class="sub-title">Resort</p>
+    </div>
+  </div>
 
-            <div class="profile-container">
-                <a href="{{ route('customer.profile') }}">
-                    <i class="fas fa-user-circle" id="profile-icon" style="font-size: 32px; cursor: pointer;"></i>
-                </a>
-                <div class="dropdown-menu" id="dropdown-menu">
+  <button class="navbar-toggler" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <nav class="nav-links" id="navMenu">
+    <a class="nav-link" href="{{ route('customer.about') }}">About</a>
+   
+      <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>
+      
+    <div class="profile-container">
+                <i class="fas fa-user-circle" id="profile-icon" onclick="toggleDropdown(event)"></i>
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="{{ route('customer.profile') }}">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </nav>
-    </header>
+</header>
 
     <main>
-        <section class="welcome-text">
-            <p>Welcome to WAVES Resort! Spend your day lounging in our private cabanas, taking a dip in the
-                crystal-clear waters, or enjoying a refreshing cocktail at our beachside bar.</p>
-            <br><br>
-            We are committed to providing a welcoming and relaxing environment where you can connect with nature,
-            recharge, and make lasting memories.
-            <br><br>
-            Our friendly staff is dedicated to ensuring your visit is comfortable and enjoyable, with personalized
-            service that makes you feel right at home.
-        </section>
-        
+       <section class="welcome-section">
+        <div class="welcome-text">
+            <h1>Welcome to WAVES Resort</h1>
+            <p>Experience luxury beachfront living at its finest, where golden sands meet crystal-clear waters.</p>
+            <p>Our private cabanas and beachside amenities are designed to provide the ultimate relaxation experience, complemented by refreshing cocktails and exceptional service.</p>
+            <p>We're committed to creating a welcoming sanctuary where you can connect with nature, recharge your spirit, and create unforgettable memories.</p>
+        </div>
+        <div class="wave-divider"></div>
+    </section>
     </main>
+
+    
+    <footer class="site-footer">
+    <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
+</footer>
+ <script>
+    
+        // Toggle mobile menu
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Toggle profile dropdown
+        function toggleDropdown(event) {
+            event.stopPropagation(); 
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileIcon = document.getElementById('profile-icon');
+            
+            if (!profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 
 </html>

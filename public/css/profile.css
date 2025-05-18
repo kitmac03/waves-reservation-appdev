@@ -42,6 +42,8 @@ body {
     z-index: 10;
 }
 
+
+
 .back-button {
     margin-bottom: 2rem;
 }
@@ -126,42 +128,18 @@ body {
     width: 24px;
     text-align: center;
 }
-.menu .balance-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-/*
-.balance-amount {
-    font-weight: 600;
-    color: #28a745;
-} */
- 
-.logout {
-    margin-top: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.8rem;
-    background: rgba(49, 105, 109, 0.751);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius);
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-}
 
-.logout:hover {
-    background: rgba(49, 105, 109, 0.751);
-    transform: translateY(-2px);
-}
+
+
+
+
 
 /* Profile Section */
 .main-content {
     flex-grow: 1;
+    padding: 40px;
     display: flex;
+    overflow-y: auto;
     justify-content: center;
     align-items: center;
   }
@@ -175,8 +153,8 @@ body {
   }
   
   .profile-card {
-    width: 70%;
-    max-width: 500px;
+    width: 90%;
+    max-width: 550px;
     height: auto;
     padding: 30px;
     background-color: white;
@@ -273,41 +251,61 @@ body {
     transition: var(--transition);
     border: none;
     font-size: 0.9rem;
-}
 
-.btn:hover {
-    transform: translateY(-2px);
+
 }
 
 .edit-btn {
-    background: rgba(49, 105, 109, 0.751);
-    color: var(--white);
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 1rem;
-}
-
-.edit-btn:hover {
-    background: rgba(55, 108, 112, 0.751);
-}
-
-.delete-btn {
-   background-color: rgb(31, 30, 30);
-    font: 400 14px;
+    background-color: rgba(49, 105, 109, 0.751);
     color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
     border: none;
-    margin-top: 1rem;
-    padding: 8px 15px;
-    border-radius: 6px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    min-width: 90px; 
+    margin-top: 10px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
-
-.delete-btn:hover {
-    background: #343333;
+.delete-btn {
+    background-color: #2b2d42;
+    color: white;
+    padding: 0.75rem 1.5rem; 
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid #2b2d42;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    min-width: 90px; 
+    margin-top: 10px;
+    width: auto; 
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
-
-
+@media (max-width: 576px) {
+    .profile-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .edit-btn,
+    .delete-btn {
+        width: 90%;
+        min-width: unset; 
+    }
+}
 
 /* Modal Styles */
 .modal {
@@ -479,7 +477,7 @@ body {
 .close {
     position: absolute;
     top: -10px; 
-    right: -5px; /* Adjust as needed */
+    right: -5px; 
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -528,14 +526,14 @@ body {
 
 /* Modal Styles for Logout */
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    background-color: rgba(0, 0, 0, 0.5); 
     justify-content: center;
     align-items: center;
 }
@@ -545,7 +543,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     width: 400px;
-    text-align: left; /* Changed from center to left */
+    text-align: left; 
 }
 
 .modal-header {
@@ -566,8 +564,8 @@ body {
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end; /* Aligns buttons to the right */
-    gap: 10px; /* Space between buttons */
+    justify-content: flex-end; 
+    gap: 10px; 
     margin-top: 20px;
 }
 
