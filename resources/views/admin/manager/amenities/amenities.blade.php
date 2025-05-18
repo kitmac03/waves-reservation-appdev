@@ -28,7 +28,7 @@
     $amenities_route = $user && $user->role === 'Manager'
       ? route('admin.manager.amenities', ['type' => 'cottage'])
       : route('admin.vendor.amenities', ['type' => 'cottage']);
-    @endphp
+  @endphp
     <div class="left-side-nav">
       <a href="{{ route('admin.dashboard') }}">
         <button class="dashboard" id="dashboard">
@@ -74,59 +74,58 @@
       </div>
     </aside>
 
-   <!-- MAIN SECTION -->
-<main class="main">
-  <p class="label">{{ ucfirst($type) }}s</p>
- @if(session('success'))
-<div class="success-message" id="successMessage">
-  <span>{{ session('success') }}</span>
-  <button class="close-btn" onclick="dismissMessage()">×</button>
-</div>
-@endif
-  <!-- Combined Form and Button Container -->
-  <div class="form-button-container">
-    <!-- Add Cottage Form -->
-    <form action="{{ route('amenities.store') }}" method="POST" class="inline-form">
-      @csrf
-      <input type="text" name="name" placeholder="Amenity Name" required
-        class="form-input">
-      <input type="number" name="price" placeholder="Price" required step="0.01"
-        class="form-input">
-      
-      <select name="type" required class="form-input">
-        <option value="" disabled selected>Select</option>
-        <option value="cottage">Cottage</option>
-        <option value="table">Table</option>
-      </select>
-      
-      <button type="submit" class="add-amenity-btn">Add Amenity</button>
-      
-      <!-- Toggle Archived Button - now placed right after the submit button -->
-      <button id="toggleButton" onclick="toggleArchived()" class="toggle-archive-btn">
-        Show Archived {{ ucfirst($type) }}
-      </button>
-    </form>
-  </div>
+    <!-- MAIN SECTION -->
+    <main class="main">
+      <p class="label">{{ ucfirst($type) }}s</p>
+      @if(session('success'))
+      <div class="success-message" id="successMessage">
+      <span>{{ session('success') }}</span>
+      <button class="close-btn" onclick="dismissMessage()">×</button>
+      </div>
+    @endif
+      <!-- Combined Form and Button Container -->
+      <div class="form-button-container">
+        <!-- Add Cottage Form -->
+        <form action="{{ route('amenities.store') }}" method="POST" class="inline-form">
+          @csrf
+          <input type="text" name="name" placeholder="Amenity Name" required class="form-input">
+          <input type="number" name="price" placeholder="Price" required step="0.01" class="form-input">
 
-  <!--Amenity Table -->
-  @yield('amenities-content')
-</main>
+          <select name="type" required class="form-input">
+            <option value="" disabled selected>Select</option>
+            <option value="cottage">Cottage</option>
+            <option value="table">Table</option>
+          </select>
+
+          <button type="submit" class="add-amenity-btn">Add Amenity</button>
+
+          <!-- Toggle Archived Button - now placed right after the submit button -->
+          <button type="button" id="toggleButton" onclick="toggleArchived()" class="toggle-archive-btn">
+            Show Archived {{ ucfirst($type) }}
+          </button>
+
+        </form>
+      </div>
+
+      <!--Amenity Table -->
+      @yield('amenities-content')
+    </main>
   </div>
   <!-- SCRIPT SECTION -->
   @yield('scripts')
 
   <script>
-function dismissMessage() {
-  const message = document.getElementById('successMessage');
-  if (message) {
-    message.style.transition = 'opacity 0.3s ease';
-    message.style.opacity = '0';
-    setTimeout(() => {
-      message.style.display = 'none';
-    }, 300);
-  }
-}
-</script>
+    function dismissMessage() {
+      const message = document.getElementById('successMessage');
+      if (message) {
+        message.style.transition = 'opacity 0.3s ease';
+        message.style.opacity = '0';
+        setTimeout(() => {
+          message.style.display = 'none';
+        }, 300);
+      }
+    }
+  </script>
 </body>
 
 </html>

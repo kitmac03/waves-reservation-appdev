@@ -97,7 +97,7 @@ class ManagerProfileController extends Controller
         $request->archived_by = auth()->id();
         $request->save();
 
-        return redirect()->back()->with('success', 'Request declined.');
+        return redirect()->back()->with('success', 'Request declined successfully.');
     }
 
     public function view_del_acc_details($id)

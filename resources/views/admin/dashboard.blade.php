@@ -68,7 +68,7 @@
           <p class="amount">₱{{ number_format($revenue, 2) }}</p>
         </div>
         <div class="card">
-          <h3>Total Annual Revenue</h3>
+          <h3>Revenue for the Year</h3>
           <p class="amount">₱{{ number_format($annualRevenue, 2) }}</p>
         </div>
         <div class="card">

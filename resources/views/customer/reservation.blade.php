@@ -42,12 +42,12 @@
                     <a href="{{ route('customer.profile') }}">
                         <i class="fas fa-user"></i> Profile
                     </a>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
+                    <a href="#" id="logoutButton">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
             </div>
         </nav>
@@ -139,6 +139,20 @@
     <footer class="site-footer">
     <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
 </footer>
+
+ <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeLogoutModal">&times;</span>
+            <div class="modal-header">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
+                <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
+            </div>
+        </div>
+    </div>
 
 <script>
     // Validation before form submission
@@ -330,27 +344,65 @@
         updateImage();
     });
 
-     // Toggle mobile menu
-        function toggleMenu() {
-            const navMenu = document.getElementById('navMenu');
-            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+        const logoutButton = document.getElementById('logoutButton');
+        const logoutModal = document.getElementById('logoutModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+        const confirmLogout = document.getElementById('confirmLogout');
+        const closeLogoutBtn = document.getElementById('closeLogoutModal');
 
-        // Toggle profile dropdown
-        function toggleDropdown(event) {
-            event.stopPropagation(); 
-            const dropdown = document.getElementById('profileDropdown');
-            dropdown.classList.toggle('show');
-        }
+        if (logoutButton && logoutModal && cancelLogout && confirmLogout && closeLogoutBtn) {
+        logoutButton.addEventListener('click', () => openModal('logoutModal'));
+        cancelLogout.addEventListener('click', () => closeModal('logoutModal'));
+        closeLogoutBtn.addEventListener('click', () => closeModal('logoutModal'));
 
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('profileDropdown');
-            const profileIcon = document.getElementById('profile-icon');
-            
-            if (!profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.remove('show');
+        confirmLogout.addEventListener('click', () => {
+            document.getElementById('logoutForm').submit();
+            closeModal('logoutModal');
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target === logoutModal) {
+            closeModal('logoutModal');
             }
         });
+        } else {
+        console.error('One or more logout modal elements not found.');
+        }
+    });
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'flex'; // This triggers centering based on your flex CSS
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
+    }
+
+
+    // Toggle mobile menu
+    function toggleMenu() {
+        const navMenu = document.getElementById('navMenu');
+        navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Toggle profile dropdown
+    function toggleDropdown(event) {
+        event.stopPropagation(); 
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('profileDropdown');
+        const profileIcon = document.getElementById('profile-icon');
+        
+        if (!profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
 </script>
 
 
