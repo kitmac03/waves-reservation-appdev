@@ -108,38 +108,38 @@
               </div>
             </div>
 
-            <div class="payment-summary">
-              <div class="w-full bg-gray-50 border border-gray-200 border-dashed rounded-lg p-4">
-                <h6 class="text-base text-center font-semibold text-gray-700 mb-2">Payment Summary</h6>
-                <ul class="text-base text-gray-800 space-y-1 mb-2">
-                  @foreach ($reservation->reservedAmenities as $reserved)
-                    <li class="flex justify-between text-base">
-                      <span>{{ $reserved->amenity->name }}</span>
-                      <span class="font-bold">₱{{ number_format($reserved->amenity->price, 2) }}</span>
-                    </li>
-                  @endforeach
-                </ul>
-            
-                <hr class="my-2 border-gray-300">
-            
-                <div class="flex justify-between text-base text-gray-700">
-                  <strong class="">Total:</strong>
-                  <span class="font-bold">₱{{ number_format($total, 2) }}</span>
-                </div>
-            
-                <div class="flex justify-between text-base text-gray-700">
-                  <strong class="">Down Payment (50%):</strong>
-                  <span class="font-bold">₱{{ number_format($downpayment, 2) }}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="payment-methods">
-              <form class="payment-instructions" action="{{ route('admin.vendor.process-payment')}}" method="POST" enctype="multipart/form-data" onsubmit="return validateSelection()">
-                @csrf
-                <input type="hidden" name="reservation_id" value="{{ $reservation->id }}">
-                <input type="hidden" name="bill_id" value="{{ optional($reservation->bill)->id }}">
-                <input type="hidden" name="status" value="verified" hidden>
+                  <div class="payment-summary">
+                     <div class="w-full bg-gray-50 border border-gray-200 border-dashed rounded-lg p-4">
+                         <h6 class="text-base text-center font-semibold text-gray-700 mb-2">Payment Summary</h6>
+                         <ul class="text-base text-gray-800 space-y-1 mb-2">
+                            @foreach ($reservation->reservedAmenities as $reserved)
+                                <li class="flex justify-between text-base">
+                                    <span>{{ $reserved->amenity->name }}</span>
+                                    <span class="font-bold">₱{{ number_format($reserved->amenity->price, 2) }}</span>
+                                </li>
+                            @endforeach
+                         </ul>
+                     
+                         <hr class="my-2 border-gray-300">
+                     
+                         <div class="flex justify-between text-base text-gray-700">
+                             <strong class="">Total:</strong>
+                             <span class="font-bold">₱{{ number_format($total, 2) }}</span>
+                         </div>
+                     
+                         <div class="flex justify-between text-base text-gray-700">
+                             <strong class="">Down Payment (50%):</strong>
+                             <span class=" font-bold">₱{{ number_format($downpayment, 2) }}</span>
+                         </div>
+                     </div>
+                 </div>
+                  
+                  <div class="payment-methods">
+                     <form class="payment-instructions" action="{{ route('admin.vendor.process-walkin')}}" method="POST" enctype="multipart/form-data" onsubmit="return validateSelection()">
+                        @csrf
+                           <input type="hidden" name="reservation_id" value="{{ $reservation->id }}">
+                            <input type="hidden" name="bill_id" value="{{ optional($reservation->bill)->id }}">
+                            <input type="hidden" name="status" value="verified" hidden>
 
                 <label for="payment_amount" class="upload-instruction my-3">Enter Payment Amount:</label>
                 <input type="number" name="payment_amount" id="payment_amount" class="w-full border border-gray-300 rounded px-3 py-2" required>
