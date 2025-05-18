@@ -104,10 +104,10 @@
 
                 <select class="reason-select" id="deleteReason" name="reason">
                     <option value="" disabled selected>Select a reason...</option>
-                    <option value="no-longer-need">I no longer need this account</option>
-                    <option value="privacy-concerns">I have privacy concerns</option>
-                    <option value="poor-experience">I had a poor experience</option>
-                    <option value="found-better-service">I found a better service</option>
+                    <option value="no longer need">I no longer need this account</option>
+                    <option value="privacy concerns">I have privacy concerns</option>
+                    <option value="poor experience">I had a poor experience</option>
+                    <option value="found better service">I found a better service</option>
                     <option value="other">Other reason</option>
                 </select>
 

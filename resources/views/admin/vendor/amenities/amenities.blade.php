@@ -73,11 +73,6 @@
         </p>
       </div>
 
-      <div class="icon-container" id="cancel-tab">
-        <i class="material-icons side-icons">block</i>
-        <p class="icon-label">Cancelled</p>
-      </div>
-
     </nav>
 
     <!----------------------- MAIN SECTION  ---------------------------->
