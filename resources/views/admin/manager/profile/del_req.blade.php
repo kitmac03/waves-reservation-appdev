@@ -83,13 +83,13 @@
           <form action="{{ route('admin.delete.approve', $request->id) }}" method="POST" style="display:inline;">
           @csrf
           @method('PATCH')
-          <button type="submit" class="accept">Accept</button>
+          <button type="button" class="accept" onclick="showAcceptDeletion(this)">Approve</button>
           </form>
 
           <form action="{{ route('admin.delete.decline', $request->id) }}" method="POST" style="display:inline;">
           @csrf
           @method('PATCH')
-          <button type="submit" class="decline">Decline</button>
+          <button type="button" class="decline" onclick="showDeclineDeletion(this)">Decline</button>
           </form>
         </td>
 
@@ -119,7 +119,7 @@
       </p>
       <div class="accept-actions">
         <button class="accept-cancel-btn" onclick="closeAcceptDeletion()">Cancel</button>
-        <button class="accept-confirm-btn" onclick="closeAcceptDeletion()">Confirm</button>
+        <button class="accept-confirm-btn">Confirm</button>
       </div>
     </div>
   </dialog>
@@ -137,7 +137,7 @@
       </p>
       <div class="decline-actions">
         <button class="decline-cancel-btn" onclick="closeDeclineDeletion()">Cancel</button>
-        <button class="decline-confirm-btn" onclick="closeDeclineDeletion()">Confirm</button>
+        <button class="decline-confirm-btn">Confirm</button>
       </div>
     </div>
   </dialog>
@@ -145,42 +145,45 @@
   <!------------ SCRIPT SECTION ------------>
 
   <script>
+    let currentForm = null;
 
-    const reservationDialog = document.querySelector('.reservation-dialog');
-    const acceptDeletion = document.querySelector('.accept-deletion');
-    const declineDeletion = document.querySelector('.decline-deletion');
-
-    function openDialogWithData(name, email, phone) {
-      document.querySelector('.profile-name').textContent = name;
-      document.querySelector('.profile-email').textContent = email;
-      document.querySelector('.profile-phone').textContent = phone;
-      reservationDialog.showModal();
-    }
-    function closeDialog() {
-      reservationDialog.close();
+    // Open Accept Confirmation Dialog
+    function showAcceptDeletion(button) {
+      currentForm = button.closest("form");
+      document.querySelector(".accept-deletion").showModal();
     }
 
-
-    function showAcceptDeletion() {
-      acceptDeletion.showModal();
+    // Open Decline Confirmation Dialog
+    function showDeclineDeletion(button) {
+      currentForm = button.closest("form");
+      document.querySelector(".decline-deletion").showModal();
     }
+
+    // Close Accept Dialog
     function closeAcceptDeletion() {
-      acceptDeletion.close();
+      document.querySelector(".accept-deletion").close();
+      currentForm = null;
     }
 
-
-    function showDeclineDeletion() {
-      declineDeletion.showModal();
-    }
+    // Close Decline Dialog
     function closeDeclineDeletion() {
-      declineDeletion.close();
+      document.querySelector(".decline-deletion").close();
+      currentForm = null;
     }
 
+    // Submit Accept Form on Confirm
+    document.querySelector(".accept-confirm-btn").addEventListener("click", () => {
+      if (currentForm) currentForm.submit();
+    });
 
-
+    // Submit Decline Form on Confirm
+    document.querySelector(".decline-confirm-btn").addEventListener("click", () => {
+      if (currentForm) currentForm.submit();
+    });
   </script>
+
 
 
 </body>
 
-</html>   
+</html>
