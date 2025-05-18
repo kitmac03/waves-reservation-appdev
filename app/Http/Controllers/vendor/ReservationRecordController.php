@@ -402,6 +402,7 @@ class ReservationRecordController extends Controller
             'status' => 'unpaid',
         ]);
 
-        return redirect()->route('vendor.payment.page', ['reservation' => $reservation->id]);
+        return redirect()
+        ->route('vendor.payment.page', ['reservation' => $reservation->id]);
     }
 }

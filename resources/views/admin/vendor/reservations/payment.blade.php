@@ -76,7 +76,7 @@
                  </div>
                   
                   <div class="payment-methods">
-                     <form class="payment-instructions" action="{{ route('admin.vendor.process-payment')}}" method="POST" enctype="multipart/form-data" onsubmit="return validateSelection()">
+                     <form class="payment-instructions" action="{{ route('admin.vendor.process-walkin')}}" method="POST" enctype="multipart/form-data" onsubmit="return validateSelection()">
                         @csrf
                            <input type="hidden" name="reservation_id" value="{{ $reservation->id }}">
                             <input type="hidden" name="bill_id" value="{{ optional($reservation->bill)->id }}">
