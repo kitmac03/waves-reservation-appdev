@@ -117,7 +117,9 @@ class AmenitiesController extends Controller
         $amenity = Amenities::findOrFail($id);
         $amenity->update(['is_active' => false]);
 
-        return redirect()->back()->with('success', 'Cottage archived successfully!');
+        $type = $amenity->type;
+
+        return redirect()->back()->with('success', ucfirst($type) . ' archived successfully!');
     }
 
     public function unarchive($id)
@@ -125,7 +127,9 @@ class AmenitiesController extends Controller
         $amenity = Amenities::findOrFail($id);
         $amenity->update(['is_active' => true]);
 
-        return redirect()->back()->with('success', 'Cottage unarchived successfully!');
+        $type = $amenity->type;
+
+        return redirect()->back()->with('success', ucfirst($type) . ' unarchived successfully!');
     }
 
     protected function validator(array $data)

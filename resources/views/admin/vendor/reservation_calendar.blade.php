@@ -250,6 +250,12 @@
 
 @section('scripts')
 	<script>
+		@if(session('success'))
+			toastr.success("{{ session('success') }}");
+		@elseif(session('error'))
+			toastr.error("{{ session('error') }}");
+    	@endif
+
 		function paymentFormHandler() {
 			return {
 				showConfirmation: false,
@@ -794,6 +800,18 @@
 						}
 				};
 			}
+
+				function showInvalidToast(message = "Action completed successfully.") {
+                    const toast = document.getElementById("successToastInvalid");
+                    const msg = document.getElementById("invalidMessage");
+                    msg.textContent = message;
+                    toast.classList.remove("hidden");
+
+                    // Hide after 3 seconds
+                    setTimeout(() => {
+                        toast.classList.add("hidden");
+                    }, 10000);
+                }
 		}); 
 	</script>
 @endsection

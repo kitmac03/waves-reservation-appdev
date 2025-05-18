@@ -35,16 +35,8 @@
                     Reservations</a>
 
             </nav>
+</aside>
 
-            <!-- logout -->
-            <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-
-            <button id="logoutButton" class="logout">
-                <i class="fas fa-sign-out-alt"></i> Log Out
-            </button>
-        </aside>
 
         <!--- MAIN CONTENT SECTION -->
         <main class="profile-section">
@@ -112,10 +104,10 @@
 
                 <select class="reason-select" id="deleteReason" name="reason">
                     <option value="" disabled selected>Select a reason...</option>
-                    <option value="no-longer-need">I no longer need this account</option>
-                    <option value="privacy-concerns">I have privacy concerns</option>
-                    <option value="poor-experience">I had a poor experience</option>
-                    <option value="found-better-service">I found a better service</option>
+                    <option value="no longer need">I no longer need this account</option>
+                    <option value="privacy concerns">I have privacy concerns</option>
+                    <option value="poor experience">I had a poor experience</option>
+                    <option value="found better service">I found a better service</option>
                     <option value="other">Other reason</option>
                 </select>
 
@@ -206,7 +198,6 @@
                         return;
                     }
                 }
-                alert('Your deletion request has been sent for review.');
                 closeModal('deleteModal');
             });
 
@@ -243,6 +234,8 @@
                 }
             });
         });
+
+        
     </script>
 </body>
 

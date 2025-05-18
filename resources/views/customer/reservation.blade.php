@@ -10,28 +10,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
 
 </head>
 
 <body>
-    <header>
-        <div class="logo">
-            <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo">
-            <h1 class="title">WAVES <span>Resort</span></h1>
-        </div>
-        <nav>
-            <a href="{{ route('customer.about') }}">About</a>
-            <a href="{{ route('customer.reservation') }}">Book</a>
 
-            <div class="profile-container">
-                <a href="{{ route('customer.profile') }}">
-                    <i class="fas fa-user-circle" id="profile-icon" style="font-size: 32px; cursor: pointer;"></i>
-                </a>
-                <div class="dropdown-menu" id="dropdown-menu">
+   <header class="navbar">
+  <div class="logo">
+    <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo" />
+    <div class="logo-text">
+      <h1 class="title">WAVES</h1>
+      <p class="sub-title">Resort</p>
+    </div>
+  </div>
+
+  <button class="navbar-toggler" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <nav class="nav-links" id="navMenu">
+    <a class="nav-link" href="{{ route('customer.about') }}">About</a>
+   
+      <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>
+      
+      <div class="profile-container">
+                <i class="fas fa-user-circle" id="profile-icon" onclick="toggleDropdown(event)"></i>
+                <div class="dropdown-content" id="profileDropdown">
+                    <a href="{{ route('customer.profile') }}">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <a href="#" id="logoutButton">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
             </div>
         </nav>
-    </header>
+</header>
+
 
     <section class="booking">
         <div class="booking-form">
@@ -118,6 +139,20 @@
     <footer class="site-footer">
     <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
 </footer>
+
+ <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeLogoutModal">&times;</span>
+            <div class="modal-header">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
+                <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
+            </div>
+        </div>
+    </div>
 
 <script>
     // Validation before form submission
@@ -308,6 +343,66 @@
 
         updateImage();
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const logoutButton = document.getElementById('logoutButton');
+        const logoutModal = document.getElementById('logoutModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+        const confirmLogout = document.getElementById('confirmLogout');
+        const closeLogoutBtn = document.getElementById('closeLogoutModal');
+
+        if (logoutButton && logoutModal && cancelLogout && confirmLogout && closeLogoutBtn) {
+        logoutButton.addEventListener('click', () => openModal('logoutModal'));
+        cancelLogout.addEventListener('click', () => closeModal('logoutModal'));
+        closeLogoutBtn.addEventListener('click', () => closeModal('logoutModal'));
+
+        confirmLogout.addEventListener('click', () => {
+            document.getElementById('logoutForm').submit();
+            closeModal('logoutModal');
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target === logoutModal) {
+            closeModal('logoutModal');
+            }
+        });
+        } else {
+        console.error('One or more logout modal elements not found.');
+        }
+    });
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'flex'; // This triggers centering based on your flex CSS
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.display = 'none';
+    }
+
+
+    // Toggle mobile menu
+    function toggleMenu() {
+        const navMenu = document.getElementById('navMenu');
+        navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Toggle profile dropdown
+    function toggleDropdown(event) {
+        event.stopPropagation(); 
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('profileDropdown');
+        const profileIcon = document.getElementById('profile-icon');
+        
+        if (!profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
 </script>
 
 

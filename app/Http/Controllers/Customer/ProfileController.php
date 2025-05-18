@@ -64,7 +64,7 @@ class ProfileController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('customer.profile')->with('success', 'Your request to archive the account has been recorded.');
+        return redirect()->route('customer.profile')->with('success', 'Your deletion request has been sent for review.');
     }
 
 

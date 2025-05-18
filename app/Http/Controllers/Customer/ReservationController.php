@@ -45,22 +45,22 @@ class ReservationController extends Controller
         $selectedAmenities = array_merge($selectedCottages, $selectedTables);
 
         // Step 4: Conflict check
-        $reservedAmenities = ReservedAmenity::join('reservations', 'reserved_amenity.res_num', '=', 'reservations.id')
-            ->where('reservations.date', $date)
+        $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($q) use ($date, $startTime, $endTime, $resNum) {
+            $q->where('date', $date)
             ->where(function ($q) {
-                $q->where('reservations.status', 'verified')
+                $q->where('status', 'verified')
                     ->orWhereHas('downPayment', function ($q2) {
                         $q2->whereIn('status', ['verified', 'pending']);
                     });
             })
+            ->where('status', '!=', 'cancelled')
+            ->where('id', '!=', $resNum)
             ->where(function ($query) use ($startTime, $endTime) {
-                $query->where('reservations.starttime', '<', $endTime)
-                    ->where('reservations.endtime', '>', $startTime);
-            })
-            ->where('reservations.status', '!=', 'cancelled')
-            ->where('reservations.id', '!=', $resNum)
-            ->pluck('reserved_amenity.amenity_id')
-            ->toArray();
+                $query->where('starttime', '<', $endTime)
+                        ->where('endtime', '>', $startTime);
+            });
+        })->pluck('amenity_id')->toArray();
+
 
         $conflicts = array_intersect($selectedAmenities, $reservedAmenities);
 
@@ -90,7 +90,40 @@ class ReservationController extends Controller
             ]);
         }
 
-        // Step 7: Redirect with success message
+        // Step 7: Recalculate and update the bill
+        $total = 0;
+
+        // Fetch selected amenities with prices
+        $amenities = Amenities::whereIn('id', $selectedAmenities)->get();
+
+        // Calculate the total hours
+        $hours = Carbon::parse($startTime)->diffInHours(Carbon::parse($endTime));
+
+        // Compute total cost
+        foreach ($amenities as $amenity) {
+            $total += $amenity->price;
+        }
+
+        // Update or create bill
+        $bill = Bill::where('res_num', $resNum)->first();
+
+        if ($bill) {
+            // Update existing bill
+            $bill->grand_total = $total;
+            $bill->date = Carbon::now();
+            $bill->save();
+        } else {
+            // Create a new bill
+            Bill::create([
+                'id' => Str::uuid(),
+                'res_num' => $resNum,
+                'grand_total' => $total,
+                'date' => Carbon::now(),
+                'status' => 'unpaid',
+            ]);
+        }
+
+        // Step 8: Redirect with success message
         return redirect()->route('customer.reservation.records')
             ->with('success', 'Reservation updated successfully.');
     }

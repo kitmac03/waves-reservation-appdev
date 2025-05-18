@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
+use App\Rules\UniqueEmailAcrossTables;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Models\DownPayment;
@@ -112,7 +112,7 @@ class AdminDashboardController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'number' => 'required|regex:/^[0-9]{11}$/',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins'],
+            'email' => ['required', 'string', 'email', 'max:255', new UniqueEmailAcrossTables()],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', 'max:255'],
         ]);
