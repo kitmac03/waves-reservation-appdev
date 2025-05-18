@@ -540,8 +540,20 @@
                 // Show the edit modal
                 document.querySelector('.edit').classList.remove('hidden');
 
-                // Fetch amenities for edit modal using reservation date + res_num + time
-                const fetchEditAmenities = (date, startTime, endTime, resNum) => {
+                const dateInput = document.getElementById('date');
+                const startTimeInput = document.getElementById('starttime');
+                const endTimeInput = document.getElementById('endtime');
+                const resNumInput = document.getElementById('res_num');
+
+                // Fetch amenities function
+                const fetchEditAmenities = () => {
+                    const date = dateInput.value;
+                    const startTime = startTimeInput.value;
+                    const endTime = endTimeInput.value;
+                    const resNum = resNumInput.value;
+
+                    if (!date || !startTime || !endTime) return;
+
                     fetch(`/customer/reservation-records/edit-amenities?date=${date}&starttime=${startTime}&endtime=${endTime}&res_num=${resNum}`)
                         .then(response => response.json())
                         .then(data => {
@@ -551,80 +563,74 @@
                             cottageContainer.innerHTML = '';
                             tableContainer.innerHTML = '';
 
-                            data.cottages.forEach(cottage => {
-                                const wrapper = document.createElement('div');
-                                wrapper.className = 'form-check d-flex align-items-center mb-2';
+                            if (data.cottages.length === 0) {
+                                cottageContainer.innerHTML = '<p class="text-muted fst-italic">No cottage available.</p>';
+                            } else {
+                                data.cottages.forEach(cottage => {
+                                    const wrapper = document.createElement('div');
+                                    wrapper.className = 'form-check d-flex align-items-center mb-2';
 
-                                const checkbox = document.createElement('input');
-                                checkbox.type = 'checkbox';
-                                checkbox.className = 'form-check-input p-2 me-2';
-                                checkbox.name = 'cottages[]';
-                                checkbox.value = cottage.id;
-                                checkbox.id = `cottage-${cottage.id}`;
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox';
+                                    checkbox.className = 'form-check-input p-2 me-2';
+                                    checkbox.name = 'cottages[]';
+                                    checkbox.value = cottage.id;
+                                    checkbox.id = `cottage-${cottage.id}`;
 
-                                if (data.selectedCottages.includes(cottage.id)) {
-                                    checkbox.checked = true;
-                                }
+                                    if (data.selectedCottages.includes(cottage.id)) {
+                                        checkbox.checked = true;
+                                    }
 
-                                const label = document.createElement('label');
-                                label.className = 'form-check-label m-0 p-0';
-                                label.htmlFor = checkbox.id;
-                                label.textContent = `${cottage.name} - ₱${cottage.price.toFixed(2)}`;
+                                    const label = document.createElement('label');
+                                    label.className = 'form-check-label m-0 p-0';
+                                    label.htmlFor = checkbox.id;
+                                    label.textContent = `${cottage.name} - ₱${cottage.price.toFixed(2)}`;
 
-                                wrapper.appendChild(checkbox);
-                                wrapper.appendChild(label);
-                                cottageContainer.appendChild(wrapper);
-                            });
+                                    wrapper.appendChild(checkbox);
+                                    wrapper.appendChild(label);
+                                    cottageContainer.appendChild(wrapper);
+                                });
+                            }
 
-                            data.tables.forEach(table => {
-                                const wrapper = document.createElement('div');
-                                wrapper.className = 'form-check d-flex align-items-center mb-2';
+                            if (data.tables.length === 0) {
+                                tableContainer.innerHTML = '<p class="text-muted fst-italic">No table available.</p>';
+                            } else {
+                                data.tables.forEach(table => {
+                                    const wrapper = document.createElement('div');
+                                    wrapper.className = 'form-check d-flex align-items-center mb-2';
 
-                                const checkbox = document.createElement('input');
-                                checkbox.type = 'checkbox';
-                                checkbox.className = 'form-check-input p-2 me-2';
-                                checkbox.name = 'tables[]';
-                                checkbox.value = table.id;
-                                checkbox.id = `table-${table.id}`;
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox';
+                                    checkbox.className = 'form-check-input p-2 me-2';
+                                    checkbox.name = 'tables[]';
+                                    checkbox.value = table.id;
+                                    checkbox.id = `table-${table.id}`;
 
-                                if (data.selectedTables.includes(table.id)) {
-                                    checkbox.checked = true;
-                                }
+                                    if (data.selectedTables.includes(table.id)) {
+                                        checkbox.checked = true;
+                                    }
 
-                                const label = document.createElement('label');
-                                label.className = 'form-check-label m-0 p-0';
-                                label.htmlFor = checkbox.id;
-                                label.textContent = `${table.name} - ₱${table.price.toFixed(2)}`;
+                                    const label = document.createElement('label');
+                                    label.className = 'form-check-label m-0 p-0';
+                                    label.htmlFor = checkbox.id;
+                                    label.textContent = `${table.name} - ₱${table.price.toFixed(2)}`;
 
-                                wrapper.appendChild(checkbox);
-                                wrapper.appendChild(label);
-                                tableContainer.appendChild(wrapper);
-                            });
+                                    wrapper.appendChild(checkbox);
+                                    wrapper.appendChild(label);
+                                    tableContainer.appendChild(wrapper);
+                                });
+                            }
                         })
                         .catch(error => console.error('Fetch error:', error));
-                    };
-                fetchEditAmenities(reservationDate, reservationStart, reservationEnd, reservationId);
+                };
 
-                document.getElementById('date').addEventListener('change', function () {
-                    const newDate = this.value;
-                    const newStartTime = document.getElementById('starttime').value;
-                    const newEndTime = document.getElementById('endtime').value;
-                    fetchEditAmenities(newDate, newStartTime, newEndTime, reservationId);
-                });
+                // Initial fetch
+                fetchEditAmenities();
 
-                document.getElementById('starttime').addEventListener('change', function () {
-                    const newStartTime = this.value;
-                    const newDate = document.getElementById('date').value;
-                    const newEndTime = document.getElementById('endtime').value;
-                    fetchEditAmenities(newDate, newStartTime, newEndTime, reservationId);
-                });
-
-                document.getElementById('endtime').addEventListener('change', function () {
-                    const newEndTime = this.value;
-                    const newDate = document.getElementById('date').value;
-                    const newStartTime = document.getElementById('starttime').value;
-                    fetchEditAmenities(newDate, newStartTime, newEndTime, reservationId);
-                });
+                // Refresh amenities on input changes
+                dateInput.addEventListener('change', fetchEditAmenities);
+                startTimeInput.addEventListener('change', fetchEditAmenities);
+                endTimeInput.addEventListener('change', fetchEditAmenities);
             };
 
         });

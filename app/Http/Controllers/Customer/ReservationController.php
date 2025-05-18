@@ -90,7 +90,40 @@ class ReservationController extends Controller
             ]);
         }
 
-        // Step 7: Redirect with success message
+        // Step 7: Recalculate and update the bill
+        $total = 0;
+
+        // Fetch selected amenities with prices
+        $amenities = Amenities::whereIn('id', $selectedAmenities)->get();
+
+        // Calculate the total hours
+        $hours = Carbon::parse($startTime)->diffInHours(Carbon::parse($endTime));
+
+        // Compute total cost
+        foreach ($amenities as $amenity) {
+            $total += $amenity->price;
+        }
+
+        // Update or create bill
+        $bill = Bill::where('res_num', $resNum)->first();
+
+        if ($bill) {
+            // Update existing bill
+            $bill->grand_total = $total;
+            $bill->date = Carbon::now();
+            $bill->save();
+        } else {
+            // Create a new bill
+            Bill::create([
+                'id' => Str::uuid(),
+                'res_num' => $resNum,
+                'grand_total' => $total,
+                'date' => Carbon::now(),
+                'status' => 'unpaid',
+            ]);
+        }
+
+        // Step 8: Redirect with success message
         return redirect()->route('customer.reservation.records')
             ->with('success', 'Reservation updated successfully.');
     }
