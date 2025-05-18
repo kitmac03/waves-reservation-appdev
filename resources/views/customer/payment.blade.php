@@ -124,7 +124,7 @@
                         <p class="upload-instruction">After completing the payment, please enter the following
                            information of the Gcash account you used to proceed with your reservation
                            verification:</p>
-                        <label for="ref_number" class="upload-instruction ms-2 my-3">Enter Referene Number:</label>
+                        <label for="ref_number" class="upload-instruction ms-2 my-3">Enter Reference Number:</label>
                         <input type="text" name="ref_number" placeholder="Enter reference number"id="ref_number" class="w-full border border-gray-300 rounded px-3 py-2" required>
 
                         <h4>3. Upload Proof of Payment</h6>

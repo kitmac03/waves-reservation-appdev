@@ -35,10 +35,12 @@
     @auth
       <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>
     @endauth
+
     <div class="profile-container">
       <a href="{{ route('customer.profile') }}">
         <i class="fas fa-user-circle" id="profile-icon"></i>
       </a>
+
     </div>
   </nav>
 </header>
