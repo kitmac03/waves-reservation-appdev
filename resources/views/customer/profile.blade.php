@@ -35,16 +35,8 @@
                     Reservations</a>
 
             </nav>
+</aside>
 
-            <!-- logout -->
-            <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-
-            <button id="logoutButton" class="logout">
-                <i class="fas fa-sign-out-alt"></i> Log Out
-            </button>
-        </aside>
 
         <!--- MAIN CONTENT SECTION -->
         <main class="profile-section">
@@ -242,6 +234,8 @@
                 }
             });
         });
+
+        
     </script>
 </body>
 

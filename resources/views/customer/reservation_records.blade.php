@@ -49,20 +49,6 @@
 
         </div>
 
-        <!-- logout -->
-        <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf <!-- CSRF Token for security -->
-        </form>
-
-        <button id="logoutButton" class="logout">
-            <i class="fas fa-sign-out-alt"></i> Log Out
-        </button>
-
-        <script>
-            document.getElementById('logoutButton').addEventListener('click', function () {
-                document.getElementById('logoutForm').submit();
-            });
-        </script>
     </div>
 
   <div class="main-content">
@@ -76,10 +62,8 @@
                 <button class="status-tab" data-status="cancelled">Cancelled/Invalid</button>
             </div>
         </div>
-            <!-- Line that spans full container width -->
             <div class="full-width-line"></div>
             
-            <!-- Legend content that matches main container width -->
                     <div class="legend-section">
                     <div class="status-legend">
                     <span class="legend-item" style="--color: blue;">Fully Paid</span>
@@ -95,8 +79,8 @@
 
        
 
-        <!-- This is where the reservation items should be - INSIDE the container -->
         <div class="reservations-content">
+
             <!-- Current Reservations -->
             <div class="reservation-list active" id="current-reservations">
                 @forelse ($paidReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
@@ -619,10 +603,8 @@
                         })
                         .catch(error => console.error('Fetch error:', error));
                     };
-                // Call the function with initial values
                 fetchEditAmenities(reservationDate, reservationStart, reservationEnd, reservationId);
 
-                // Add event listeners to date and time inputs to update amenities dynamically
                 document.getElementById('date').addEventListener('change', function () {
                     const newDate = this.value;
                     const newStartTime = document.getElementById('starttime').value;
