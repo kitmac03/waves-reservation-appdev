@@ -271,7 +271,7 @@ padding: 0;
 display: flex;
 align-items: center;
 padding: 12px;
-border: 1px solid #e0e0e0; /* Lighter border */
+border: 1px solid #e0e0e0;
 border-radius: 6px;
 background-color: white;
 gap: 10px;

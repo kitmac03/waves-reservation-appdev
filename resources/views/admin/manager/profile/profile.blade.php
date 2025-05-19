@@ -145,7 +145,7 @@
               </div>
             </div>
 
-            <div class="form-actions" style="text-align: right; margin-top: 20px;">
+            <div class="form-actions" style="text-align: right; margin-top: 75px;">
               <button type="button" class="btn cancel-button" onclick="cancelEdit()">Cancel</button>
               <button type="button" class="btn confirm-button" onclick="showSaveConfirmation()">Save</button>
             </div>
@@ -201,8 +201,8 @@
           Any unsaved changes will be lost.
         </p>
         <div class="modal-button-wrapper">
-          <button class="cancel-button" onclick="cancelCancel()">No, Keep Editing</button>
-          <button class="confirm-button" onclick="confirmCancel()">Yes, Cancel</button>
+          <button class="cancel-button" onclick="cancelCancel()">No</button>
+          <button class="confirm-button" onclick="confirmCancel()">Yes</button>
         </div>
       </div>
     </dialog>
