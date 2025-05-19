@@ -52,7 +52,9 @@
 
                     <div class="profile-details">
                         @if(session('success'))
-                            <div style="text-xs color: green;">{{ session('success') }}</div>
+                            <div class="success-message" id="successMessage">
+                                <span>{{ session('success') }}</span>
+                            </div>
                         @endif
                         <div class="detail-item name">
                             <span>{{ $customer->name }}</span>
@@ -256,7 +258,16 @@
             });
         });
 
-
+        function dismissMessage() {
+            const message = document.getElementById('successMessage');
+            if (message) {
+                message.style.transition = 'opacity 0.3s ease';
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 300);
+            }
+        }
     </script>
 </body>
 
