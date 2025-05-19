@@ -59,9 +59,12 @@
       <p class="head-title">ADMIN ACCOUNT CREATION</p>
 
       @if(session('success'))
-      <div style="text-xs color: green;">{{ session('success') }}</div>
+      <div class="success-message" id="successMessage">
+      <span>{{ session('success') }}</span>
+      <button class="close-btn" onclick="dismissMessage()">×</button>
+      </div>
     @endif
-    
+
       <form class="input-container" action="{{ route('admin.create.account.store') }}" method="POST">
         @csrf
 
@@ -140,7 +143,16 @@
       document.querySelector('.input-container').submit();
     }
 
-
+    function dismissMessage() {
+      const message = document.getElementById('successMessage');
+      if (message) {
+        message.style.transition = 'opacity 0.3s ease';
+        message.style.opacity = '0';
+        setTimeout(() => {
+          message.style.display = 'none';
+        }, 300);
+      }
+    }
   </script>
 
 </body>
