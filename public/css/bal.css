@@ -176,7 +176,7 @@ table {
   border-radius: 8px;
   padding: 20px;
   margin: auto;
-  width: 80%;
+  width: 90%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -277,13 +277,7 @@ table {
 
 .verify-btn {
   background-color: #10b981;
-  border: none;
-  color: white;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
   transition: background-color 0.2s;
-  white-space: nowrap;
 }
 
 .verify-btn:hover {
@@ -292,23 +286,25 @@ table {
 
 .reminder-btn {
   background-color: rgb(66, 120, 235);
-  border: none;
-  color: white;
-  border-radius: 4px;
-  font-weight: 500;
-  cursor: pointer;
   transition: background-color 0.2s;
-  white-space: nowrap;
 }
 
 .reminder-btn:hover {
   background-color: #2663dc;
 }
+
 .verify-btn,
 .reminder-btn {
   font-size: 14px;
-  padding: 6px 12px; /* smaller padding */
+  padding: 8px 16px; /* slightly more padding for comfort */
   border-radius: 6px;
-  min-width: 110px;
+  border: none;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  width: fit-content; /* allows button to adjust to content */
+  max-width: 100%; /* prevents overflow */
   text-align: center;
+  box-sizing: border-box; /* ensures padding doesn't overflow */
 }

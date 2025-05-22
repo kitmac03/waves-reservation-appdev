@@ -35,7 +35,7 @@
                     Reservations</a>
 
             </nav>
-</aside>
+        </aside>
 
 
         <!--- MAIN CONTENT SECTION -->
@@ -49,10 +49,12 @@
                             <i class="fas fa-user"></i>
                         </div>
                     </div>
-                    
+
                     <div class="profile-details">
                         @if(session('success'))
-                            <div style="text-xs color: green;">{{ session('success') }}</div>
+                            <div class="success-message" id="successMessage">
+                                <span>{{ session('success') }}</span>
+                            </div>
                         @endif
                         <div class="detail-item name">
                             <span>{{ $customer->name }}</span>
@@ -97,6 +99,8 @@
                 <h3>Why do you want to delete your account?</h3>
                 <p>We're sorry to see you go. Please let us know why you're leaving.</p>
             </div>
+
+            <div id="deleteError" class="text-danger mt-2" style="display: none; font-size: 0.85rem; color: red;"></div>
 
             <form id="deleteForm" method="POST" action="{{ route('profile.delete', ['id' => $customer->id]) }}">
                 @csrf
@@ -176,6 +180,14 @@
 
             cancelDelete.addEventListener('click', function () {
                 closeModal('deleteModal');
+                // Clear error message and reset form
+                const errorBox = document.getElementById('deleteError');
+                errorBox.textContent = '';
+                errorBox.style.display = 'none';
+
+                document.getElementById('deleteReason').value = '';
+                document.getElementById('otherReason').value = '';
+                document.getElementById('otherReason').style.display = 'none';
             });
 
             closeDeleteBtn.addEventListener('click', function () {
@@ -183,23 +195,34 @@
             });
 
             // Confirm deletion logic (handling form submission or alert)
-            confirmDelete.addEventListener('click', function () {
-                let reason;
-                if (deleteReason.value === 'other') {
-                    reason = otherReason.value.trim();
-                    if (!reason) {
-                        alert('Please specify your reason for deletion');
-                        return;
-                    }
-                } else {
-                    reason = deleteReason.value;
-                    if (!reason) {
-                        alert('Please select a reason for deletion');
-                        return;
+            const deleteForm = document.getElementById('deleteForm');
+
+            deleteForm.addEventListener('submit', function (e) {
+                const errorBox = document.getElementById('deleteError');
+                errorBox.style.display = 'none';
+                errorBox.textContent = '';
+
+                let reasonValid = true;
+                let reason = deleteReason.value;
+
+                if (!reason) {
+                    errorBox.textContent = 'Please select a reason for deletion.';
+                    errorBox.style.display = 'block';
+                    reasonValid = false;
+                } else if (reason === 'other') {
+                    const otherText = otherReason.value.trim();
+                    if (!otherText) {
+                        errorBox.textContent = 'Please specify your reason for deletion.';
+                        errorBox.style.display = 'block';
+                        reasonValid = false;
                     }
                 }
-                closeModal('deleteModal');
+
+                if (!reasonValid) {
+                    e.preventDefault(); // ✅ Prevent the form from submitting
+                }
             });
+
 
             // Logout Modal
             const logoutButton = document.getElementById('logoutButton');
@@ -235,7 +258,16 @@
             });
         });
 
-        
+        function dismissMessage() {
+            const message = document.getElementById('successMessage');
+            if (message) {
+                message.style.transition = 'opacity 0.3s ease';
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 300);
+            }
+        }
     </script>
 </body>
 

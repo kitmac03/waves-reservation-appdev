@@ -55,7 +55,7 @@
           Feel you summer and relaxing moment with your family and friends
           <br />Cuz it's time to feel the summer vibe.
         </p>
-        <button id="btn">Book Now</button>
+        <button id="btn" onclick="window.location.href='{{ route('customer.reservation') }}'">Book Now</button>
       </div>
     </section>
 

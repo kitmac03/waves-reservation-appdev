@@ -47,18 +47,18 @@ class ReservationController extends Controller
         // Step 4: Conflict check
         $reservedAmenities = ReservedAmenity::whereHas('reservation', function ($q) use ($date, $startTime, $endTime, $resNum) {
             $q->where('date', $date)
-            ->where(function ($q) {
-                $q->where('status', 'verified')
-                    ->orWhereHas('downPayment', function ($q2) {
-                        $q2->whereIn('status', ['verified', 'pending']);
-                    });
-            })
-            ->where('status', '!=', 'cancelled')
-            ->where('id', '!=', $resNum)
-            ->where(function ($query) use ($startTime, $endTime) {
-                $query->where('starttime', '<', $endTime)
+                ->where(function ($q) {
+                    $q->where('status', 'verified')
+                        ->orWhereHas('downPayment', function ($q2) {
+                            $q2->whereIn('status', ['verified', 'pending']);
+                        });
+                })
+                ->where('status', '!=', 'cancelled')
+                ->where('id', '!=', $resNum)
+                ->where(function ($query) use ($startTime, $endTime) {
+                    $query->where('starttime', '<', $endTime)
                         ->where('endtime', '>', $startTime);
-            });
+                });
         })->pluck('amenity_id')->toArray();
 
 
@@ -533,7 +533,11 @@ class ReservationController extends Controller
 
         }
 
-        return redirect()->route('customer.reservation.records')->with('success', 'Reservation cancelled successfully.');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Reservation cancelled successfully.',
+            'redirect' => route('customer.reservation.records') // Or your calendar route
+        ]);
     }
 
     public function sendReminder(Request $request)

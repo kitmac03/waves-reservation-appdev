@@ -13,10 +13,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <!-- Bootstrap Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 </head>
 
@@ -329,32 +331,37 @@
     </div> -->
 
     <script>
-        function validateSelection() {
-            const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
-            const tables = document.querySelectorAll('input[name="tables[]"]:checked');
-            const cottageChecked = cottages.length > 0;
-            const tableChecked = tables.length > 0;
+        @if(session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+        let selectedReservationId = null;
 
-            const startTime = document.getElementById("startTime").value;
-            const endTime = document.getElementById("endTime").value;
-            const errorMessageContainer = document.getElementById("error-message");
+            function validateSelection() {
+                const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
+                const tables = document.querySelectorAll('input[name="tables[]"]:checked');
+                const cottageChecked = cottages.length > 0;
+                const tableChecked = tables.length > 0;
 
-            // Validate if end time is after start time
-            if (endTime <= startTime && endTime !== "") {
-                alert("End time must be later than the start time.");
-                return false; // Prevent form submission
+                const startTime = document.getElementById("startTime").value;
+                const endTime = document.getElementById("endTime").value;
+                const errorMessageContainer = document.getElementById("error-message");
+
+                // Validate if end time is after start time
+                if (endTime <= startTime && endTime !== "") {
+                    alert("End time must be later than the start time.");
+                    return false; // Prevent form submission
+                }
+
+                // If neither cottage nor table is selected
+                if (!cottageChecked && !tableChecked) {
+                    errorMessageContainer.style.display = "block"; // Show the error message
+                    return false; // Prevent form submission
+                }
+
+                // If either cottage or table is selected, hide the error message
+                errorMessageContainer.style.display = "none";
+                return true; // Allow form submission
             }
-
-            // If neither cottage nor table is selected
-            if (!cottageChecked && !tableChecked) {
-                errorMessageContainer.style.display = "block"; // Show the error message
-                return false; // Prevent form submission
-            }
-
-            // If either cottage or table is selected, hide the error message
-            errorMessageContainer.style.display = "none";
-            return true; // Allow form submission
-        }
         function convertTo24HourFormat(time) {
             // Ensure the time string is in the correct format (12-hour with AM/PM)
             const regex = /(\d{1,2}):(\d{2})\s([APap][Mm])/;  // Matches "2:30 PM", "10:45 am"
@@ -622,48 +629,13 @@
                 });
 
                 const cancelButtons = document.querySelectorAll(".cancel-reservation");
-                const cancelModal = document.getElementById("cancelModal");
-                const cancelYesBtn = document.getElementById("cancelYes");
                 const cancelNoBtn = document.getElementById("cancelNo");
-
-                let selectedReservationId = null;
 
                 cancelButtons.forEach(button => {
                     button.addEventListener("click", function () {
                         selectedReservationId = document.querySelector(".reservation-id").textContent.replace('#', '');
                         cancelModal.classList.remove("hidden");
                     });
-                });
-
-                cancelYesBtn.addEventListener("click", function () {
-                    if (!selectedReservationId) return;
-
-                    fetch(`/customer/reservation-records/${selectedReservationId}/cancel`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({ id: selectedReservationId })
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                showSuccessToast("Reservation cancelled successfully.");
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-
-                            } else {
-                                alert("Failed to cancel reservation.");
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            alert("An error occurred.");
-                        })
-                        .finally(() => {
-                            cancelModal.classList.add("hidden");
-                        });
                 });
 
                 cancelNoBtn.addEventListener("click", function () {
@@ -696,18 +668,6 @@
                     }
                 });
 
-                function showSuccessToast(message = "Action completed successfully.") {
-                    const toast = document.getElementById("successToast");
-                    const msg = document.getElementById("successMessage");
-                    msg.textContent = message;
-                    toast.classList.remove("hidden");
-
-                    // Hide after 3 seconds
-                    setTimeout(() => {
-                        toast.classList.add("hidden");
-                    }, 10000);
-                }
-
             });
             // Handle dropdown toggle
             document.addEventListener('click', function (event) {
@@ -716,6 +676,40 @@
                     dropdownMenu.classList.toggle("hidden");
                     event.stopPropagation();
                 }
+            });
+            const cancelYesBtn = document.getElementById("cancelYes");
+            const cancelModal = document.getElementById("cancelModal");
+
+            // Attach listener ONCE, outside any loops
+            cancelYesBtn.addEventListener("click", function () {
+                if (!selectedReservationId) return;
+
+                fetch(`/customer/reservation-records/${selectedReservationId}/cancel`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ id: selectedReservationId })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            toastr.success(data.message);
+                            setTimeout(() => {
+                                window.location.href = data.redirect;
+                            }, 1500);
+                        } else {
+                            toastr.error("Failed to cancel reservation.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred.");
+                    })
+                    .finally(() => {
+                        cancelModal.classList.add("hidden");
+                    });
             });
         });
         // Toggle dropdowns
@@ -803,7 +797,6 @@
             });
         });
 
-
     </script>
 
     <div id="cancelModal" class="fixed inset-0 z-[9999] bg-black bg-opacity-50 hidden items-center justify-center">
@@ -817,13 +810,6 @@
                     Cancel</button>
             </div>
         </div>
-    </div>
-
-    <!-- Success Toast Modal -->
-    <div id="successToast"
-        class="fixed bottom-6 right-6 z-[9999] bg-green-500 text-white px-6 py-3 rounded shadow-lg flex items-center gap-3 hidden">
-        <i class="fas fa-check-circle text-xl"></i>
-        <span id="successMessage" class="text-sm font-medium">Reservation cancelled successfully.</span>
     </div>
 
     </body>

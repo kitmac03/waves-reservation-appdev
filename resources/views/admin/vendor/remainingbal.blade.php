@@ -150,7 +150,7 @@
 						<span id="dpStatus" class="text-sm font-bold px-2 py-1 rounded-md"></span>
 					</div>
 				</div>
-				<form id="verifyPaymentForm" method="POST" action="{{ route('admin.vendor.process-payment') }}" x-ref="paymentForm" @submit.prevent="trySubmit" class="p-6">
+				<form id="verifyPaymentForm" method="POST" action="{{ route('admin.vendor.process-rembal') }}" x-ref="paymentForm" @submit.prevent="trySubmit" class="p-6">
 					@csrf
 					<input type="hidden" id="reservationId" name="reservation_id">
 					<input type="hidden" id="billId" name="bill_id">
