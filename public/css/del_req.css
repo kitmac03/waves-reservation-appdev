@@ -481,7 +481,7 @@
  }
 
  .decline-title {
-   font: 700 18px poppins;
+   font: 700 15px poppins;
  }
 
  .divider {
@@ -489,7 +489,7 @@
  }
 
  .decline-text {
-   font: 400 16px poppins;
+   font: 400 12px poppins;
    padding: 6px 30px 12px 30px;
  }
 
@@ -498,12 +498,12 @@
    justify-content: end;
    gap: 10px;
 
-   width: 100%;
+   width: 90%;
  }
 
  .decline-cancel-btn {
    color: red;
-   font: 400 16px poppins;
+   font: 400 14px poppins;
    border: none;
    background: none;
    cursor: pointer;
@@ -515,7 +515,7 @@
    border: none;
    border-radius: 6px;
    padding: 4px 20px;
-   font: 400 16px poppins;
+   font: 400 14px poppins;
    cursor: pointer;
  }
 
