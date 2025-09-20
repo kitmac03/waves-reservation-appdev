@@ -153,20 +153,20 @@ body, html {
     margin-bottom: 22px;
   }
   .dialog-title {
-    font: 600 35px poppins;
+    font: 600 20px poppins;
     color: #002044;
   }
   b {
-    font: 600 18px poppins;
+    font: 600 14px poppins;
   }
   
   .name, .email, .contact, .select-role {
-    font: 400 18px poppins;
+    font: 400 14px poppins;
   }
   .select-role {
     border-radius: 12px;
-    padding: 4px;
-    width: 70%;
+    padding: 3px;
+    width: 60%;
   }
   
   .button-container {
@@ -178,7 +178,7 @@ body, html {
     padding: 8px 18px;
     border: none;
     border-radius: 8px;
-    font: 400 14px poppins;
+    font: 400 12px poppins;
   }
   .cancel-button {
     border: none;
