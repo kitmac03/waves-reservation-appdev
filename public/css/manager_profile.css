@@ -346,6 +346,12 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* More subtle shadow */
   border: none;
   border-radius: 12px;
 }
+
+.cancel-confirmation-modal {
+  border-radius: 18px;
+  border: none;
+
+}
 .modal-wrapper {
   height: 100%;
   width: 100%;
@@ -353,19 +359,19 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* More subtle shadow */
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+
 }
 .modal-heading {
-  font: 700 18px poppins;
+  font: 700 14px poppins;
 }
 .modal-text {
-  font: 400 16px poppins;
+  font: 400 12px poppins;
   padding: 6px 30px 12px 30px;
 }
 .modal-button-wrapper {
   display: flex;
   justify-content: end;
   gap: 10px;
-
   width: 100%;
 }
 .cancel-button {
@@ -374,7 +380,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* More subtle shadow */
   border: none;
   border-radius: 6px;
   padding: 4px 20px 4px 20px;
-  font: 400 16px poppins;
+  font: 400 14px poppins;
   cursor: pointer;
 }
 .confirm-button {
@@ -383,6 +389,6 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* More subtle shadow */
   border: none;
   border-radius: 6px;
   padding: 4px 20px 4px 20px;
-  font: 400 16px poppins;
+  font: 400 14px poppins;
   cursor: pointer;
 }

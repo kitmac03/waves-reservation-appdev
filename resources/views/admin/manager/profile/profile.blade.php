@@ -195,7 +195,6 @@
     <dialog class="cancel-confirmation-modal">
       <div class="modal-wrapper">
         <p class="modal-heading">Are you sure you want to cancel?</p>
-        <hr style="width: 100%">
 
         <p class="modal-text">
           Any unsaved changes will be lost.
