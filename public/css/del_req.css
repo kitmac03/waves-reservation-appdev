@@ -425,7 +425,7 @@
  }
 
  .accept-title {
-   font: 700 18px poppins;
+   font: 700 15px poppins;
  }
 
  .divider {
@@ -433,7 +433,7 @@
  }
 
  .accept-text {
-   font: 400 16px poppins;
+   font: 400 15px poppins;
    padding: 6px 30px 12px 30px;
  }
 
@@ -447,7 +447,7 @@
 
  .accept-cancel-btn {
    color: red;
-   font: 400 16px poppins;
+   font: 400 14px poppins;
    border: none;
    background: none;
    cursor: pointer;
@@ -459,7 +459,7 @@
    border: none;
    border-radius: 6px;
    padding: 4px 20px;
-   font: 400 16px poppins;
+   font: 400 14px poppins;
    cursor: pointer;
  }
 
@@ -489,7 +489,7 @@
  }
 
  .decline-text {
-   font: 400 12px poppins;
+   font: 400 13px poppins;
    padding: 6px 30px 12px 30px;
  }
 
