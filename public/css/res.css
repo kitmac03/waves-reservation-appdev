@@ -550,7 +550,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 400px;
+    max-width: 350px;
     text-align: left;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     animation: fadeIn 0.3s ease-in-out;
@@ -594,10 +594,10 @@ body {
 }
 
 .modal-footer .btn {
-    padding: 8px 16px;
+    padding: 6px 10px;
     border: none;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     border-radius: 5px;
     min-width: 80px;
 }
@@ -614,6 +614,21 @@ body {
 
 .modal-footer .btn:hover {
     opacity: 0.8;
+}
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #7f8c8d;
+  transition: color 0.2s;
+  line-height: 1;
+  z-index: 1052;
+}
+.close:hover {
+  color: #2c3e50;
 }
 
 .dropdown-menu {
