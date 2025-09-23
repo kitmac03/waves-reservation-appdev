@@ -90,7 +90,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('res_num'); 
             $table->decimal('amount');
-            $table->string('number', 11);
+            $table->string('ref_num')->nullable();
             $table->string('img_proof', 255);
             $table->timestamp('date');
             $table->enum('status', ['verified', 'pending', 'invalid']);
