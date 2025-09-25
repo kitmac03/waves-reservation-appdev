@@ -41,7 +41,7 @@
                                 <div class="reservation-id">#{{ $res->id }}</div>
                                 <div class="reservation-amenity">
                                     <span class="material-icons">apartment</span>
-                                    {{ optional($res->reservedAmenities->first()->amenity)->name ?? 'No Amenity' }}
+                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
                                 </div>
                                 <div class="reservation-datetime">
                                     <div class="reservation-date">
@@ -103,7 +103,7 @@
                                 <div class="reservation-id">#{{ $res->id }}</div>
                                 <div class="reservation-amenity">
                                     <span class="material-icons">apartment</span>
-                                    {{ optional($res->reservedAmenities->first()->amenity)->name ?? 'No Amenity' }}
+                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
                                 </div>
                                 <div class="reservation-datetime">
                                     <div class="reservation-date">
@@ -134,7 +134,7 @@
                                 <div class="reservation-id">#{{ $res->id }}</div>
                                 <div class="reservation-amenity">
                                     <span class="material-icons">apartment</span>
-                                    {{ optional($res->reservedAmenities->first()->amenity)->name ?? 'No Amenity' }}
+                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
                                 </div>
                                 <div class="reservation-datetime">
                                     <div class="reservation-date">
