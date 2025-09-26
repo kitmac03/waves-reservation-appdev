@@ -182,7 +182,7 @@ body {
 /* Update the reservations container to remove the extra margin */
 .reservations-container {
     width: 100%;
-    max-width: 930px;
+    max-width: 1600px;
     margin: 0 auto; /* This will now properly center the container */
     font-family: 'Inter', -apple-system, sans-serif;
     color: var(--text-primary);
