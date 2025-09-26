@@ -11,12 +11,12 @@
 	<h2 class="head-title">All Reservations</h2>
 
 	<div class="status-bar">
-		<span style="color: blue;">● Fully Paid</span>
-		<span style="color: lightgreen;">● Partially Paid</span>
-		<span style="color: orange;">● With Downpayment</span>
-		<span style="color: yellow;">● No Downpayment</span>
-		<span style="color: red;">● Cancelled/Invalid</span>
-		<span style="color: rgb(51, 51, 51);">● Past</span>
+		<span style="color: blue;"> Fully Paid</span>
+		<span style="color: lightgreen;"> Partially Paid</span>
+		<span style="color: orange;"> With Downpayment</span>
+		<span style="color: yellow;"> No Downpayment</span>
+		<span style="color: red;"> Cancelled/Invalid</span>
+		<span style="color: rgb(51, 51, 51);"> Past</span>
 	</div>
 
 	<div class="reservations-container">
