@@ -83,7 +83,7 @@ class Reservation extends Model
 
     public function bill()
     {
-        return $this->hasOne(Bill::class, 'res_num', 'id');
+        return $this->hasOne(Bill::class, 'res_num', 'id')->withDefault();
     }
 
     public function customer()
@@ -94,5 +94,26 @@ class Reservation extends Model
     public function downPayment()
     {
         return $this->hasOne(DownPayment::class, 'res_num', 'id')->latestOfMany('date');
+    }
+
+    public function resource()
+    {
+    return $this->belongsTo(Amenities::class, 'amenity_id');
+    }
+
+    public function getTotalPriceAttribute()
+    {
+    $start = Carbon::parse($this->date . ' ' . $this->startTime, 'Asia/Manila');
+    $end   = Carbon::parse($this->date . ' ' . $this->endTime, 'Asia/Manila');
+
+    $hours = $start->diffInMinutes($end) / 60;
+
+    return $hours * ($this->resource->price ?? 0);
+    }
+
+    public function getHoursAttribute()
+    {
+    return \Carbon\Carbon::parse($this->startTime)
+        ->floatDiffInMinutes(\Carbon\Carbon::parse($this->endTime)) / 60;
     }
 }

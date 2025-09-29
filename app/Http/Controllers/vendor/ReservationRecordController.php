@@ -24,16 +24,18 @@ class ReservationRecordController extends Controller
     $vendor = auth('admin')->user();
 
     $reservations = Reservation::with([
-            'customer',
-            'reservedAmenities.amenity',
-            'bill.balance',
-            'downPayment'
+            'customer:id,name,number',
+            'reservedAmenities.amenity:id,name,price',
+            'bill:id,res_num,grand_total,status',
+            'bill.balance:id,bill_id,amount',
+            'downPayment:id,down_payment.res_num,amount,status,img_proof'
         ])
         ->whereIn('status', ['pending', 'verified'])
         ->whereHas('bill', function ($query) {
             $query->whereIn('status', ['partially paid', 'unpaid']);
         })
-        ->get();
+        ->select('id', 'res_num', 'customer_id', 'start_time', 'end_time') 
+        ->paginate(50);
 
     $reservations->each(function ($reservation) {
         $bill = $reservation->bill;
@@ -64,12 +66,14 @@ class ReservationRecordController extends Controller
         $vendor = auth('admin')->user();
     
         $reservations = Reservation::with([
-                'customer',
-                'reservedAmenities.amenity',
-                'bill.balance',
-                'downPayment'
+                'customer:id,name,number',
+                'reservedAmenities.amenity:id,name,price',
+                'bill:id,res_num,grand_total,status',
+                'bill.balance:id,bill_id,amount',
+                'downPayment:id,down_payment.res_num,amount,status,img_proof'
             ])
-            ->get();
+            ->select('id', 'res_num', 'customer_id', 'start_time', 'end_time') 
+            ->paginate(50);
     
         // Add computed attributes
         $reservations->each(function ($reservation) {
@@ -371,6 +375,10 @@ class ReservationRecordController extends Controller
         }
 
         // Calculate the total price
+        $start = Carbon::parse($request->startTime);
+        $end = Carbon::parse($request->endTime);
+        $hours = $end->floatDiffInHours($start);
+
         $total = 0;
 
         // Sum selected cottages
@@ -378,7 +386,7 @@ class ReservationRecordController extends Controller
             foreach ($request->cottages as $cottageId) {
                 $amenity = Amenities::find($cottageId);
                 if ($amenity) {
-                    $total += $amenity->price;
+                    $total += $amenity->price*$hours;
                 }
             }
         }
@@ -388,7 +396,7 @@ class ReservationRecordController extends Controller
             foreach ($request->tables as $tableId) {
                 $amenity = Amenities::find($tableId);
                 if ($amenity) {
-                    $total += $amenity->price;
+                    $total += $amenity->price*$hours;
                 }
             }
         }

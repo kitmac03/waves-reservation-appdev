@@ -97,11 +97,11 @@ class ReservationController extends Controller
         $amenities = Amenities::whereIn('id', $selectedAmenities)->get();
 
         // Calculate the total hours
-        $hours = Carbon::parse($startTime)->diffInHours(Carbon::parse($endTime));
+        $hours = Carbon::parse($startTime)->floatDiffInMinutes(Carbon::parse($endTime)) / 60;
 
         // Compute total cost
         foreach ($amenities as $amenity) {
-            $total += $amenity->price;
+            $total += $amenity->price*$hours;
         }
 
         // Update or create bill
@@ -312,13 +312,14 @@ class ReservationController extends Controller
 
 
         $total = 0;
+        $hours = Carbon::parse($startTime)->floatDiffInMinutes(Carbon::parse($endTime)) / 60;
 
         // Sum selected cottages
         if ($request->filled('cottages')) {
             foreach ($request->cottages as $cottageId) {
                 $amenity = Amenities::find($cottageId);
                 if ($amenity) {
-                    $total += $amenity->price;
+                    $total += $amenity->price*$hours;
                 }
             }
         }
@@ -328,7 +329,7 @@ class ReservationController extends Controller
             foreach ($request->tables as $tableId) {
                 $amenity = Amenities::find($tableId);
                 if ($amenity) {
-                    $total += $amenity->price;
+                    $total += $amenity->price*$hours;
                 }
             }
         }

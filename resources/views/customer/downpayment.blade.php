@@ -32,7 +32,9 @@
                 <h2 class="dp-title">WAVES <span class="text-gray-600">Beach Resort</span></h2>
                 <h3 class="text-lg font-semibold mt-4">Complete Your Reservation with a Down Payment</h5>
                     @php
-                        $total = optional($reservation->bill)->grand_total ?? 0;
+                        $total = $reservation->reservedAmenities->sum(function ($reserved) use ($reservation) {
+                            return $reserved->amenity->price * $reservation->hours;
+                        });
                         $downpayment = $total * 0.5;
                     @endphp
 
@@ -59,10 +61,13 @@
                                     <h6 class="text-xs font-semibold text-gray-700 mb-2">Payment Summary</h6>
                                     <ul class="text-xs text-gray-800 space-y-1 mb-2">
                                         @foreach ($reservation->reservedAmenities as $reserved)
+                                            @php
+                                                $hours = $reservation->hours;
+                                                $itemTotal = $reserved->amenity->price * $hours;
+                                            @endphp
                                             <li class="flex justify-between text-xs">
-                                                <span>{{ $reserved->amenity->name }}</span>
-                                                <span
-                                                    class="font-bold">₱{{ number_format($reserved->amenity->price, 2) }}</span>
+                                                <span>{{ $reserved->amenity->name }} (₱{{ number_format($reserved->amenity->price, 2) }} x {{ $hours }} hrs)</span>
+                                                <span class="font-bold">₱{{ number_format($itemTotal, 2) }}</span>
                                             </li>
                                         @endforeach
                                     </ul>

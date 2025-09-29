@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Bill extends Model
 {
@@ -28,12 +29,20 @@ class Bill extends Model
 
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class, 'res_num');
+        return $this->belongsTo(Reservation::class, 'res_num', 'id')->withDefault();
     }
 
     public function balance()
     {
         return $this->hasOne(Balance::class, 'bill_id');
+    }
+
+    public function getGrandTotalAttribute($value)
+    {
+        if ($this->reservation) {
+            return $this->reservation->total_price;
+        }
+        return $value;
     }
     
 }
