@@ -15,39 +15,37 @@
 
 <body>
     <header class="navbar">
-  <div class="logo">
-    <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo" />
-    <div class="logo-text">
-      <h1 class="title">WAVES</h1>
-      <p class="sub-title">Resort</p>
-    </div>
-  </div>
+        <div class="logo">
+            <div class="logo-text">
+                <h1 class="title">Waves</h1>
+                <p class="sub-title">Beach Resort</p>
+            </div>
+        </div>
 
-  <button class="navbar-toggler" onclick="toggleMenu()">
-    <i class="fa-solid fa-bars"></i>
-  </button>
+        <button class="navbar-toggler" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-  <nav class="nav-links" id="navMenu">
-    <a class="nav-link" href="{{ route('customer.about') }}">About</a>
-   
-      <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>
-      
-    <div class="profile-container">
+        <nav class="nav-links" id="navMenu">
+            <a class="nav-link" href="{{ route('customer.about') }}">About</a>
+            <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>
+
+            <div class="profile-container">
                 <i class="fas fa-user-circle" id="profile-icon" onclick="toggleDropdown(event)"></i>
                 <div class="dropdown-content" id="profileDropdown">
                     <a href="{{ route('customer.profile') }}">
                         <i class="fas fa-user"></i> Profile
                     </a>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
+                    <a href="#" id="logoutButton">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
             </div>
         </nav>
-</header>
+    </header>
 
     <main>
        <section class="welcome-section">
@@ -92,3 +90,4 @@
 </body>
 
 </html>
+
