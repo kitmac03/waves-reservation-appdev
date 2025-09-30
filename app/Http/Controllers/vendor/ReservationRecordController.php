@@ -23,29 +23,33 @@ class ReservationRecordController extends Controller
 {
     $vendor = auth('admin')->user();
 
-    $reservations = Reservation::with([
+    $reservations = Reservation::query()
+        ->select(['id','res_num','customer_id','start_time','end_time','status','date'])
+        ->with([
             'customer:id,name,number',
-            'reservedAmenities.amenity:id,name,price',
             'bill:id,res_num,grand_total,status',
-            'bill.balance:id,bill_id,amount',
-            'downPayment:id,down_payment.res_num,amount,status,img_proof'
+            'bill.balance:id,bill_id,amount', 
+            'reservedAmenities.amenity:id,name,price', // avoid on list
+            //'downPayment:id,res_num,amount,status,img_proof'
         ])
         ->whereIn('status', ['pending', 'verified'])
-        ->whereHas('bill', function ($query) {
-            $query->whereIn('status', ['partially paid', 'unpaid']);
-        })
-        ->select('id', 'res_num', 'customer_id', 'start_time', 'end_time') 
-        ->paginate(50);
+        ->whereHas('bill', fn($q) => $q->whereIn('status', ['partially paid','unpaid']))
+        ->latest('date')
+        ->paginate(20);
 
-    $reservations->each(function ($reservation) {
+        $resIds = collect($reservations->items())->pluck('id')->all();
+
+        $paidByRes = DownPayment::query()
+            ->whereIn('res_num', $resIds)
+            ->where('status', 'verified')
+            ->select('res_num', DB::raw('SUM(amount) as paid_amount'))
+            ->groupBy('res_num')
+            ->pluck('paid_amount', 'res_num');
+
+        foreach ($reservations as $reservation) {
         $bill = $reservation->bill;
-
-        $grandTotal = optional($bill)->grand_total ?? 0;
-
-        // Sum all verified down payments for this reservation
-        $paidAmount = DownPayment::where('res_num', $reservation->id)
-            ->whereIn('status', ['verified'])
-            ->sum('amount');
+        $grandTotal = optional($bill)->grand_total ?? 0.0;
+        $paidAmount = (float) ($paidByRes[$reservation->id] ?? 0.0);
 
         $reservation->paidAmount = $paidAmount;
         $reservation->grandTotal = $grandTotal;
@@ -56,7 +60,7 @@ class ReservationRecordController extends Controller
             : null;
 
         $reservation->downpayment_status = $reservation->downPayment->status ?? null;
-    });
+    }
 
         return view('admin.vendor.remainingbal', compact('reservations'));
     }
@@ -65,46 +69,53 @@ class ReservationRecordController extends Controller
     {
         $vendor = auth('admin')->user();
     
-        $reservations = Reservation::with([
+        $reservations = Reservation::query()
+            ->select(['id','res_num','customer_id','date','start_time','end_time','status'])
+            ->with([
                 'customer:id,name,number',
-                'reservedAmenities.amenity:id,name,price',
                 'bill:id,res_num,grand_total,status',
-                'bill.balance:id,bill_id,amount',
-                'downPayment:id,down_payment.res_num,amount,status,img_proof'
+                'downPayment:id,res_num,amount,status',
+                'reservedAmenities:id,res_num,amenity_id',
+                
             ])
-            ->select('id', 'res_num', 'customer_id', 'start_time', 'end_time') 
-            ->paginate(50);
+            ->latest('date')     
+            ->paginate(20); 
+
+        $resIds = collect($reservations->items())->pluck('id')->all();
+        $paidByRes = DownPayment::query()
+            ->whereIn('res_num', $resIds)
+            ->where('status', 'verified')
+            ->select('res_num', DB::raw('SUM(amount) as paid_amount'))
+            ->groupBy('res_num')
+            ->pluck('paid_amount', 'res_num');
     
         // Add computed attributes
-        $reservations->each(function ($reservation) {
-            $bill = $reservation->bill;
-            $grandTotal = optional($bill)->grand_total ?? 0;
-    
-            $paidAmount = DownPayment::where('res_num', $reservation->id)
-                            ->where('status', 'verified')
-                            ->sum('amount');
+        foreach ($reservations as $reservation) {
+        $grandTotal = optional($reservation->bill)->grand_total ?? 0.0;
+        $paidAmount = (float) ($paidByRes[$reservation->id] ?? 0.0);
     
             $reservation->paidAmount = $paidAmount;
             $reservation->grandTotal = $grandTotal;
             $reservation->balance = $grandTotal - $paidAmount;
-        });
+        };
     
+        $pageItems = collect($reservations->items());
         // Filter reservations from the collection
-        $pendingReservationsWithDP = $reservations->filter(function ($res) {
-            return $res->status === 'pending' && $res->downPayment;
-        });
-    
-        $pendingReservationsWithoutDP = $reservations->filter(function ($res) {
-            return $res->status === 'pending' && !$res->downPayment;
-        });
-    
-        $reservationsWithFullyPaidBills = $reservations->filter(function ($res) {
-            return $res->status === 'verified' && optional($res->bill)->status === 'paid';
-        });
-    
-        $reservationsWithPartialBills = $reservations->filter(function ($res) {
-            return $res->status === 'verified' && optional($res->bill)->status === 'partially paid';
-        });
+        $pendingReservationsWithDP = $pageItems->filter(fn($r) =>
+                $r->status === 'pending' && $paidByRes->has($r->id)
+            );
+
+            $pendingReservationsWithoutDP = $pageItems->filter(fn($r) =>
+                $r->status === 'pending' && !$paidByRes->has($r->id)
+            );
+
+            $reservationsWithFullyPaidBills = $pageItems->filter(fn($r) =>
+                $r->status === 'verified' && optional($r->bill)->status === 'paid'
+            );
+
+            $reservationsWithPartialBills = $pageItems->filter(fn($r) =>
+                $r->status === 'verified' && optional($r->bill)->status === 'partially paid'
+            );
     
         $paidReservations = $reservationsWithFullyPaidBills->merge($reservationsWithPartialBills);
     
