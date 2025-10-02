@@ -72,10 +72,7 @@
         <td>{{ $vendor->name }}</td>
         <td class="role">{{ $vendor->role }}</td>
         <td>
-          <button class="change-button"
-          onclick="openDialog('{{ $vendor->id }}', '{{ $vendor->name }}', '{{ $vendor->email }}', '{{ $vendor->number }}')">
-          Change role
-          </button>
+         
         </td>
         </tr>
       @endforeach
