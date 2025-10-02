@@ -584,11 +584,17 @@
 				// Populate amenities
 				const verifyAmenitiesList = document.getElementById('verifyAmenities');
 				verifyAmenitiesList.innerHTML = "";
+				const hrs = eventProps.hours ?? 0;
+
 				if (Array.isArray(eventProps.amenities) && eventProps.amenities.length > 0) {
 						eventProps.amenities.forEach(amenity => {
 							const li = document.createElement('li');
 							li.className = "flex justify-between";
-							li.innerHTML = `<span>${amenity.name || "Unknown"}</span><span class="font-bold">₱${parseFloat(amenity.price || 0).toFixed(2)}</span>`;
+							const price = parseFloat(amenity.price || 0).toFixed(2);
+							li.innerHTML = `
+								<span>${amenity.name || 'Unknown'}</span>
+								<span class="font-bold">₱${(parseFloat(price) * hrs).toFixed(2)}</span>
+							`;
 							verifyAmenitiesList.appendChild(li);
 						});
 				} else {
