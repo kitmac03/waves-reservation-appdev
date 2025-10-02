@@ -70,7 +70,7 @@
                         
                         <div class="cottage-content">
                             <h3>Standard Cottage</h3>
-                            <p>Comfortable bamboo cottage perfect for families and small groups. Includes basic amenities and beachfront location.</p>
+                            <p>Comfortable bamboo cottage perfect for families and small groups.</p>
                             
                             <table class="cottage-table">
                                 <tbody>
@@ -86,14 +86,10 @@
                                         <th>Amenities</th>
                                         <td>Table, Benches, Fan</td>
                                     </tr>
-                                    <tr>
-                                        <th>Rental Period</th>
-                                        <td>8 Hours</td>
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
                             
-                            <div class="capacity-highlight">Perfect for families of 6-8</div>
                         </div>
                     </div>
 
@@ -105,7 +101,7 @@
                         
                         <div class="cottage-content">
                             <h3>Deluxe Cottage</h3>
-                            <p>Spacious cottage with upgraded amenities, perfect for larger groups or special occasions.</p>
+                            <p>Spacious cottage perfect for larger groups or special occasions.</p>
                             
                             <table class="cottage-table">
                                 <tbody>
@@ -119,16 +115,12 @@
                                     </tr>
                                     <tr>
                                         <th>Amenities</th>
-                                        <td>Large Table, Cushioned Seats, Fan, Lights</td>
+                                        <td>Large Table, Seats, Fan</td>
                                     </tr>
-                                    <tr>
-                                        <th>Rental Period</th>
-                                        <td>8 Hours</td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                             
-                            <div class="capacity-highlight">Ideal for groups of 10-12</div>
                         </div>
                     </div>
 
@@ -154,16 +146,13 @@
                                     </tr>
                                     <tr>
                                         <th>Amenities</th>
-                                        <td>Premium Furniture, Charging Ports, Fan, Decor</td>
+                                        <td>Lounge, Charging Ports</td>
                                     </tr>
-                                    <tr>
-                                        <th>Rental Period</th>
-                                        <td>8 Hours</td>
+                                   
                                     </tr>
                                 </tbody>
                             </table>
                             
-                            <div class="capacity-highlight">Great for 8-10 guests</div>
                         </div>
                     </div>
 
@@ -193,10 +182,7 @@
                                 <span class="detail-label">Beach Umbrella</span>
                                 <span class="detail-value">Yes</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Rental Period</span>
-                                <span class="detail-value">8 Hours</span>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -218,10 +204,7 @@
                                 <span class="detail-label">Beach Umbrella</span>
                                 <span class="detail-value">Large Size</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Rental Period</span>
-                                <span class="detail-value">8 Hours</span>
-                            </div>
+                           
                         </div>
                     </div>
 
@@ -243,10 +226,7 @@
                                 <span class="detail-label">Beach Umbrella</span>
                                 <span class="detail-value">Premium Large</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Rental Period</span>
-                                <span class="detail-value">8 Hours</span>
-                            </div>
+                            
                         </div>
                     </div>
 

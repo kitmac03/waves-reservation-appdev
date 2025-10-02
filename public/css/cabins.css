@@ -31,7 +31,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 2rem;
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(237, 240, 247, 0.96);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
@@ -70,9 +70,10 @@ body {
 .logo-text .title {
     font-size: 2rem;
     font-weight: 800;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+   background: linear-gradient(135deg, 
+        rgba(14, 92, 126, 0.95) 0%, 
+        rgba(8, 69, 94, 0.98) 50%, 
+        rgba(6, 52, 71, 1) 100%);
     background-clip: text;
     line-height: 1;
     letter-spacing: -0.5px;
@@ -832,53 +833,7 @@ body {
     font-weight: 600;
 }
 
-/* Compact Capacity Highlight */
-.capacity-highlight {
-    display: inline-block;
-    background: #0e5c7e;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    margin-top: 12px;
-    font-size: 0.85rem;
-}
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .cottages-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .cottage-image {
-        height: 200px;
-    }
-    
-    .tables-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .cottage-content,
-    .table-card {
-        padding: 18px;
-    }
-    
-    .cottage-image {
-        height: 180px;
-    }
-    
-    .cottage-content h3 {
-        font-size: 1.3rem;
-    }
-    
-    .table-card h3 {
-        font-size: 1.2rem;
-    }
-}
 /* Improved Capacity Highlight */
 .capacity-highlight {
     display: inline-flex;

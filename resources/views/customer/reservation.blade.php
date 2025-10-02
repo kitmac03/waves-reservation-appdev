@@ -168,7 +168,7 @@
 <footer class="site-footer">
     <div class="footer-content">
         <div class="footer-bottom">
-            <p>All rights reserved.</p>
+        <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
         </div>
     </div>
 </footer>
