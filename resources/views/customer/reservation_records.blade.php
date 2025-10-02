@@ -48,6 +48,8 @@
                 <i class="fas fa-calendar-check"></i>
                 <span>Reservation</span>
             </a>
+             <a href="{{ route('customer.password') }}"><i class="fas fa-key"></i>
+                   Password</a>
 
         </div>
 
