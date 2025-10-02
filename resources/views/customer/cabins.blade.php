@@ -24,6 +24,7 @@
         </button>
 
         <nav class="nav-links" id="navMenu">
+            <a class="nav-link" href="{{ route('home') }}">Home</a>
             <a class="nav-link" href="{{ route('customer.about') }}">About</a>
             <a class="nav-link" href="{{ route('customer.cabins') }}">Cabins</a>
             <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>

@@ -163,7 +163,7 @@ background: linear-gradient(135deg,
     width: 44px;
     height: 44px;
     background: #2c3e50;
-    border-radius: 10px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
