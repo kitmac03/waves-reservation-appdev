@@ -21,12 +21,12 @@ class ReservedAmenity extends Model
     // Relationship to Amenity
     public function amenity()
     {
-        return $this->belongsTo(Amenities::class, 'amenity_id');
+        return $this->belongsTo(Amenities::class, 'amenity_id', 'id');
     }
 
     // Relationship to Reservation
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class, 'res_num');
+        return $this->belongsTo(Reservation::class, 'res_num','id');
     }
 }

@@ -24,13 +24,12 @@ class ReservationRecordController extends Controller
     $vendor = auth('admin')->user();
 
     $reservations = Reservation::query()
-        ->select(['id','res_num','customer_id','start_time','end_time','status','date'])
+        ->select(['id','res_num','customer_id','startTime','endTime','status','date'])
         ->with([
             'customer:id,name,number',
             'bill:id,res_num,grand_total,status',
             'bill.balance:id,bill_id,amount', 
             'reservedAmenities.amenity:id,name,price', // avoid on list
-            //'downPayment:id,res_num,amount,status,img_proof'
         ])
         ->whereIn('status', ['pending', 'verified'])
         ->whereHas('bill', fn($q) => $q->whereIn('status', ['partially paid','unpaid']))
@@ -70,7 +69,7 @@ class ReservationRecordController extends Controller
         $vendor = auth('admin')->user();
     
         $reservations = Reservation::query()
-            ->select(['id','res_num','customer_id','date','start_time','end_time','status'])
+            ->select(['id','res_num','customer_id','date','startTime','endTime','status'])
             ->with([
                 'customer:id,name,number',
                 'bill:id,res_num,grand_total,status',

@@ -81,7 +81,7 @@ class DownpaymentController extends Controller
                 ->first();
 
             if ($conflict) {
-                $conflictingAmenities[] = $reservedAmenity->amenity->name;
+                $conflictingAmenities[] = optional($reservedAmenity->amenity)->name;
             }
         }
 

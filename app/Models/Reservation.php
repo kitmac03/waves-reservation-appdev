@@ -21,17 +21,18 @@ class Reservation extends Model
 
     protected static function booted()
     {
-        static::retrieved(function ($reservation) {
-            if ($reservation->isPastDate()) {
-                if ($reservation->areBillsPaid()) {
-                    $reservation->markAsCompleted();
-                } elseif ($reservation->hasDownpayment() || $reservation->hasPartiallyPaidBill()) {
-                    $reservation->markAsCancelled();
-                } elseif (!$reservation->hasDownpayment()) {
-                    $reservation->markAsInvalid();
-                }
-            }
-        });
+         static::retrieved(function ($r) {
+        if (! $r->isPastDate()) return;
+
+        $new = $r->areBillsPaid() ? 'completed'
+             : ($r->hasPartiallyPaidBill() || $r->hasDownpayment() ? 'cancelled' : 'invalid');
+
+        if ($new !== $r->status) {
+            static::withoutEvents(function () use ($r, $new) {
+                $r->newQuery()->whereKey($r->getKey())->update(['status' => $new]);
+            });
+        }
+     });
     }
 
     public function isPastDate(): bool
@@ -42,43 +43,46 @@ class Reservation extends Model
 
     protected function hasDownpayment(): bool
     {
-        return $this->downPayment()->exists(); 
+        if ($this->relationLoaded('downPayment')) {
+        return !is_null($this->downPayment);
+        }
+        return $this->downPayment()->exists();
     }
 
     protected function areBillsPaid(): bool
     {
-        if (!$this->bill) {
-            return false;
+        if ($this->relationLoaded('bill')) {
+            return optional($this->bill)->status === 'paid';
         }
-        return $this->bill->status === 'paid';
+        return $this->bill()->exists() && $this->bill()->value('status') === 'paid';
     }
 
     protected function hasPartiallyPaidBill(): bool
     {
-        return $this->bill && $this->bill->status === 'partially paid';
+        if ($this->relationLoaded('bill')) {
+            return optional($this->bill)->status === 'partially paid';
+        }
+        return $this->bill()->exists() && $this->bill()->value('status') === 'partially paid';
     }
 
     public function markAsCompleted(): void
     {
-        $this->status = 'completed';
-        $this->save();
+        $this->forceFill(['status' => 'completed'])->save();
     }
 
     public function markAsInvalid(): void
     {
-        $this->status = 'invalid';
-        $this->save();
+        $this->forceFill(['status' => 'invalid'])->save();
     }
 
     public function markAsCancelled(): void
     {
-        $this->status = 'cancelled';
-        $this->save();
+        $this->forceFill(['status' => 'cancelled'])->save();
     }
 
     public function reservedAmenities()
     {
-        return $this->hasMany(ReservedAmenity::class, 'res_num');
+        return $this->hasMany(ReservedAmenity::class, 'res_num', 'id');
     }
 
     public function bill()
@@ -93,27 +97,32 @@ class Reservation extends Model
 
     public function downPayment()
     {
-        return $this->hasOne(DownPayment::class, 'res_num', 'id')->latestOfMany('date');
-    }
-
-    public function resource()
-    {
-    return $this->belongsTo(Amenities::class, 'amenity_id');
-    }
-
-    public function getTotalPriceAttribute()
-    {
-    $start = Carbon::parse($this->date . ' ' . $this->startTime, 'Asia/Manila');
-    $end   = Carbon::parse($this->date . ' ' . $this->endTime, 'Asia/Manila');
-
-    $hours = $start->diffInMinutes($end) / 60;
-
-    return $hours * ($this->resource->price ?? 0);
+            return $this->hasOne(\App\Models\DownPayment::class, 'res_num', 'id')
+                ->orderByDesc('date')
+                ->orderByDesc('id');
     }
 
     public function getHoursAttribute()
     {
-    return \Carbon\Carbon::parse($this->startTime)
-        ->floatDiffInMinutes(\Carbon\Carbon::parse($this->endTime)) / 60;
+        $start = $this->getAttribute('start_time');
+        $end   = $this->getAttribute('end_time');
+
+        if (!$start || !$end) {
+            return 0.0;
+        }
+
+        return \Carbon\Carbon::parse($start)
+            ->floatDiffInMinutes(\Carbon\Carbon::parse($end)) / 60;
+     }
+    public function getTotalPriceAttribute()
+    {
+        $hours = $this->hours;
+        $this->loadMissing('reservedAmenities.amenity');
+
+        return (float) $this->reservedAmenities->sum(function ($ra) use ($hours) {
+            return (optional($ra->amenity)->price ?? 0) * $hours;
+        });
     }
+
+
 }

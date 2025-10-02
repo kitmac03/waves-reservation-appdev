@@ -31,9 +31,18 @@
             <div class="receipt-container">
                 <h2 class="dp-title">WAVES <span class="text-gray-600">Beach Resort</span></h2>
                 <h3 class="text-lg font-semibold mt-4">Complete Your Reservation with a Down Payment</h5>
+                <pre>
+                    Reservation ID: {{ $reservation->id }}
+                    Reserved Amenities Count: {{ $reservation->reservedAmenities->count() }}
+                    @foreach($reservation->reservedAmenities as $ra)
+                        - Amenity: {{ optional($ra->amenity)->name }} | Price: {{ optional($ra->amenity)->price }}
+                    @endforeach
+                    </pre>
                     @php
-                        $total = $reservation->reservedAmenities->sum(function ($reserved) use ($reservation) {
-                            return $reserved->amenity->price * $reservation->hours;
+                        $hours = $reservation->hours ?? 0;
+                        $total = $reservation->reservedAmenities->sum(function ($reserved) use ($hours) {
+                            $price = optional($reserved->amenity)->price ?? 0;
+                            return $price * $hours;
                         });
                         $downpayment = $total * 0.5;
                     @endphp
@@ -62,11 +71,13 @@
                                     <ul class="text-xs text-gray-800 space-y-1 mb-2">
                                         @foreach ($reservation->reservedAmenities as $reserved)
                                             @php
-                                                $hours = $reservation->hours;
-                                                $itemTotal = $reserved->amenity->price * $hours;
+                                                $hours = $reservation->hours ?? 0;
+                                                $price    = optional($reserved->amenity)->price ?? 0;
+                                                $name     = optional($reserved->amenity)->name  ?? 'Amenity';
+                                                $itemTotal = $price * $hours;
                                             @endphp
                                             <li class="flex justify-between text-xs">
-                                                <span>{{ $reserved->amenity->name }} (₱{{ number_format($reserved->amenity->price, 2) }} x {{ $hours }} hrs)</span>
+                                                <span>{{ $name }} (₱{{ number_format($price, 2) }} x {{ $hours }} hrs)</span>
                                                 <span class="font-bold">₱{{ number_format($itemTotal, 2) }}</span>
                                             </li>
                                         @endforeach

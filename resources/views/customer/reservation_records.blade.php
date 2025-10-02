@@ -119,7 +119,7 @@
                 <div class="reservation-list" id="pending-reservations">
                     @forelse ($pendingReservations->sortBy(fn($reservation) => new DateTime($reservation->date . ' ' . $reservation->startTime)) as $reservation)
                         @php
-                            $statusColor = $reservation->downPayment ? 'orange' : 'yellow';
+                            $statusColor = ($reservation->paidAmount ?? 0) > 0 ? 'orange' : 'yellow';
                             $startTime = new DateTime($reservation->startTime ?? '00:00:00');
                             $startTimeFormatted = $startTime->format('h:i A');
                             $endTime = new DateTime($reservation->endTime ?? '00:00:00');
@@ -407,6 +407,7 @@
                     const reservationStart = this.getAttribute("data-start");
                     const reservationEnd = this.getAttribute("data-end");
                     const reservationStatus = this.getAttribute("data-status");
+                    
                     const statusElement = document.getElementById("status");
 
                     console.log("Reservation ID:", reservationId);

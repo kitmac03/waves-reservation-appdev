@@ -501,16 +501,38 @@ function removeAmenity(type, id) {
     }
 }
 
+function getReservedHours() {
+  const start = document.getElementById('startTime')?.value || document.getElementById('starttime')?.value || '';
+  const end   = document.getElementById('endTime')?.value   || document.getElementById('endtime')?.value   || '';
+
+  if (!start || !end) return 0;
+
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+
+  const startMin = sh * 60 + sm;
+  const endMin   = eh * 60 + em;
+
+  const diffMin = endMin - startMin;
+  if (diffMin <= 0) return 0; // invalid or zero-length
+
+  // exact decimal hours (e.g., 1.5 hours)
+  const hours = diffMin / 60;
+
+  return hours;
+}
+
 // Function to update total price
 function updateTotalPrice(amenities) {
     const totalAmount = document.getElementById('total-amount');
-    let total = 0;
+    const hours = getReservedHours();
+
+    let base = 0;
+    amenities.forEach(a => { base += Number(a.price) || 0; });
+
+    const total = base * hours;
     
-    amenities.forEach(amenity => {
-        total += amenity.price;
-    });
-    
-    totalAmount.textContent = `₱${total.toFixed(2)}`;
+    totalAmount.textContent = `₱${total.toFixed(2)}${hours ? ` (${hours} hr${hours === 1 ? '' : 's'})` : ''}`;
 }
 
 // Validation before form submission
@@ -596,11 +618,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Fetch updated amenities based on the new start and end times
         fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
+        updateSelectedAmenities();
     });
 
     document.getElementById("endTime").addEventListener("change", function () {
         // Fetch updated amenities based on the new end time
         fetchAvailableAmenities(getSelectedDate(), getStartTime(), getEndTime());
+        updateSelectedAmenities();
     });
 
     // Fetch and update available amenities when a date is selected
