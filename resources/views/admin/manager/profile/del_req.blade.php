@@ -43,7 +43,7 @@
           <li class="menu-item">Create Admin Account</li>
         </a>
         <a href="{{ route('admin.vendors.list') }}">
-          <li class="menu-item">List of Vendors</li>
+          <li class="menu-item">List of Admins</li>
         </a>
         <a href="{{ route('admin.delete.requests') }}">
           <li class="menu-item active">

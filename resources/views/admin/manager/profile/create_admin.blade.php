@@ -43,7 +43,7 @@
           <li class="menu-item active">Create Admin Account</li>
         </a>
         <a href="{{ route('admin.vendors.list') }}">
-          <li class="menu-item">List of Admin</li>
+          <li class="menu-item">List of Admins</li>
         </a>
         <a href="{{ route('admin.delete.requests') }}">
           <li class="menu-item">
@@ -90,14 +90,18 @@
         <input class="password-confirmation-input" type="password" name="password_confirmation"
           placeholder="Confirm Password" required>
 
-        <select class="select-role" name="role" required>
+        <!--<select class="select-role" name="role" required>
           <option disabled selected>Select admin role</option>
           <option value="Manager" {{ old('role') == 'Manager' ? 'selected' : '' }}>Manager</option>
           <option value="Vendor" {{ old('role') == 'Vendor' ? 'selected' : '' }}>Vendor</option>
         </select>
         @if ($errors->has('role'))
       <div class="error-message">{{ $errors->first('role') }}</div>
-    @endif
+    @endif*/--->
+
+        <input class="name-input" name="Role" placeholder="Admin" value="Admin" readonly>
+        <input type="hidden" name="role" value="Vendor">
+
 
         <div class="button-container">
           <button type="button" class="create-button" onclick="confirmDialog()">Create Account</button>
