@@ -41,19 +41,22 @@
     </div>
 
     <div class="right-side-nav">
-      @if($user->role === 'Manager')
-      <a href="{{ route('admin.manager.profile') }}">
-      <button class="profile">
-        <i class="material-icons" style="font-size:45px; color: white">account_circle</i>
-      </button>
-      </a>
-    @elseif($user->role === 'Vendor')
-      <a href="{{ route('admin.vendor.profile') }}">
-      <button class="profile">
-        <i class="material-icons" style="font-size:45px; color: white">account_circle</i>
-      </button>
-      </a>
-    @endif
+        @if($user->role === 'Manager')
+          <a href="{{ route('admin.manager.profile') }}" style="display: flex; align-items: center; text-decoration: none;">
+          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white">
+              {{ $user->name ?? 'Unknown User' }}
+            </span>  
+          <i class="material-icons" style="font-size:45px; color: white; margin-right: 50px;">account_circle</i>
+            
+          </a>
+        @elseif($user->role === 'Vendor')
+          <a href="{{ route('admin.vendor.profile') }}" style="display: flex; align-items: center; text-decoration: none;">
+          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white">
+              {{ $user->name ?? 'Unknown User' }}
+            </span>  
+          <i class="material-icons" style="font-size:45px; color: white; margin-right: 50px;">account_circle</i>
+          </a>
+        @endif
     </div>
   </nav>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

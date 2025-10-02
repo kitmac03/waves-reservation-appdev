@@ -75,6 +75,7 @@ class ReservationRecordController extends Controller
                 'bill:id,res_num,grand_total,status',
                 'downPayment:id,res_num,amount,status',
                 'reservedAmenities:id,res_num,amenity_id',
+                'reservedAmenities.amenity:id,name,price',
                 
             ])
             ->latest('date')     
