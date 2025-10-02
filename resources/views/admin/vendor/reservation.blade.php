@@ -25,7 +25,10 @@
 
 <body class="bg-gray-100 min-h-screen">
   <nav class="navbar">
-
+    @php
+    $user = \App\Models\Admin::find(Auth::id());
+    @endphp
+    
     <div class="left-side-nav">
       <a href="{{ route('admin.dashboard') }}">
         <button class="dashboard inactive" id="dashboard">
@@ -45,13 +48,12 @@
     </div>
 
     <div class="right-side-nav">
-      <a href="{{ route('admin.vendor.profile') }}">
-        <button class="profile">
-          <i class="material-icons" style="font-size:45px; color: white">
-            account_circle
-          </i>
-        </button>
-      </a>
+      <a href="{{ route('admin.vendor.profile') }}" style="display: flex; align-items: center; text-decoration: none;">
+          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white">
+              {{ $user->name ?? 'Unknown User' }}
+            </span>  
+          <i class="material-icons" style="font-size:45px; color: white; margin-right: 50px;">account_circle</i>
+          </a>
     </div>
   </nav>
   <main class="main">

@@ -43,7 +43,7 @@
     <div class="right-side-nav">
         @if($user->role === 'Manager')
           <a href="{{ route('admin.manager.profile') }}" style="display: flex; align-items: center; text-decoration: none;">
-          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white">
+          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white; font-family: sans-serif; font-weight: 550">
               {{ $user->name ?? 'Unknown User' }}
             </span>  
           <i class="material-icons" style="font-size:45px; color: white; margin-right: 50px;">account_circle</i>
@@ -51,7 +51,7 @@
           </a>
         @elseif($user->role === 'Vendor')
           <a href="{{ route('admin.vendor.profile') }}" style="display: flex; align-items: center; text-decoration: none;">
-          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white">
+          <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white; font-family: sans-serif; font-weight: 550">
               {{ $user->name ?? 'Unknown User' }}
             </span>  
           <i class="material-icons" style="font-size:45px; color: white; margin-right: 50px;">account_circle</i>
