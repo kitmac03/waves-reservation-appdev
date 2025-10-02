@@ -217,6 +217,8 @@ class ReservationRecordController extends Controller
                             ->whereIn('status', ['verified'])
                             ->sum('amount');
     
+                $hours = (float) ($reservation->hours ?? 0);
+
                 return [
                     'id' => $reservation->id,
                     'title' => ($reservation->customer->name ?? 'No Name') . ' | ' . 
@@ -233,6 +235,7 @@ class ReservationRecordController extends Controller
                         'date' => $reservation->date,
                         'start_time' => Carbon::parse($reservation->startTime ?? '00:00 AM')->format('g:i A'),
                         'end_time' => Carbon::parse($reservation->endTime ?? '00:00 PM')->format('g:i A'),
+                        'hours' => $hours,
                         'amenities' => $reservation->reservedAmenities->map(function ($reservedAmenity) {
                             return [
                                 'name' => $reservedAmenity->amenity->name ?? 'Unknown',
