@@ -15,10 +15,9 @@
 <body>
 <header class="navbar">
   <div class="logo">
-    <img src="{{ asset('images/logs.png') }}" alt="WAVES Logo" />
     <div class="logo-text">
-      <h1 class="title">WAVES</h1>
-      <p class="sub-title">Resort</p>
+      <h1 class="title">Waves</h1>
+      <p class="sub-title">Beach Resort</p>
     </div>
   </div>
 
@@ -27,8 +26,10 @@
   </button>
 
   <nav class="nav-links" id="navMenu">
-    <a href="#" class="nav-link active">Home</a>
+    <a href="#" class="nav-link">Home</a>
     <a href="#about" class="nav-link">About</a>
+   <a class="nav-link" href="{{ route('customer.cabins') }}">Cabins</a>
+
     @guest
       <a class="nav-link" href="{{ route('login') }}">Book</a>
     @endguest
