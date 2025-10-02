@@ -104,8 +104,8 @@ class Reservation extends Model
 
     public function getHoursAttribute()
     {
-        $start = $this->getAttribute('start_time');
-        $end   = $this->getAttribute('end_time');
+        $start = $this->getAttribute('startTime');
+        $end   = $this->getAttribute('endTime');
 
         if (!$start || !$end) {
             return 0.0;

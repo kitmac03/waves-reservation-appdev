@@ -70,10 +70,12 @@
           <div class="balance-header">
             <h2>Payment Details</h2>
             @php
-                $total = $reservation->reservedAmenities->sum(function ($reserved) use ($reservation) {
-                            return $reserved->amenity->price * $reservation->hours;
-                });
-                $downpayment = $total * 0.5;
+                  $hours = $reservation->hours ?? 0;
+                  $total = $reservation->reservedAmenities->sum(function ($reserved) use ($hours) {
+                      $price = optional($reserved->amenity)->price ?? 0;
+                      return $price * $hours;
+                  });
+                  $downpayment = $total * 0.5;
             @endphp
 
             @if ($errors->any())
@@ -116,8 +118,10 @@
                          <ul class="text-base text-gray-800 space-y-1 mb-2">
                             @foreach ($reservation->reservedAmenities as $reserved)
                               @php
-                                  $hours = $reservation->hours;
-                                  $itemTotal = $reserved->amenity->price * $hours;
+                                $hours = $reservation->hours ?? 0;
+                                $price    = optional($reserved->amenity)->price ?? 0;
+                                $name     = optional($reserved->amenity)->name  ?? 'Amenity';
+                                $itemTotal = $price * $hours;
                               @endphp
                               <li class="flex justify-between text-xs">
                                 <span>{{ $reserved->amenity->name }} (₱{{ number_format($reserved->amenity->price, 2) }} x {{ $hours }} hrs)</span>
