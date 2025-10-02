@@ -10,6 +10,7 @@ use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
 use App\Http\Controllers\Customer\PasswordController;
+use App\Http\Controllers\Customer\CabinsController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\EmptyyController;
 use App\Http\Controllers\Customer\RegisteredUserController;
@@ -66,6 +67,8 @@ Route::middleware('auth')->group(function () {
     ->name('password.update');
     Route::get('/customer/password', [PasswordController::class, 'index'])
     ->name('customer.password');
+    Route::get('/cabins', [CabinsController::class, 'showCabins'])
+    ->name('customer.cabins');
 
 
 });
