@@ -37,7 +37,7 @@ class Bill extends Model
         return $this->hasOne(Balance::class, 'bill_id');
     }
 
-    public function getGrandTotalAttribute($value)
+   public function getGrandTotalAttribute($value)
     {
         if ($this->reservation) {
             return $this->reservation->total_price;

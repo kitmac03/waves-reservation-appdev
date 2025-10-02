@@ -96,6 +96,8 @@
 						class="verify-btn {{ !$reservation->customer || !$reservation->customer->email ? 'w-full' : '' }}"
 						onclick='openPaymentModal(
 								"{{ $reservation->id }}", 
+								"{{ $reservation->res_num }}", 
+								"{{ $reservation->date }}",
 								"{{ $bill->id }}",
 								"{{optional($reservation->downPayment)->id }}",
 								@json($reservation->customer->name ?? "Unknown"),
@@ -163,7 +165,18 @@
 					
 					<div class="mb-4">
 						<h2 class="text-sm font-semibold text-gray-800"><span id="modalGustName"></span></h2>
-						<p class="text-sm text-gray-600"><span id="modalPhoneNumber"></span></p>
+						  <p class="text-sm text-gray-600">
+							<strong>Reservation #:</strong>
+							<span id="modalResNum"></span>
+						</p>
+						<p class="text-sm text-gray-600">
+							<strong>Date:</strong>
+							<span id="modalResDate"></span>
+						</p>
+
+						<p class="text-sm text-gray-600">
+							<span id="modalPhoneNumber"></span>
+						</p>
 					</div>
 
 					<div class="flex justify-between">
@@ -453,7 +466,7 @@
 			}
 		}
 
-		function openPaymentModal(reservationId, billId, dpId, name, total, downpayment, balance, amenities, downpayment_image, downpayment_status, hours) {
+		function openPaymentModal(reservationId,resNum, resDate, billId, dpId, name, total, downpayment, balance, amenities, downpayment_image, downpayment_status, hours) {
 			const modal = document.getElementById('paymentModal');
 			const minDp = total * 0.5;
 
@@ -462,6 +475,8 @@
 			document.getElementById('billId').value = billId;
 			document.getElementById('dp_id').value = dpId;
 			document.getElementById('dpStatus').innerText = downpayment_status;
+			document.getElementById('modalResNum').innerText  = resNum || '';
+  			document.getElementById('modalResDate').innerText = resDate || '';
 			document.getElementById('modalGustName').innerText = name;
 			document.getElementById('modalTotalAmount').innerText = `₱${total.toFixed(2)}`;
 			document.getElementById('modalDownpayment').innerText = `₱${minDp.toFixed(2)}`;
