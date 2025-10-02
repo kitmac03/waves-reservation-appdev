@@ -101,7 +101,8 @@
 								{{ $reservation->balance }},
 								@json($amenities),
 								@json($reservation->downPaymentImageUrl),
-								@json($reservation->downpayment_status)
+								@json($reservation->downpayment_status),
+								{{ (float) ($reservation->hours ?? 0) }} 
 						)'
 					>
 						Record Payment
@@ -160,6 +161,11 @@
 					<div class="mb-4">
 						<h2 class="text-sm font-semibold text-gray-800"><span id="modalGustName"></span></h2>
 						<p class="text-sm text-gray-600"><span id="modalPhoneNumber"></span></p>
+					</div>
+
+					<div class="flex justify-between">
+						<strong>Hours:</strong>
+						<span id="modalHours"></span>
 					</div>
 					
 					<div class="bg-gray-50 border border-gray-200 rounded-lg p-4 ps-10 mx-15 pe-10 mb-4">
@@ -444,7 +450,7 @@
 			}
 		}
 
-		function openPaymentModal(reservationId, billId, dpId, name, total, downpayment, balance, amenities, downpayment_image, downpayment_status) {
+		function openPaymentModal(reservationId, billId, dpId, name, total, downpayment, balance, amenities, downpayment_image, downpayment_status, hours) {
 			const modal = document.getElementById('paymentModal');
 			const minDp = total * 0.5;
 
@@ -536,8 +542,12 @@
 					nameSpan.textContent = item.name;
 				
 					const priceSpan = document.createElement('span');
+					const price = (parseFloat(item.price)).toFixed(2);
+					const hrs = Number(hours) || 0;
+					//const hrsText = `${hrs} hr${hrs === 1 ? '' : 's'}`;
+					//document.getElementById('modalHours').innerText = hrsText;
 					priceSpan.className = 'font-medium text-gray-900';
-					priceSpan.textContent = `₱${item.price}`;
+					priceSpan.textContent = `₱${(parseFloat(item.price) * hrs).toFixed(2)} (${item.price} x ${hrs} hrs)`;
 					
 					amenityDiv.appendChild(nameSpan);
 					amenityDiv.appendChild(priceSpan);
