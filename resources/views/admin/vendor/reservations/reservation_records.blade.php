@@ -262,19 +262,59 @@
 					document.getElementById("endTime").textContent = formattedEndTime;
 					console.log(reservationpaidAmount, reservationgrandTotal, reservationbalance);
 
-					const selectedReservation = amenities.find(r => r.id == reservationId);
+					const selectedReservation = (amenities || []).find(r => String(r.id) === String(reservationId));
+					const list = document.getElementById("modalAmenities");
 
-					if (selectedReservation) {
-						let amenitiesHtml = '';
+					let amenitiesHtml = '';
+					const items = (selectedReservation && Array.isArray(selectedReservation.reserved_amenities))
+					? selectedReservation.reserved_amenities
+					: [];
 
-						selectedReservation.reserved_amenities.forEach(amenity => {
+					if (!items.length) {
+						list.innerHTML = '<li>No amenities listed.</li>';
+						} else {
+						// compute hours (optional: shown below the times)
+						const computeHours = (start, end) => {
+							if (!start || !end) return 0;
+							const [sh, sm] = start.split(':').map(Number);
+							const [eh, em] = end.split(':').map(Number);
+							return Math.max(0, ((eh * 60 + em) - (sh * 60 + sm)) / 60);
+						};
+						const hours = computeHours(reservationStart, reservationEnd);
+						const hrsLabel = hours === 1 ? 'hr' : 'hrs';
+
+						 items.forEach((it) => {
+							const a = it?.amenity || {};
+    						const name = a.name ?? 'Amenity';
+
+							const unitPrice = Number(it?.price ?? a?.price ?? 0);
+							const lineTotal = hours > 0 ? unitPrice * hours : unitPrice;
+							const totalPrice = (unitPrice * hours) || unitPrice;
+							const priceDisplay = totalPrice.toFixed(2);
+
+							amenitiesHtml += 
+							'<li>' +
+								name + ' – ₱' + lineTotal.toFixed(2) +
+								(hours > 0
+								? ' <span class="text-gray-500">(₱' + unitPrice.toFixed(2) + ' × ' + hours + ' ' + hrsLabel + ')</span>'
+								: ''
+								) +
+							'</li>';
+						});
+
+						list.innerHTML = amenitiesHtml;
+						}
+					/*if (selectedReservation) {
+						
+
+						//selectedReservation.reserved_amenities.forEach(amenity => {
 							const amenityName = amenity.amenity.name;
 							const amenityPrice = amenity.amenity.price;
 							amenitiesHtml += `<li>${amenityName} - ₱${parseFloat(amenityPrice).toFixed(2)}</li>`;
 						});
 
 						document.getElementById("modalAmenities").innerHTML = amenitiesHtml;
-					}
+					}*/
 
 					document.querySelector(".reservation-details").classList.remove("hidden");
 				});

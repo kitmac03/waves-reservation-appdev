@@ -37,7 +37,7 @@
 
 	<div class="reservation-container">
 		<div class="header-row">
-				<div class="header-cell name-header">Name</div>
+				<div class="header-cell name-header">Name - Reservation Number</div>
 				<div class="header-cell calculation-header">Balance Calculation</div>
 				<div class="header-cell remaining-header">Remaining Balance</div>
 				<div class="header-cell remaining-header">Status</div>
@@ -47,6 +47,9 @@
 		<div class="reservation-item">
 				<div class="name-cell">
 					<span class="guest-name">{{ $reservation->customer->name ?? 'Unknown' }}</span>
+					<div class="guest-name">
+						{{ $reservation->id }}
+					</div>
 				</div>
 				<div class="calculation-cell">
 					@php
