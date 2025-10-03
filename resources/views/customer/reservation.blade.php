@@ -112,6 +112,8 @@
                                                 Available
                                             </div>
                                         </div>
+                                        <input type="checkbox" name="cottages[]" value="{{ $cottage->id }}" class="amenity-check" hidden>
+                                        <input type="hidden" name="prices[cottage][{{ $cottage->id }}]" value="{{ $cottage->price }}">
                                         <button type="button" class="select-btn">Select</button>
                                     </div>
                                 @endif
@@ -135,6 +137,8 @@
                                                 Available
                                             </div>
                                         </div>
+                                         <input type="checkbox" name="tables[]" value="{{ $table->id }}" class="amenity-check" hidden>
+                                         <input type="hidden" name="prices[table][{{ $table->id }}]" value="{{ $table->price }}">
                                         <button type="button" class="select-btn">Select</button>
                                     </div>
                                 @endif
@@ -153,6 +157,8 @@
                         <span id="total-amount">₱0.00</span>
                     </div>
                 </div>
+
+                <div id="hidden-selection-bucket"></div>
 
                 <!-- Error Message Container -->
                 <div id="error-message" class="error-message">
@@ -191,7 +197,9 @@
    
 
     <script>
+
         // Validation before form submission
+        /*
         function validateSelection() {
             const cottages = document.querySelectorAll('input[name="cottages[]"]:checked');
             const tables = document.querySelectorAll('input[name="tables[]"]:checked');
@@ -379,7 +387,7 @@
 
             updateImage();
         });
-
+        */
         document.addEventListener('DOMContentLoaded', function () {
             const logoutButton = document.getElementById('logoutButton');
             const logoutModal = document.getElementById('logoutModal');
@@ -537,9 +545,11 @@ function updateTotalPrice(amenities) {
     totalAmount.textContent = `₱${total.toFixed(2)}${hours ? ` (${hours} hr${hours === 1 ? '' : 's'})` : ''}`;
 }
 
+
+
 // Validation before form submission
 function validateSelection() {
-    const selectedAmenities = document.querySelectorAll('.amenity-card.selected');
+    const selectedAmenities = document.querySelectorAll('.amenity-check:checked');
     const startTime = document.getElementById("startTime").value;
     const endTime = document.getElementById("endTime").value;
     const errorMessageContainer = document.getElementById("error-message");
@@ -596,8 +606,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.select-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const card = this.closest('.amenity-card');
+            const checkbox = card.querySelector('.amenity-check');
             
-            if (card.classList.contains('selected')) {
+            /*if (card.classList.contains('selected')) {
                 // Deselect
                 card.classList.remove('selected');
                 this.textContent = 'Select';
@@ -607,7 +618,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 card.classList.add('selected');
                 this.textContent = 'Selected';
                 this.style.backgroundColor = 'var(--error-color)';
-            }
+            }*/
+
+                const selecting = !card.classList.contains('selected');
+                    card.classList.toggle('selected', selecting);
+                    this.textContent = selecting ? 'Selected' : 'Select';
+                    this.style.backgroundColor = selecting ? 'var(--error-color)' : '';
+
+                    // toggle form value
+                    if (checkbox) checkbox.checked = selecting;
             
             updateSelectedAmenities();
         });
@@ -732,6 +751,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Logout Modal Functions
+/*
 document.addEventListener('DOMContentLoaded', function () {
     const logoutButton = document.getElementById('logoutButton');
     const logoutModal = document.getElementById('logoutModal');
@@ -768,7 +788,7 @@ function closeModal(id) {
     const modal = document.getElementById(id);
     if (modal) modal.style.display = 'none';
 }
-
+*/
 // Toggle mobile menu
 function toggleMenu() {
     const navMenu = document.getElementById('navMenu');

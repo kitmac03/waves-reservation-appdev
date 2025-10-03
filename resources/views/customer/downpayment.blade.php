@@ -31,13 +31,14 @@
             <div class="receipt-container">
                 <h2 class="dp-title">WAVES <span class="text-gray-600">Beach Resort</span></h2>
                 <h3 class="text-lg font-semibold mt-4">Complete Your Reservation with a Down Payment</h5>
-                <pre>
-                    Reservation ID: {{ $reservation->id }}
-                    Reserved Amenities Count: {{ $reservation->reservedAmenities->count() }}
-                    @foreach($reservation->reservedAmenities as $ra)
-                        - Amenity: {{ optional($ra->amenity)->name }} | Price: {{ optional($ra->amenity)->price }}
-                    @endforeach
-                    </pre>
+                <div class="w-full p-1 mb-1">
+                <h4 class="text-gray-800 space-y-1 mb-2" style="text-align: left; font-size: 13px; font-weight: bold;">
+                    Reservation ID: {{ $reservation->id }} <br>
+                    Customer Name: {{ $reservation->customer->name }} <br>
+                    Reservation Date: {{ \Carbon\Carbon::parse($reservation->reservation_date)->format('F d, Y') }} <br>
+                    Reservation Time: {{ \Carbon\Carbon::parse($reservation->startTime)->format('h:i A') }} - {{ \Carbon\Carbon::parse($reservation->endTime)->format('h:i A') }}
+                </h4>
+                </div>
                     @php
                         $hours = $reservation->hours ?? 0;
                         $total = $reservation->reservedAmenities->sum(function ($reserved) use ($hours) {
