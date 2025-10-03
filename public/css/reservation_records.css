@@ -82,7 +82,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(49, 105, 109, 0.751);
+    color: #2c3e50;
     font-size: 1.8rem;
 }
 
@@ -111,13 +111,13 @@ body {
 }
 
 .menu a:hover {
-    color: rgba(49, 105, 109, 0.751);
+    color: #18477c;
     background: var(--primary-light);
 }
 
 .menu a.active {
     color: var(--white);
-    background: rgba(49, 105, 109, 0.751);
+    background:#133f79;
     font-weight: 500;
 }
 

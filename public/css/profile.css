@@ -61,7 +61,7 @@ body {
 }
 
 .back-link:hover {
-    color: rgba(49, 105, 109, 0.751);
+    color:#2c3e50;
     background: var(--primary-light);
 }
 
@@ -85,7 +85,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(49, 105, 109, 0.751);
+    color: #2c3e50;
     font-size: 1.8rem;
 }
 
@@ -114,13 +114,13 @@ body {
 }
 
 .menu a:hover {
-    color: rgba(49, 105, 109, 0.751);
+    color: #18477c;
     background: var(--primary-light);
 }
 
 .menu a.active {
     color: var(--white);
-    background: rgba(49, 105, 109, 0.751);
+    background: #133f79;
     font-weight: 500;
 }
 
@@ -185,7 +185,7 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: linear-gradient(135deg, #3e8388 0%, #288c90 100%);
+    background: #496682;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,7 +256,7 @@ body {
 }
 
 .edit-btn {
-    background-color: rgba(49, 105, 109, 0.751);
+    background-color: #133f79;
     color: white;
     padding: 0.75rem 2rem;
     border-radius: 8px;
@@ -457,12 +457,12 @@ body {
 }
 
 .primary-btn {
-    background: rgba(49, 105, 109, 0.751);
+    background: #18477c;
     color: var(--white);
 }
 
 .primary-btn:hover {
-    background: rgba(49, 105, 109, 0.751);
+    background:#18477c;
 }
 
 .secondary-btn {
