@@ -246,8 +246,10 @@ class ReservationController extends Controller
             'date' => 'required|date',
             'startTime' => 'required|date_format:H:i',
             'endTime' => 'required|date_format:H:i|after:startTime',
-            'cottage' => 'nullable|exists:amenities,id',
-            'tables' => 'nullable|exists:amenities,id',
+            'cottages' => 'nullable|array',
+            'cottages.*' => 'exists:amenities,id',
+            'tables' => 'nullable|array',
+            'tables.*' => 'exists:amenities,id',
         ]);
 
         if ($validator->fails()) {
@@ -301,7 +303,7 @@ class ReservationController extends Controller
         // Save selected table if present
         if ($request->has('tables')) {
             foreach ($request->input('tables') as $tableId) {
-                if (!empty($cottageId)) {
+                if (!empty($tableId)) {
                     ReservedAmenity::create([
                         'res_num' => $reservation->id,
                         'amenity_id' => $tableId,

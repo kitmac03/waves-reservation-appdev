@@ -460,10 +460,20 @@
 // Function to update selected amenities display
 function updateSelectedAmenities() {
     const container = document.getElementById('selected-amenities-container');
-    const selectedAmenities = [];
+    const checked = document.querySelectorAll('.amenity-check:checked');
+    //const selectedAmenities = [];
     
+    const selectedAmenities = Array.from(checked).map(input => {
+    const card  = input.closest('.amenity-card');
+    return {
+      id:   card.getAttribute('data-id'),
+      type: card.getAttribute('data-type'),
+      name: card.querySelector('.amenity-name')?.textContent?.trim() || '',
+      price: parseFloat(card.getAttribute('data-price')) || 0
+    };
+    });
     // Get all selected amenities
-    const selectedCards = document.querySelectorAll('.amenity-card.selected');
+    /*const selectedCards = document.querySelectorAll('.amenity-card.selected');
     selectedCards.forEach(card => {
         const id = card.getAttribute('data-id');
         const type = card.getAttribute('data-type');
@@ -476,7 +486,7 @@ function updateSelectedAmenities() {
             name: name,
             price: price
         });
-    });
+    });*/
     
     // Update the display
     container.innerHTML = '';
@@ -502,14 +512,15 @@ function updateSelectedAmenities() {
 // Function to remove an amenity
 function removeAmenity(type, id) {
     const card = document.querySelector(`.amenity-card[data-type="${type}"][data-id="${id}"]`);
-    if (card) {
+     if (!card) return;
         card.classList.remove('selected');
-        const button = card.querySelector('.select-btn');
-        button.textContent = 'Select';
-        button.style.backgroundColor = '';
+        const btn = card.querySelector('.select-btn');
+        if (btn) { btn.textContent = 'Select'; btn.style.backgroundColor = ''; }
+        const checkbox = card.querySelector('.amenity-check');
+        if (checkbox) checkbox.checked = false;
         updateSelectedAmenities();
     }
-}
+
 
 function getReservedHours() {
   const start = document.getElementById('startTime')?.value || document.getElementById('starttime')?.value || '';
@@ -540,7 +551,7 @@ function updateTotalPrice(amenities) {
     let base = 0;
     amenities.forEach(a => { base += Number(a.price) || 0; });
 
-    const total = base * hours;
+    let total = hours > 0 ? base * hours : base;
     
     totalAmount.textContent = `₱${total.toFixed(2)}${hours ? ` (${hours} hr${hours === 1 ? '' : 's'})` : ''}`;
 }

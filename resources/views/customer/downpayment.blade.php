@@ -35,7 +35,7 @@
                 <h4 class="text-gray-800 space-y-1 mb-2" style="text-align: left; font-size: 13px; font-weight: bold;">
                     Reservation ID: {{ $reservation->id }} <br>
                     Customer Name: {{ $reservation->customer->name }} <br>
-                    Reservation Date: {{ \Carbon\Carbon::parse($reservation->reservation_date)->format('F d, Y') }} <br>
+                    Reservation Date: {{ \Carbon\Carbon::parse($reservation->date)->format('F d, Y') }} <br>
                     Reservation Time: {{ \Carbon\Carbon::parse($reservation->startTime)->format('h:i A') }} - {{ \Carbon\Carbon::parse($reservation->endTime)->format('h:i A') }}
                 </h4>
                 </div>
