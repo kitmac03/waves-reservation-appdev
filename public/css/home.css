@@ -576,7 +576,7 @@ background: linear-gradient(135deg,
 /* Resort Preview */
 .top-cards {
   padding: 60px 20px;
-  background-color: #e0f7fa;
+  background-color: #ebf4f6;
 }
 
 .heading2 {
@@ -618,7 +618,7 @@ background: linear-gradient(135deg,
 .site-footer {
   text-align: center;
   padding: 30px;
-  background-color: #7CB9BC;
+  background: linear-gradient(135deg, #1a3c4a 0%, #2c3e50 100%);
   color: white;
 }
 
