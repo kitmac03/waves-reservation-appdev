@@ -15,10 +15,10 @@
 <body>
 <header class="navbar">
   <div class="logo">
-    <div class="logo-text">
-      <h1 class="title">Waves</h1>
-      <p class="sub-title">Beach Resort</p>
-    </div>
+            <a href="{{ route('home') }}" class="logo-text" style="text-decoration: none; color: inherit;">
+                    <h1 class="title">Waves</h1>
+                    <p class="sub-title">Beach Resort</p>
+            </a>
   </div>
 
   <button class="navbar-toggler" onclick="toggleMenu()">
@@ -26,7 +26,7 @@
   </button>
 
   <nav class="nav-links" id="navMenu">
-    <a href="#" class="nav-link">Home</a>
+    <a href="{{ route('home') }}"  class="nav-link">Home</a>
     <a href="#about" class="nav-link">About</a>
    <a class="nav-link" href="{{ route('customer.cabins') }}">Cabins</a>
 

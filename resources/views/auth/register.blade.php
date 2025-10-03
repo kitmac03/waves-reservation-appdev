@@ -10,7 +10,7 @@
 
 <body>
     <div class="container">
-        <h1 class="title">WAVES</h1>
+        <a href="{{ route('home') }}" class="title" style="text-decoration: none;">WAVES</a>
         <h2 class="subtitle">Beach Resort</h2>
         <form method="POST" action="{{ route('cust.register') }}">
             @csrf <!-- Include CSRF token for security -->
