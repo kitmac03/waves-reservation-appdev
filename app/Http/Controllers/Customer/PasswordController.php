@@ -17,7 +17,7 @@ class PasswordController extends Controller
     }
 
     // Handle password update
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $request->validate([
             'current_password'      => ['required'],
