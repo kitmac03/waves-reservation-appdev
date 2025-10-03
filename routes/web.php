@@ -30,6 +30,7 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('cust
 Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 Route::post('/send-reminder', [ReservationController::class, 'sendReminder'])->name('send-reminder');
 Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
+Route::get('/cabins', [CabinsController::class, 'showCabins'])->name('customer.cabins');
 
 // Customer Routes
 Route::middleware('auth')->group(function () {
@@ -67,8 +68,7 @@ Route::middleware('auth')->group(function () {
     ->name('password.update');
     Route::get('/customer/password', [PasswordController::class, 'index'])
     ->name('customer.password');
-    Route::get('/cabins', [CabinsController::class, 'showCabins'])
-    ->name('customer.cabins');
+    
 
 
 });
