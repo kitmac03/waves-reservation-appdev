@@ -29,6 +29,7 @@
 				</div>
 
 				<div class="py-2 text-gray-600">
+					<p>Reservation #: <span id="modalResNum"></span></p>
 					<p>Date: <span id="modalDate"> </span></p>
 					<p>Start Time: <span id="modalStartTime"></span></p>
 					<p>End Time: <span id="modalEndTime"></span></p>
@@ -86,6 +87,9 @@
 						<!-- Customer Details -->
 						<div class="mb-4">
 								<h2 class="text-xl font-semibold text-gray-800"><span id="verifyCustomerName"></span></h2>
+								 <p class="text-sm text-gray-600">
+									<strong>Reservation #:</strong> <span id="verifyResNum"></span> <!-- ⬅️ add this -->
+								</p>
 								<p><span id="modalPhoneNumber"></span></p>
 						</div>
 					
@@ -391,6 +395,7 @@
 						const amenities = eventProps.amenities || [];
 
 						// Basic information
+						document.getElementById('modalResNum').textContent = info.event.id || "N/A";
 						document.getElementById('modalCustomerName').textContent = eventProps.customer_name || "Unknown";
 						document.getElementById('modalPhoneNumber').textContent = eventProps.phone_number || "N/A";
 						document.getElementById('modalDate').textContent = eventProps.date || "N/A";
@@ -422,7 +427,7 @@
     							const hrs = eventProps.hours ?? 0;
 
 								if (typeof amenity === 'object' && amenity.name && amenity.price !== undefined) {
-										li.innerHTML = `<span>${amenity.name}</span><span class="font-bold"> - ₱${(parseFloat(amenity.price) * hrs).toFixed(2)}</span>`;
+										li.innerHTML = `<span>${amenity.name} (₱${price} x ${hrs} hrs)</span><span class="font-bold"> - ₱${(parseFloat(amenity.price) * hrs).toFixed(2)}</span>`;
 								} else {
 										li.innerHTML = `<span>${amenity}</span><span class="font-bold"> - ₱0.00</span>`; // Fallback if data is missing
 								}
@@ -543,13 +548,16 @@
 				const dp_id = eventProps.dp_id || "";
 				const dpIdInput = document.getElementById('dp_id');
 
+
 				// Populate verify modal
 				document.getElementById('reservationId').value = reservationId;
+				document.getElementById('verifyResNum').textContent = reservationId || '';
 				document.getElementById('billId').value = billId;
 				document.getElementById('dp_id').value = dp_id;
 				document.getElementById('verifyCustomerName').textContent = eventProps.customer_name || "Unknown";
 				document.getElementById('modalPhoneNumber').textContent = eventProps.phone_number || "N/A";
 				document.getElementById('verifyReferenceNumber').textContent = eventProps.ref_num || "N/A";
+				document.getElementById('verifyModalBackdrop').classList.remove("opacity-0","pointer-events-none");
 
 				// Status display
 				const downpaymentStatusEl = document.getElementById('dpStatus');

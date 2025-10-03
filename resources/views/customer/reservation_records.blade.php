@@ -232,6 +232,8 @@
                     </p>
 
                     <p><span id="startTime"></span> - <span id="endTime"></span></p>
+                    <p><strong>Reservation ID:</strong> <span id="modalReservationId"></span></p>
+                    <p><strong>Hours:</strong> <span id="modalHours"></span></p>
                     <ul id="modalAmenities"></ul>
                     <div id="invalidMessage" class="bg-red-100 text-red-500 rounded-md text-xs p-2">
                         <p>Down payment is invalid. Please submit it again.</p>
@@ -364,6 +366,22 @@
                 errorMessageContainer.style.display = "none";
                 return true; // Allow form submission
             }
+
+        function calculateHours(start, end) {
+                if (!start || !end) return 0;
+
+                const toMinutes = t => {
+                    const [h, m] = t.split(':').map(Number);
+                    return h * 60 + m;
+                };
+
+                const startMin = toMinutes(start);
+                const endMin = toMinutes(end);
+                const diff = endMin - startMin;
+
+                return diff > 0 ? (diff / 60).toFixed(2) : 0; // decimal hours
+            }
+
         function convertTo24HourFormat(time) {
             // Ensure the time string is in the correct format (12-hour with AM/PM)
             const regex = /(\d{1,2}):(\d{2})\s([APap][Mm])/;  // Matches "2:30 PM", "10:45 am"
@@ -416,6 +434,7 @@
 
                     // Populate modal fields
                     document.querySelector(".reservation-id").textContent = `#${reservationId}`;
+                    document.getElementById("modalReservationId").textContent = reservationId;
                     document.getElementById("name").textContent = reservationName || '';
                     document.getElementById("date").textContent = reservationDate || '';
                     document.getElementById("grandTotal").textContent = `Total: ₱${reservationGrandTotal || 0}`;
@@ -423,7 +442,11 @@
                     document.getElementById("balance").textContent = `Balance: ₱${reservationBalance || 0}`;
                     document.getElementById("startTime").textContent = reservationStart || '';
                     document.getElementById("endTime").textContent = reservationEnd || '';
-
+                    const hours = calculateHours(
+                        convertTo24HourFormat(reservationStart),
+                        convertTo24HourFormat(reservationEnd)
+                    );
+                    document.getElementById("modalHours").textContent = `${hours} hr${hours == 1 ? '' : 's'}`;
                     // Set status
                     if (statusElement) {
                         const capitalizedStatus = reservationStatus.charAt(0).toUpperCase() + reservationStatus.slice(1);
@@ -451,12 +474,18 @@
 
                     // Fetch and display amenities
                     const selectedReservation = amenities.find(r => r.id == reservationId);
+
                     if (selectedReservation) {
                         let amenitiesHtml = '';
                         selectedReservation.reserved_amenities.forEach(amenity => {
                             const amenityName = amenity.amenity.name;
                             const amenityPrice = amenity.amenity.price;
-                            amenitiesHtml += `<li>${amenityName} - ₱${parseFloat(amenityPrice).toFixed(2)}</li>`;
+                            const hours = calculateHours(
+                                convertTo24HourFormat(reservationStart),
+                                convertTo24HourFormat(reservationEnd)
+                            );
+                            const lineTotal = amenityPrice * hours;
+                            amenitiesHtml += `<li>${amenityName} (₱${amenityPrice} x ${hours} hrs) - ₱${parseFloat(lineTotal).toFixed(2)}</li>`;
                         });
                         document.getElementById("modalAmenities").innerHTML = amenitiesHtml;
                     }

@@ -43,7 +43,7 @@
 						data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
 						data-status="{{ $reservation->status }}"
 						style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-						<strong>{{ $reservation->customer->name ?? 'Unknown' }}</strong><br>
+						<strong>{{ $reservation->customer->name ?? 'Unknown' }} <br> {{ $reservation->id }}</strong><br>
 						@php
 
 							$date = new DateTime($reservation->date);
@@ -79,7 +79,7 @@
 						data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
 						data-status="{{ $reservation->status }}"
 						style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-						<strong>{{ $reservation->customer->name ?? 'Unknown' }}</strong><br>
+						<strong>{{ $reservation->customer->name ?? 'Unknown' }} <br> {{ $reservation->id }}</strong><br>
 						@php
 
 							$date = new DateTime($reservation->date);
@@ -117,7 +117,7 @@
 						data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
 						data-status="{{ $reservation->status }}"
 						style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-						<strong>{{ $reservation->customer->name ?? 'Unknown Customer' }}</strong><br>
+						<strong>{{ $reservation->customer->name ?? 'Unknown' }} <br> {{ $reservation->id }}</strong><br>
 						{{ $date->format('Y-m-d') }} |
 						{{ $startTime->format('g:i A') }} -
 						{{ $endTime->format('g:i A') }}
@@ -148,7 +148,7 @@
 						data-start="{{ $reservation->startTime }}" data-end="{{ $reservation->endTime }}"
 						data-status="{{ $reservation->status }}"
 						style="border-left: 5px solid {{ $statusColor }}; cursor: pointer;">
-						<strong>{{ $reservation->customer->name ?? 'Unknown' }}</strong><br>
+						<strong>{{ $reservation->customer->name ?? 'Unknown' }} <br> {{ $reservation->id }}</strong><br>
 						@php
 							$date = new DateTime($reservation->date);
 							$startTime = new DateTime($reservation->startTime);

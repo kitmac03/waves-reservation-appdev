@@ -6,8 +6,8 @@
   <tr>
     <th>ID</th>
     <th>Name</th>
-    <th>Price</th>
-    <th>Actions</th>
+    <th>Price/hour</th>
+    <th style = "padding-left:50px;" >Actions</th>
   </tr>
 
   @foreach($amenities as $amenity)
@@ -19,19 +19,27 @@
         <div class="button-wrapper">
           @if($amenity->is_active)
             <!-- Edit Button -->
-            <i class="material-icons edit-icon" onclick="openEditModal({{ $amenity->id }}, '{{ $amenity->name }}', {{ $amenity->price }}, '{{ $amenity->type }}')">edit</i>
+            <button type="button" class="archive-button" 
+                  onclick="openEditModal({{ $amenity->id }}, '{{ $amenity->name }}', {{ $amenity->price }}, '{{ $amenity->type }}')">
+              <i class="material-icons" style = "font-size:15px; py:0.5;">edit</i> Edit
+          </button>
             <!-- Archive Button -->
             <form action="{{ route('amenitys.archive', $amenity->id) }}" method="POST" style="display:inline;">
               @csrf
               @method('PATCH')
-              <button type="submit" class="archive-button">Archive</button>
+              <button type="submit" class="archive-button">
+                <i class="material-icons" style = "font-size:15px; py:0.5;">archive</i>Archive
+              </button>
+              
             </form>
           @else
             <!-- Unarchive Button -->
             <form action="{{ route('amenitys.unarchive', $amenity->id) }}" method="POST" style="display:inline;">
               @csrf
               @method('PATCH')
-              <button type="submit" class="unarchive-button">Unarchive</button>
+              <button type="submit" class="unarchive-button">
+                <i class="material-icons" style = "font-size:15px; py:0.5;">unarchive</i>Unarchive
+              </button>
             </form>
           @endif
         </div>
@@ -49,7 +57,7 @@
       <input type="hidden" id="edit_id" name="id">
       <label class="block mb-2">{{ ucfirst($type) }} Name</label>
       <input type="text" id="edit_name" name="name" required class="border border-gray-300 px-3 py-2 w-full rounded-md mb-4">
-      <label class="block mb-2">Price</label>
+      <label class="block mb-2">Price/hour</label>
       <input type="number" id="edit_price" name="price" required step="0.01" class="border border-gray-300 px-3 py-2 w-full rounded-md mb-4">
       <div class="flex justify-end">
         <button type="button" onclick="closeEditModal()" class="cancel-button">Cancel</button>

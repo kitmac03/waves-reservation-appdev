@@ -52,7 +52,7 @@
           <span class="text-white font-semibold" style="margin-right: 8px; font-size: 20px; color: white">
               {{ $user->name ?? 'Unknown User' }}
             </span>  
-          <i class="material-icons" style="font-size:45px; color: white; margin-right: 50px;">account_circle</i>
+          <i class="material-icons" style="font-size:40px; color: white; margin-right: 60px;">account_circle</i>
             
           </a>
     </div>
@@ -87,9 +87,11 @@
           </div>
   
           <div class="py-2 text-gray-600">
+			<p>Reservation #: <span id="modalResNum"></span></p>
             <p>Date: <span id="modalDate"> </span></p>
             <p>Start Time: <span id="modalStartTime"></span></p>
             <p>End Time: <span id="modalEndTime"></span></p>
+			<p>Hours: <span id="modalHours"></span></p>
   
             <h3 class="font-semibold mt-3">Amenities Reserved:</h3>
             <ul id="modalAmenities" class="list-disc pl-5"></ul>
@@ -142,7 +144,10 @@
               <!-- Customer Details -->
               <div class="mb-4">
                   <h2 class="text-xl font-semibold text-gray-800"><span id="verifyCustomerName"></span></h2>
-                  <p><span id="modalPhoneNumber"></span></p>
+                  <p class="text-sm text-gray-600">
+						<strong>Reservation #:</strong> <span id="verifyResNum"></span> <!-- ⬅️ add this -->
+						</p>
+				  <p><span id="modalPhoneNumber"></span></p>
               </div>
             
               <!-- Bill Details -->
@@ -440,12 +445,13 @@
 						const amenities = eventProps.amenities || [];
 
 						// Basic information
+						document.getElementById('modalResNum').textContent = info.event.id || "N/A";
 						document.getElementById('modalCustomerName').textContent = eventProps.customer_name || "Unknown";
 						document.getElementById('modalPhoneNumber').textContent = eventProps.phone_number || "N/A";
 						document.getElementById('modalDate').textContent = eventProps.date || "N/A";
 						document.getElementById('modalStartTime').textContent = eventProps.start_time || "N/A";
 						document.getElementById('modalEndTime').textContent = eventProps.end_time || "N/A";
-
+						document.getElementById('modalHours').textContent = (eventProps.hours ?? 0) + ' hr' + ((eventProps.hours ?? 0) === 1 ? '' : 's');
 						// Status display
 						const statusEl = document.getElementById('modalStatus');
 						const billStatus = eventProps.bill_status || "unpaid";
@@ -466,9 +472,11 @@
 							amenities.forEach(amenity => {
 								const li = document.createElement('li');
 								li.className = "list-none";
+								const price = parseFloat(amenity.price || 0).toFixed(2);
+    							const hrs = eventProps.hours ?? 0;
 
 								if (typeof amenity === 'object' && amenity.name && amenity.price !== undefined) {
-										li.innerHTML = `<span>${amenity.name}</span><span class="font-bold"> - ₱${parseFloat(amenity.price).toFixed(2)}</span>`;
+										li.innerHTML = `<span>${amenity.name} (₱${price} x ${hrs} hrs)</span><span class="font-bold"> - ₱${(parseFloat(amenity.price) * hrs).toFixed(2)}</span>`;
 								} else {
 										li.innerHTML = `<span>${amenity}</span><span class="font-bold"> - ₱0.00</span>`; // Fallback if data is missing
 								}

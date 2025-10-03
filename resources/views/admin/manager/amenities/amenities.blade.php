@@ -89,7 +89,7 @@
         <form action="{{ route('amenities.store') }}" method="POST" class="inline-form">
           @csrf
           <input type="text" name="name" placeholder="Amenity Name" required class="form-input">
-          <input type="number" name="price" placeholder="Price" required step="0.01" class="form-input">
+          <input type="number" name="price" placeholder="Price per hour" required step="0.01" class="form-input">
 
           <select name="type" required class="form-input">
             <option value="" disabled selected>Select</option>
