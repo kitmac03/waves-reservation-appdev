@@ -74,6 +74,16 @@
                     @php
                     $total = optional($reservation->bill)->grand_total ?? 0;
                     $downpayment = $total * 0.5;
+
+                    $start = \Carbon\Carbon::parse($reservation->startTime);
+                    $end   = \Carbon\Carbon::parse($reservation->endTime);
+
+                    // decimal hours (e.g., 1.5)
+                    $hours = method_exists($start, 'floatDiffInMinutes')
+                        ? $start->floatDiffInMinutes($end) / 60
+                        : $start->diffInMinutes($end) / 60;
+
+                    
                     @endphp
                 </div>
                 @if ($errors->any())
@@ -87,13 +97,26 @@
                     @endif
                <div class="balance-content">
                   <div class="payment-summary">
+                    <div class="w-full p-1 mb-1">
+                    <h4 class="text-gray-800 space-y-1 mb-2" style="text-align: left; font-size: 15px; font-weight: bold;">
+                        Reservation ID: {{ $reservation->id }} <br>
+                        Customer Name: {{ $reservation->customer->name }} <br>
+                        Reservation Date: {{ \Carbon\Carbon::parse($reservation->date)->format('F d, Y') }} <br>
+                        Reservation Time: {{ \Carbon\Carbon::parse($reservation->startTime)->format('h:i A') }} - {{ \Carbon\Carbon::parse($reservation->endTime)->format('h:i A') }}
+                    </h4>
+                    </div>
                      <div class="w-full bg-gray-50 border border-gray-200 border-dashed rounded-lg p-4">
                          <h6 class="text-base text-center font-semibold text-gray-700 mb-2">Payment Summary</h6>
                          <ul class="text-base text-gray-800 space-y-1 mb-2">
                             @foreach ($reservation->reservedAmenities as $reserved)
+                                @php
+                                $rate  = (float) ($reserved->amenity->price ?? 0);         
+                                $lineTotal  = $rate * $hours;
+                                @endphp
+            
                                 <li class="flex justify-between text-base">
-                                    <span>{{ $reserved->amenity->name }}</span>
-                                    <span class="font-bold">₱{{ number_format($reserved->amenity->price, 2) }}</span>
+                                    <span>{{ $reserved->amenity->name }} (₱{{ number_format($reserved->amenity->price, decimals:2) }} x {{$hours}} hrs)</span>
+                                    <span class="font-bold">₱{{ number_format($lineTotal, 2) }}</span>
                                 </li>
                             @endforeach
                          </ul>
