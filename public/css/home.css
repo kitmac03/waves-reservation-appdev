@@ -470,6 +470,7 @@ background: linear-gradient(135deg,
 }
 
 /* About Section */
+/* About Section */
 .about-container {
   padding: 60px 20px;
   max-width: 1200px;
@@ -488,6 +489,7 @@ background: linear-gradient(135deg,
   flex-wrap: wrap;
   gap: 30px;
   justify-content: center;
+  align-items: center;
 }
 
 .about-col {
@@ -514,10 +516,50 @@ background: linear-gradient(135deg,
 .about-col p {
   line-height: 1.6;
   font-size: 1.3rem;
-  margin-top: 15px;
+  margin-bottom: 0;
 }
 
-/* Responsive text size for smaller screens */
+.about-btn-container {
+  margin-top: 25px;
+  text-align: center; 
+  width: 100%;
+}
+
+.more-about-btn {
+  display: inline-block;
+  background-color: #f1c40f;
+  color: #000;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.more-about-btn:hover {
+  background-color: #f39c12;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+  color: #000;
+  text-decoration: none;
+}
+
+.more-about-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.more-about-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.5);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .about-col p {
     font-size: 1.1rem;
@@ -525,6 +567,10 @@ background: linear-gradient(135deg,
 
   .heading {
     font-size: 2rem;
+  }
+  
+  .about-btn-container {
+    text-align: center; /* Center on mobile */
   }
 }
 
@@ -566,6 +612,8 @@ background: linear-gradient(135deg,
   object-fit: cover;
   display: block;
 }
+
+
 
 /* Footer */
 .site-footer {

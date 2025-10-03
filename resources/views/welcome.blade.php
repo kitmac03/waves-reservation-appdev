@@ -61,25 +61,28 @@
     </section>
 
     <!-- about section -->
-    <div class="about" id="about">
-      <div class="about-container">
-        <div class="heading">About Us</div>
-        <div class="about-row">
-          <div class="about-col">
-            <div class="card">
-              <img src="{{ asset('images/abt.jpg') }}" alt="" />
-            </div>
-          </div>
-          <div class="about-col">
-            <p>
-              Welcome to WAVES Resort! Spend your day lounging in our private cabanas, taking a dip in the crystal-clear waters, or enjoying a refreshing cocktail at our beachside bar.
-              <br /><br />We are committed to providing a welcoming and relaxing environment where you can connect with nature, recharge, and make lasting memories.
-              <br /><br />Our friendly staff is dedicated to ensuring your visit is comfortable and enjoyable, with personalized service that makes you feel right at home.
-            </p>
-          </div>
+<div class="about" id="about">
+  <div class="about-container">
+    <div class="heading">About Us</div>
+    <div class="about-row">
+      <div class="about-col">
+        <div class="card">
+          <img src="{{ asset('images/abt.jpg') }}" alt="WAVES Resort" />
+        </div>
+      </div>
+      <div class="about-col">
+        <p>
+          Welcome to WAVES Resort! Spend your day lounging in our private cabanas, taking a dip in the crystal-clear waters, or enjoying a refreshing cocktail at our beachside bar.
+          <br /><br />We are committed to providing a welcoming and relaxing environment where you can connect with nature, recharge, and make lasting memories.
+          <br /><br />Our friendly staff is dedicated to ensuring your visit is comfortable and enjoyable, with personalized service that makes you feel right at home.
+        </p>
+        <div class="about-btn-container">
+          <a href="{{ route('customer.about') }}" class="more-about-btn">More about us</a>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
     <!-- resort preview -->
     <section class="top-cards">
