@@ -73,20 +73,6 @@
                     <div class="card-content">
                         <h3>Beachfront Villas</h3>
                         <p>Private villas with direct beach access, outdoor showers, and panoramic ocean views. Perfect for romantic getaways.</p>
-                        <div class="card-features">
-                            <div class="feature">
-                                <i class="fas fa-bed"></i>
-                                <span>King Bed</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-swimming-pool"></i>
-                                <span>Private Pool</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-wifi"></i>
-                                <span>WiFi</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -96,20 +82,6 @@
                     <div class="card-content">
                         <h3>Infinity Pool</h3>
                         <p>Stunning infinity pool overlooking the ocean with swim-up bar, comfortable loungers, and daily poolside service.</p>
-                        <div class="card-features">
-                            <div class="feature">
-                                <i class="fas fa-cocktail"></i>
-                                <span>Swim-up Bar</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-umbrella-beach"></i>
-                                <span>Sun Loungers</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-concierge-bell"></i>
-                                <span>Pool Service</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -119,20 +91,23 @@
                     <div class="card-content">
                         <h3>Seaside Restaurant</h3>
                         <p>Gourmet dining experience with fresh local seafood, international cuisine, and breathtaking sunset views.</p>
-                        <div class="card-features">
-                            <div class="feature">
-                                <i class="fas fa-utensils"></i>
-                                <span>Fine Dining</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-fish"></i>
-                                <span>Fresh Seafood</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-wine-glass-alt"></i>
-                                <span>Wine Bar</span>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+
+                 <!-- Tables -->
+                 <div class="preview-card">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1680014909199-ef0adcb29901?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
+                    <div class="card-content">
+                        <h3>Standard Table</h3>
+                        <p>Stunning infinity pool overlooking the ocean with swim-up bar, comfortable loungers, and daily poolside service.</p>
+                    </div>
+                </div>
+
+                <div class="preview-card">
+                    <div class="card-image" style="background-image: url('https://plus.unsplash.com/premium_photo-1687960116836-0eb19ff4fcca?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
+                    <div class="card-content">
+                        <h3>Family Table</h3>
+                        <p>Stunning infinity pool overlooking the ocean with swim-up bar, comfortable loungers, and daily poolside service.</p>
                     </div>
                 </div>
 
@@ -142,20 +117,6 @@
                     <div class="card-content">
                         <h3>Spa & Wellness</h3>
                         <p>Rejuvenate with our signature treatments, yoga sessions on the beach, and state-of-the-art fitness center.</p>
-                        <div class="card-features">
-                            <div class="feature">
-                                <i class="fas fa-spa"></i>
-                                <span>Spa Treatments</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-yoga"></i>
-                                <span>Yoga Classes</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-dumbbell"></i>
-                                <span>Fitness Center</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -204,7 +165,7 @@
             const dropdown = document.getElementById('profileDropdown');
             const profileIcon = document.getElementById('profile-icon');
             
-            if (!profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
+            if (!profileIcon.contains(event. target) && !dropdown.contains(event.target)) {
                 dropdown.classList.remove('show');
             }
         });

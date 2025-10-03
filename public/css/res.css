@@ -2224,7 +2224,6 @@ background: linear-gradient(135deg,
     color: #fff;
     font-size: 1.4rem;
 }
-
 /* Resort Preview Section */
 .resort-preview {
     position: relative;
@@ -2245,6 +2244,7 @@ background: linear-gradient(135deg,
     font-weight: 600;
     color: #0e5c7e;
     margin-bottom: 15px;
+    margin-top: 40px;
 }
 
 .preview-header p {
@@ -2254,7 +2254,7 @@ background: linear-gradient(135deg,
     margin: 0 auto;
 }
 
-/* Preview Gallery */
+/* Preview Gallery - Grid remains consistent */
 .preview-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -2309,25 +2309,6 @@ background: linear-gradient(135deg,
     color: #666;
     line-height: 1.6;
     margin-bottom: 15px;
-}
-
-.card-features {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.feature {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.9rem;
-    color: #888;
-}
-
-.feature i {
-    color: #0e5c7e;
 }
 
 /* Resort Stats */
@@ -2449,7 +2430,6 @@ background: linear-gradient(135deg,
         height: 80px;
     }
 }
-
  .success-message {
    background-color: #f0fdf4;
    color: #166534;

@@ -758,7 +758,48 @@ body {
     gap: 20px; /* Uniform spacing between ALL rows and columns */
 }
 
-/* Improved Tables Grid - More Compact */
+/* Table Images */
+.table-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+/* Maintain Grid Layout Width */
+.table-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    position: relative;
+}
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.table-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+    /* Ensure consistent height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Maintain hover effects */
+.table-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
 .tables-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

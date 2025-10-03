@@ -65,7 +65,7 @@
                     
                     <!-- Cottage 1 -->
                     <div class="cottage-card">
-                        <div class="cottage-image" style="background-image: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="cottage-image" style="background-image: url('https://images.unsplash.com/photo-1588387077973-0ba5cb497a59?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
                             <div class="cottage-badge">Most Popular</div>
                         </div>
                         
@@ -85,7 +85,7 @@
                                     </tr>
                                     <tr>
                                         <th>Amenities</th>
-                                        <td>Table, Benches, Fan</td>
+                                        <td>Table, Benches</td>
                                     </tr>
                                    
                                 </tbody>
@@ -96,12 +96,12 @@
 
                     <!-- Cottage 2 -->
                     <div class="cottage-card">
-                        <div class="cottage-image" style="background-image: url('https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="cottage-image" style="background-image: url('https://images.unsplash.com/photo-1597454642566-d4d3632eae6f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
                             <div class="cottage-badge">Premium</div>
                         </div>
                         
                         <div class="cottage-content">
-                            <h3>Deluxe Cottage</h3>
+                            <h3>Family Cottage</h3>
                             <p>Spacious cottage perfect for larger groups or special occasions.</p>
                             
                             <table class="cottage-table">
@@ -116,7 +116,7 @@
                                     </tr>
                                     <tr>
                                         <th>Amenities</th>
-                                        <td>Large Table, Seats, Fan</td>
+                                        <td>Large Table, Seats</td>
                                     </tr>
                                     
                                 </tbody>
@@ -127,19 +127,19 @@
 
                     <!-- Cottage 3 -->
                     <div class="cottage-card">
-                        <div class="cottage-image" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="cottage-image" style="background-image: url('https://images.unsplash.com/photo-1718330009321-0b02f7ba3ba1?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
                             <div class="cottage-badge">Beachfront</div>
                         </div>
                         
                         <div class="cottage-content">
                             <h3>Premium Cottage</h3>
-                            <p>Luxury beachfront cottage with premium amenities and the best ocean views.</p>
+                            <p>Luxury beachfront cottage and the best ocean views.</p>
                             
                             <table class="cottage-table">
                                 <tbody>
                                     <tr>
                                         <th>Capacity</th>
-                                        <td>8-10 People</td>
+                                        <td>4-6 People</td>
                                     </tr>
                                     <tr>
                                         <th>Size</th>
@@ -160,80 +160,79 @@
                 </div>
             </div>
 
-            <!-- Tables Section -->
-            <div class="amenities-section">
-                <h2 class="section-title">Beachside Tables</h2>
-                <div class="tables-grid">
-                    
-                    <!-- Table 1 -->
-                    <div class="table-card">
-                        <h3><i class="fas fa-umbrella-beach"></i> Standard Table</h3>
-                        <p>Perfect for couples or small groups who want a simple beach setup.</p>
-                        
-                        <div class="table-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Capacity</span>
-                                <span class="detail-value">2-4 People</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Includes</span>
-                                <span class="detail-value">Table + 4 Chairs</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Beach Umbrella</span>
-                                <span class="detail-value">Yes</span>
-                            </div>
-                            
-                        </div>
-                    </div>
-
-                    <!-- Table 2 -->
-                    <div class="table-card">
-                        <h3><i class="fas fa-sun"></i> Family Table</h3>
-                        <p>Spacious setup perfect for families with children.</p>
-                        
-                        <div class="table-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Capacity</span>
-                                <span class="detail-value">4-6 People</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Includes</span>
-                                <span class="detail-value">Large Table + 6 Chairs</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Beach Umbrella</span>
-                                <span class="detail-value">Large Size</span>
-                            </div>
-                           
-                        </div>
-                    </div>
-
-                    <!-- Table 3 -->
-                    <div class="table-card">
-                        <h3><i class="fas fa-cocktail"></i> Premium Table</h3>
-                        <p>Luxury beachside setup with premium furniture and service.</p>
-                        
-                        <div class="table-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Capacity</span>
-                                <span class="detail-value">6-8 People</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Includes</span>
-                                <span class="detail-value">Premium Table + 8 Lounge Chairs</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Beach Umbrella</span>
-                                <span class="detail-value">Premium Large</span>
-                            </div>
-                            
-                        </div>
-                    </div>
-
+          <!-- Tables Section -->
+<div class="amenities-section">
+    <h2 class="section-title">Beachside Tables</h2>
+    <div class="tables-grid">
+        
+        <!-- Table 1 -->
+        <div class="table-card">
+            <div class="table-image" style="background-image: url('https://images.unsplash.com/photo-1758941192772-6737563a4386?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+            <h3><i class="fas fa-umbrella-beach"></i> Standard Table</h3>
+            <p>Perfect for couples or small groups who want a simple beach setup.</p>
+            
+            <div class="table-details">
+                <div class="detail-item">
+                    <span class="detail-label">Capacity</span>
+                    <span class="detail-value">2-4 People</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Includes</span>
+                    <span class="detail-value">Table + 4 Chairs</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Beach Umbrella</span>
+                    <span class="detail-value">Yes</span>
                 </div>
             </div>
+        </div>
 
+        <!-- Table 2 -->
+        <div class="table-card">
+            <div class="table-image" style="background-image: url('https://images.unsplash.com/photo-1680014909199-ef0adcb29901?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+            <h3><i class="fas fa-sun"></i> Family Table</h3>
+            <p>Spacious setup perfect for families with children.</p>
+            
+            <div class="table-details">
+                <div class="detail-item">
+                    <span class="detail-label">Capacity</span>
+                    <span class="detail-value">4-6 People</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Includes</span>
+                    <span class="detail-value">Large Table + 6 Chairs</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Beach Umbrella</span>
+                    <span class="detail-value">Large Size</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table 3 -->
+        <div class="table-card">
+            <div class="table-image" style="background-image: url('https://plus.unsplash.com/premium_photo-1687960116836-0eb19ff4fcca?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');"></div>
+            <h3><i class="fas fa-cocktail"></i> Premium Table</h3>
+            <p>Luxury beachside setup with premium furniture and service.</p>
+            
+            <div class="table-details">
+                <div class="detail-item">
+                    <span class="detail-label">Capacity</span>
+                    <span class="detail-value">6-8 People</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Includes</span>
+                    <span class="detail-value">Premium Table + Chairs</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Beach Umbrella</span>
+                    <span class="detail-value">Premium Large</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
             <!-- CTA Section -->
             <div style="text-align: center; margin-top: 60px;">
                 <a href="{{ route('customer.reservation') }}" class="cta-button">
