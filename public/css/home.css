@@ -470,7 +470,6 @@ background: linear-gradient(135deg,
 }
 
 /* About Section */
-/* About Section */
 .about-container {
   padding: 60px 20px;
   max-width: 1200px;
@@ -498,7 +497,7 @@ background: linear-gradient(135deg,
 }
 
 .about-col .card {
-  width: 100%;
+  width: 95%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -515,7 +514,7 @@ background: linear-gradient(135deg,
 
 .about-col p {
   line-height: 1.6;
-  font-size: 1.3rem;
+  font-size: 1.0rem;
   margin-bottom: 0;
 }
 
