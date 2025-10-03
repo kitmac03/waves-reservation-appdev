@@ -56,12 +56,14 @@
     <!--- MAIN CONTENT SECTION -->
     <div class="main-content">
 
-      <p class="head-title">LIST OF VENDORS</p>
+      <p class="head-title">LIST OF ADMINS</p>
       <div id="flash-message" style="display:none; padding:10px; margin-bottom:10px; border-radius:5px;"></div>
       <table>
         <thead>
           <tr>
             <th>Name</th>
+            <th>Email</th>
+            <th>Contact No.</th>
             <th>Role</th>
             <th></th>
           </tr>
@@ -70,7 +72,10 @@
           @foreach ($vendors as $vendor)
         <tr>
         <td>{{ $vendor->name }}</td>
-        <td class="role">{{ $vendor->role }}</td>
+        <td>{{ $vendor->email }}</td>
+        <td>{{ $vendor->number }}</td>
+        <!--<td class="role">{{ $vendor->role }}</td>-->
+        <td>Admin</td>
         <td>
          
         </td>
