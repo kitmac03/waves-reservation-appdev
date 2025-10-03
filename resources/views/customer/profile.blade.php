@@ -33,6 +33,8 @@
                 <a href="{{ route('customer.profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
                 <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i>
                     Reservations</a>
+                <a href="{{ route('customer.password') }}"><i class="fas fa-key"></i>
+                   Password</a>
 
             </nav>
         </aside>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Vendor\VendorProfileController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\ReservationController;
 use App\Http\Controllers\Customer\DownpaymentController;
+use App\Http\Controllers\Customer\PasswordController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\EmptyyController;
 use App\Http\Controllers\Customer\RegisteredUserController;
@@ -61,7 +62,14 @@ Route::middleware('auth')->group(function () {
         ->name('customer.updateReservation');
     Route::get('customer/about', [ReservationController::class, 'about'])
         ->name('customer.about');
+   Route::patch('/customer/password', [PasswordController::class, 'update'])
+    ->name('password.update');
+    Route::get('/customer/password', [PasswordController::class, 'index'])
+    ->name('customer.password');
+
+
 });
+
 
 // Downpayment routes
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
