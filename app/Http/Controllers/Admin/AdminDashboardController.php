@@ -26,9 +26,9 @@ class AdminDashboardController extends Controller
         $currentMonth = Carbon::now()->month;
 
         // Revenue for current month
-        $revenue = Bill::whereIn('status', ['paid', 'partially_paid'])
+        $revenue = Bill::whereIn('status', ['paid', 'partially paid'])
             ->whereMonth('date', $currentMonth)
-            ->sum('grand_total');
+            ->sum(Bill::raw('-grand_total'));
 
         // Reservation counts
         $completedReservations = Reservation::where('status', 'completed')
@@ -44,7 +44,7 @@ class AdminDashboardController extends Controller
         // Monthly revenue for line chart
         $monthlyRevenue = [];
         for ($month = 1; $month <= 12; $month++) {
-            $monthlyRevenue[] = Bill::whereIn('status', ['paid', 'partially_paid'])
+            $monthlyRevenue[] = -Bill::whereIn('status', ['paid', 'partially paid'])
                 ->whereMonth('date', $month)
                 ->sum('grand_total');
         }
@@ -68,7 +68,7 @@ class AdminDashboardController extends Controller
         $annualRevenue = 0;
 
         for ($month = 1; $month <= 12; $month++) {
-            $monthlySum = Bill::whereIn('status', ['paid', 'partially_paid'])
+            $monthlySum = -Bill::whereIn('status', ['paid', 'partially paid'])
                 ->whereMonth('date', $month)
                 ->sum('grand_total');
             $monthlyRevenue[] = $monthlySum;
