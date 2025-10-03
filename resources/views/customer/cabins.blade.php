@@ -239,11 +239,7 @@
                     <i class="fas fa-calendar-check"></i> Reserve Your Spot Now
                 </a>
                 
-                <div class="back-home">
-                    <a href="{{ route('customer.about') }}" class="back-button">
-                        <i class="fas fa-arrow-left"></i> Back to Home
-                    </a>
-                </div>
+                
             </div>
         </section>
     </main>

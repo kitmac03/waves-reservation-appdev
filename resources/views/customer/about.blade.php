@@ -54,7 +54,7 @@
                 <p>Experience luxury beachfront living at its finest, where golden sands meet crystal-clear waters.</p>
                 <p>Our private cabanas and beachside amenities are designed to provide the ultimate relaxation experience, complemented by refreshing cocktails and exceptional service.</p>
                 <p>We're committed to creating a welcoming sanctuary where you can connect with nature, recharge your spirit, and create unforgettable memories.</p>
-                <a href="{{ route('customer.reservation') }}" class="cta-button">Book Your Stay Now</a>
+                <a href="{{ route('customer.reservation') }}" class="cta-button">Book Your Vacay Now</a>
             </div>
             <div class="wave-divider"></div>
         </section>
