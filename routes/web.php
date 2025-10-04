@@ -67,17 +67,8 @@ Route::middleware('auth')->group(function () {
     ->name('password.update');
     Route::get('/customer/password', [PasswordController::class, 'index'])
     ->name('customer.password');
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    
-=======
     Route::get('/cabins', [CabinsController::class, 'showCabins'])
     ->name('customer.cabins');
->>>>>>> Stashed changes
-=======
-    Route::get('/cabins', [CabinsController::class, 'showCabins'])
-    ->name('customer.cabins');
->>>>>>> Stashed changes
 
 
 });
