@@ -16,6 +16,12 @@
 
 <body>
     <div class="main-content">
+        <a href="{{ route('admin.delete.requests') }}">
+        <div class="back-to-main">
+          <i class="material-icons">arrow_back</i>
+          <p>Back to Requests</p>
+        </div>
+       </a>
         <h1>Customer Reservation Details: {{ $customer->name }}</h1>
         <div class="customer-info">
             <p><span class="material-icons">email</span> {{ $customer->email }}</p>
@@ -32,129 +38,158 @@
             </div>
 
             <div class="columns">
-                <!-- Verified (Current) -->
-                <div class="column verified-column">
-                    <h3 class="column-title">Verified (Current)</h3>
-                    <div class="reservation-list">
-                        @forelse($verifiedReservations as $res)
-                            <div class="reservation-card verified">
-                                <div class="reservation-id">#{{ $res->id }}</div>
-                                <div class="reservation-amenity">
-                                    <span class="material-icons">apartment</span>
-                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
-                                </div>
-                                <div class="reservation-datetime">
-                                    <div class="reservation-date">
-                                        <span class="material-icons">calendar_today</span>
-                                        {{ $res->date }}
-                                    </div>
-                                    <div class="reservation-time">
-                                        <span class="material-icons">schedule</span>
-                                        {{ $res->time }}
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="empty-state">
-                                <span class="material-icons">info</span>
-                                No records
-                            </div>
-                        @endforelse
+    <!-- Verified (Current) -->
+    <div class="column verified-column">
+        <h3 class="column-title">Verified (Current)</h3>
+        <div class="reservation-list">
+            @forelse($verifiedReservations as $res)
+                <div class="reservation-card verified">
+                    <div class="reservation-id">#{{ $res->id }}</div>
+                    <div class="reservation-amenity">
+                        <span class="material-icons">apartment</span>
+                        {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
+                    </div>
+                    <div class="reservation-datetime">
+                        <div class="reservation-date">
+                            <span class="material-icons">calendar_today</span>
+                            {{ $res->date }}
+                        </div>
+                        <div class="reservation-time">
+                            <span class="material-icons">schedule</span>
+                            {{ $res->time }}
+                        </div>
+                    </div>
+                    <div class="reservation-payment">
+                        <p><b>Total:</b> ₱{{ number_format(optional($res->bill)->grand_total ?? 0, 2) }}</p>
+                        <p><b>Paid:</b> ₱{{ number_format(
+                            $res->downPayment && $res->downPayment->status === 'verified'
+                                ? $res->downPayment->amount : 0, 2) }}</p>
+                        <p><b>Balance:</b> ₱{{ number_format($res->balance, 2) }}</p>
                     </div>
                 </div>
+            @empty
+                <div class="empty-state">
+                    <span class="material-icons">info</span>
+                    No records
+                </div>
+            @endforelse
+        </div>
+    </div>
 
-                <!-- Pending -->
-                <div class="column pending-column">
-                    <h3 class="column-title">Pending</h3>
-                    <div class="reservation-list">
-                        @forelse($pendingReservations as $res)
-                            <div class="reservation-card pending">
-                                <div class="reservation-id">#{{ $res->id }}</div>
-                                <div class="reservation-amenity">
-                                    <span class="material-icons">apartment</span>
-                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
-                                </div>
-                                <div class="reservation-datetime">
-                                    <div class="reservation-date">
-                                        <span class="material-icons">calendar_today</span>
-                                        {{ $res->date }}
-                                    </div>
-                                    <div class="reservation-time">
-                                        <span class="material-icons">schedule</span>
-                                        {{ $res->time }}
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="empty-state">
-                                <span class="material-icons">info</span>
-                                No records
-                            </div>
-                        @endforelse
+    <!-- Pending -->
+    <div class="column pending-column">
+        <h3 class="column-title">Pending</h3>
+        <div class="reservation-list">
+            @forelse($pendingReservations as $res)
+                <div class="reservation-card pending">
+                    <div class="reservation-id">#{{ $res->id }}</div>
+                    <div class="reservation-amenity">
+                        <span class="material-icons">apartment</span>
+                        {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
+                    </div>
+                    <div class="reservation-datetime">
+                        <div class="reservation-date">
+                            <span class="material-icons">calendar_today</span>
+                            {{ $res->date }}
+                        </div>
+                        <div class="reservation-time">
+                            <span class="material-icons">schedule</span>
+                            {{ $res->time }}
+                        </div>
+                    </div>
+                    <div class="reservation-payment">
+                        <p><b>Total:</b> ₱{{ number_format(optional($res->bill)->grand_total ?? 0, 2) }}</p>
+                        <p><b>Paid:</b> ₱{{ number_format(
+                            $res->downPayment && $res->downPayment->status === 'pending'
+                                ? $res->downPayment->amount : 0, 2) }}</p>
+                        <p><b>Balance:</b> ₱{{ number_format($res->balance, 2) }}</p>
                     </div>
                 </div>
+            @empty
+                <div class="empty-state">
+                    <span class="material-icons">info</span>
+                    No records
+                </div>
+            @endforelse
+        </div>
+    </div>
 
-                <!-- Completed -->
-                <div class="column completed-column">
-                    <h3 class="column-title">Completed</h3>
-                    <div class="reservation-list">
-                        @forelse($completedReservations as $res)
-                            <div class="reservation-card completed">
-                                <div class="reservation-id">#{{ $res->id }}</div>
-                                <div class="reservation-amenity">
-                                    <span class="material-icons">apartment</span>
-                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
-                                </div>
-                                <div class="reservation-datetime">
-                                    <div class="reservation-date">
-                                        <span class="material-icons">calendar_today</span>
-                                        {{ $res->date }}
-                                    </div>
-                                    <div class="reservation-time">
-                                        <span class="material-icons">schedule</span>
-                                        {{ $res->time }}
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="empty-state">
-                                <span class="material-icons">info</span>
-                                No records
-                            </div>
-                        @endforelse
+    <!-- Completed -->
+    <div class="column completed-column">
+        <h3 class="column-title">Completed</h3>
+        <div class="reservation-list">
+            @forelse($completedReservations as $res)
+                <div class="reservation-card completed">
+                    <div class="reservation-id">#{{ $res->id }}</div>
+                    <div class="reservation-amenity">
+                        <span class="material-icons">apartment</span>
+                        {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
+                    </div>
+                    <div class="reservation-datetime">
+                        <div class="reservation-date">
+                            <span class="material-icons">calendar_today</span>
+                            {{ $res->date }}
+                        </div>
+                        <div class="reservation-time">
+                            <span class="material-icons">schedule</span>
+                            {{ $res->time }}
+                        </div>
+                    </div>
+                    <div class="reservation-payment">
+                        <p><b>Total:</b> ₱{{ number_format(optional($res->bill)->grand_total ?? 0, 2) }}</p>
+                        <p><b>Paid:</b> ₱{{ number_format(
+                            $res->downPayment && $res->downPayment->status === 'verified'
+                                ? $res->downPayment->amount : 0, 2) }}</p>
+                        <p><b>Balance:</b> ₱{{ number_format($res->balance, 2) }}</p>
                     </div>
                 </div>
+            @empty
+                <div class="empty-state">
+                    <span class="material-icons">info</span>
+                    No records
+                </div>
+            @endforelse
+        </div>
+    </div>
 
-                <!-- Cancelled/Invalid -->
-                <div class="column cancelled-column">
-                    <h3 class="column-title">Cancelled/Invalid</h3>
-                    <div class="reservation-list">
-                        @forelse($redReservations as $res)
-                            <div class="reservation-card cancelled">
-                                <div class="reservation-id">#{{ $res->id }}</div>
-                                <div class="reservation-amenity">
-                                    <span class="material-icons">apartment</span>
-                                    {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
-                                </div>
-                                <div class="reservation-datetime">
-                                    <div class="reservation-date">
-                                        <span class="material-icons">calendar_today</span>
-                                        {{ $res->date }}
-                                    </div>
-                                    <div class="reservation-time">
-                                        <span class="material-icons">schedule</span>
-                                        {{ $res->time }}
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="empty-state">
-                                <span class="material-icons">info</span>
-                                No records
-                            </div>
-                        @endforelse
+    <!-- Cancelled/Invalid -->
+    <div class="column cancelled-column">
+        <h3 class="column-title">Cancelled/Invalid</h3>
+        <div class="reservation-list">
+            @forelse($redReservations as $res)
+                <div class="reservation-card cancelled">
+                    <div class="reservation-id">#{{ $res->id }}</div>
+                    <div class="reservation-amenity">
+                        <span class="material-icons">apartment</span>
+                        {{ optional(optional($res->reservedAmenities->first())->amenity)->name ?? 'No Amenity' }}
+                    </div>
+                    <div class="reservation-datetime">
+                        <div class="reservation-date">
+                            <span class="material-icons">calendar_today</span>
+                            {{ $res->date }}
+                        </div>
+                        <div class="reservation-time">
+                            <span class="material-icons">schedule</span>
+                            {{ $res->time }}
+                        </div>
+                    </div>
+                    <div class="reservation-payment">
+                        <p><b>Total:</b> ₱{{ number_format(optional($res->bill)->grand_total ?? 0, 2) }}</p>
+                        <p><b>Paid:</b> ₱{{ number_format(
+                            $res->downPayment && $res->downPayment->status === 'verified'
+                                ? $res->downPayment->amount : 0, 2) }}</p>
+                        <p><b>Balance:</b> ₱{{ number_format($res->balance, 2) }}</p>
                     </div>
                 </div>
+            @empty
+                <div class="empty-state">
+                    <span class="material-icons">info</span>
+                    No records
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
