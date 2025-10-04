@@ -77,7 +77,9 @@ background: linear-gradient(135deg,
     -webkit-text-fill-color: transparent;
     background-clip: text;
     line-height: 1;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.6px;
+    font-family: 'Poppins', sans-serif;
+
 }
 
 .logo-text .sub-title {
@@ -85,15 +87,18 @@ background: linear-gradient(135deg,
     color: var(--light-text);
     text-align: center;
     font-weight: 500;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.7px;
     text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+
 }
 
 /* Enhanced Navigation Links - No Hover */
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2.7rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 .nav-link {
