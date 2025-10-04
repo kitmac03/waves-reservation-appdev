@@ -15,29 +15,40 @@
 
 <body>
     <div class="container">
-        <aside class="sidebar">
-            <div class="back-button">
-                <a href="{{ route('customer.reservation') }}" class="back-link">
-                    <i class="fas fa-chevron-left"></i>
-                    <span>Back to main</span>
-                </a>
-            </div>
-
-            <div class="customer-profile">
-                <div class="avatar">
-                    <i class="fas fa-user-circle"></i>
+        <aside class="sidebar" style="display: flex; flex-direction: column;">
+            <div>
+                <div class="back-button">
+                    <a href="{{ route('customer.reservation') }}" class="back-link">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Back to main</span>
+                    </a>
                 </div>
-                <span class="customer-name">{{ $customer->name }}</span>
-            </div>
-            <nav class="menu">
-                <a href="{{ route('customer.profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
-                <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i>
-                    Reservations</a>
-                <a href="{{ route('customer.password') }}"><i class="fas fa-key"></i>
-                   Password</a>
 
-            </nav>
-        </aside>
+                <div class="customer-profile"> 
+                    <div class="avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <span class="customer-name">{{ $customer->name }}</span>
+                </div>
+                <nav class="menu">
+                    <a href="{{ route('customer.profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
+                    <a href="{{ route('customer.reservation.records') }}"><i class="fas fa-calendar-check"></i>
+                        Reservations</a>
+                    <a href="{{ route('customer.password') }}"><i class="fas fa-key"></i>
+                        Password</a>
+                </nav>
+            </div>
+            <div style="margin-top: auto;">
+                <nav class="menu" style="margin-bottom: 0; ">
+                    <a href="#" id="logoutButton" style="color: var(--text-light);">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </nav>
+                <form id="logoutForm" method="POST" action="{{ route('logout') }}" style="display: none;">
+                    @csrf
+                </form>
+            </div>
+        </aside> 
 
 
         <!--- MAIN CONTENT SECTION -->

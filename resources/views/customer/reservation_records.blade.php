@@ -22,38 +22,43 @@
 
 </head>
 
-<div class="container">
+<body>
+    <div class="container">
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="back-button">
-            <a href="{{ route('customer.reservation') }}" class="back-btn">
-                <i class="fas fa-chevron-left"></i>
-                <span>Back to main</span>
-            </a>
-        </div>
+        <aside class="sidebar" style="display: flex; flex-direction: column;">
+            <div>
+                <div class="back-button">
+                    <a href="{{ route('customer.reservation') }}" class="back-link">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Back to main</span>
+                    </a>
+                </div>
 
-        <div class="customer-profile">
-            <div class="avatar">
-                <i class="fas fa-user-circle"></i>
+                <div class="customer-profile"> 
+                    <div class="avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <span class="customer-name">{{ $customer->name }}</span>
+                </div>
+                <nav class="menu">
+                    <a href="{{ route('customer.profile') }}" ><i class="fas fa-user"></i> Profile</a>
+                    <a href="{{ route('customer.reservation.records') }}" class="active"><i class="fas fa-calendar-check"></i>
+                        Reservations</a>
+                    <a href="{{ route('customer.password') }}"><i class="fas fa-key"></i>
+                        Password</a>
+                </nav>
             </div>
-            <span class="customer-name">{{ $customer->name }}</span>
-        </div>
-
-        <div class="menu">
-            <a href="{{ route('customer.profile') }}">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-            <a href="{{ route('customer.reservation.records') }}" class="active">
-                <i class="fas fa-calendar-check"></i>
-                <span>Reservation</span>
-            </a>
-             <a href="{{ route('customer.password') }}"><i class="fas fa-key"></i>
-                   Password</a>
-
-        </div>
-
-    </div>
+            <div style="margin-top: auto;">
+                <nav class="menu" style="margin-bottom: 0; ">
+                    <a href="#" id="logoutButton" style="color: var(--text-light);">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </nav>
+                <form id="logoutForm" method="POST" action="{{ route('logout') }}" style="display: none;">
+                    @csrf
+                </form>
+            </div>
+        </aside> 
 
     <div class="main-content">
         <div class="reservations-container">
@@ -321,7 +326,7 @@
     </div>
 
     <!-- Logout Confirmation Modal -->
-    <!-- <div id="logoutModal" class="modal">
+    <div id="logoutModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeLogoutModal">&times;</span>
             <div class="modal-header">
@@ -332,7 +337,9 @@
                 <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
             </div>
         </div>
-    </div> -->
+    </div> 
+
+    
 
     <script>
         @if(session('success'))
@@ -829,6 +836,50 @@
             });
         });
 
+            // Modal functions
+            function openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'flex';
+            }
+
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.style.display = 'none';
+            }
+
+        // Logout Modal
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogout = document.getElementById('cancelLogout');
+            const confirmLogout = document.getElementById('confirmLogout');
+            const closeLogoutBtn = document.getElementById('closeLogoutModal');
+
+            logoutButton.addEventListener('click', function () {
+                openModal('logoutModal');
+            });
+
+            cancelLogout.addEventListener('click', function () {
+                closeModal('logoutModal');
+            });
+
+            closeLogoutBtn.addEventListener('click', function () {
+                closeModal('logoutModal');
+            });
+
+            confirmLogout.addEventListener('click', function () {
+                document.getElementById('logoutForm').submit();
+                closeModal('logoutModal');
+            });
+
+            // Close modal when clicking outside of it
+            window.addEventListener('click', function (event) {
+                if (event.target === deleteModal) {
+                    closeModal('deleteModal');
+                } else if (event.target === logoutModal) {
+                    closeModal('logoutModal');
+                }
+            });
+
     </script>
 
     <div id="cancelModal" class="fixed inset-0 z-[9999] bg-black bg-opacity-50 hidden items-center justify-center">
@@ -844,6 +895,6 @@
         </div>
     </div>
 
-    </body>
+</body>
 
 </html>
