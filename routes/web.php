@@ -31,8 +31,9 @@ Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
 Route::post('/send-reminder', [ReservationController::class, 'sendReminder'])->name('send-reminder');
 Route::get('customer/check-availability', [ReservationController::class, 'checkAvailability']);
 Route::get('/cabins', [CabinsController::class, 'showCabins'])->name('customer.cabins');
+Route::get('customer/about', [ReservationController::class, 'about'])->name('customer.about');
 
-// Customer Routes
+// Customer Routes 
 Route::middleware('auth')->group(function () {
     Route::get('customer/profile', [ProfileController::class, 'view_profile'])
         ->name('customer.profile');
@@ -62,8 +63,6 @@ Route::middleware('auth')->group(function () {
     Route::get('customer/reservation-records/edit-amenities', [ReservationController::class, 'edit_amenities']);
     Route::post('/customer/update-reservation', [ReservationController::class, 'updateReservation'])
         ->name('customer.updateReservation');
-    Route::get('customer/about', [ReservationController::class, 'about'])
-        ->name('customer.about');
    Route::patch('/customer/password', [PasswordController::class, 'update'])
     ->name('password.update');
     Route::get('/customer/password', [PasswordController::class, 'index'])
