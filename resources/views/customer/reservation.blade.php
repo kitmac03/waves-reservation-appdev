@@ -47,10 +47,14 @@
         </nav>
     </header>
 
-    <section class="hero">
+<section class="reservation-hero">
+    <div class="hero-content">        
         <h1>Escape to Waves at Bliss</h1>
         <p>Book your perfect beach getaway at Waves Beach Resort</p>
+        </div>
+            <div class="hero-wave"></div>
     </section>
+    
     
 
     <section class="booking">
@@ -190,7 +194,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
-                <button class="btn primary-btn" id="confirmLogout">Confirm Logout</button>
+                <button class="btn primary-btn" id="confirmLogout">Logout</button>
             </div>
         </div>
     </div>

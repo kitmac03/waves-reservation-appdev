@@ -53,7 +53,6 @@
             <div class="welcome-text">
                 <h1>Welcome to WAVES Resort</h1>
                 <p>Experience luxury beachfront living at its finest, where golden sands meet crystal-clear waters.</p>
-                <p>Our private cabanas and beachside amenities are designed to provide the ultimate relaxation experience, complemented by refreshing cocktails and exceptional service.</p>
                 <p>We're committed to creating a welcoming sanctuary where you can connect with nature, recharge your spirit, and create unforgettable memories.</p>
                 <a href="{{ route('customer.reservation') }}" class="cta-button">Book Your Vacay Now</a>
             </div>
@@ -97,27 +96,27 @@
 
                  <!-- Tables -->
                  <div class="preview-card">
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1680014909199-ef0adcb29901?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1645696301019-35adcc18fc21?q=80&w=1329&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
                     <div class="card-content">
-                        <h3>Standard Table</h3>
-                        <p>Stunning infinity pool overlooking the ocean with swim-up bar, comfortable loungers, and daily poolside service.</p>
+                        <h3>Foods</h3>
+                        <p>Every bite is crafted to make your beach escape memorable. Dine by the shore and feel the ocean breeze.</p>
                     </div>
                 </div>
 
                 <div class="preview-card">
-                    <div class="card-image" style="background-image: url('https://plus.unsplash.com/premium_photo-1687960116836-0eb19ff4fcca?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1666632814910-daebf04b69b8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
                     <div class="card-content">
-                        <h3>Family Table</h3>
-                        <p>Stunning infinity pool overlooking the ocean with swim-up bar, comfortable loungers, and daily poolside service.</p>
+                        <h3>Drinks</h3>
+                        <p>Sip on refreshing tropical juices, signature cocktails, and ice-cold classics while soaking up the sun.</p>
                     </div>
                 </div>
 
                 <!-- Spa & Wellness -->
                 <div class="preview-card">
-                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1743804237965-d86a2cf093cc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
                     <div class="card-content">
-                        <h3>Spa & Wellness</h3>
-                        <p>Rejuvenate with our signature treatments, yoga sessions on the beach, and state-of-the-art fitness center.</p>
+                        <h3>Relaxing View</h3>
+                        <p>Let the golden sunsets, gentle sea breeze, and calming sound of waves create the perfect escape from the everyday.</p>
                     </div>
                 </div>
             </div>
