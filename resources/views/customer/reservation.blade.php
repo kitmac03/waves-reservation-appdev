@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waves Beach Resort</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/res.css') }}">
 </head>
@@ -105,7 +106,7 @@
                                         </div>
                                         <div class="amenity-details">
                                             <div class="amenity-features">
-                                                <span class="feature-tag">Capacity: {{ $cottage->capacity ?? 'N/A' }}</span>
+                                                <span class="feature-tag"> <span class="material-symbols-outlined">cottage table_restaurant</span> </span>
                                             </div>
                                             <div class="amenity-status available">
                                                 <span class="status-dot"></span>
@@ -130,7 +131,7 @@
                                         </div>
                                         <div class="amenity-details">
                                             <div class="amenity-features">
-                                                <span class="feature-tag">Capacity: {{ $table->capacity ?? 'N/A' }}</span>
+                                                <span class="feature-tag"><span class="material-symbols-outlined">table_restaurant umbrella</span></span>
                                             </div>
                                             <div class="amenity-status available">
                                                 <span class="status-dot"></span>
