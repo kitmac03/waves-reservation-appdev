@@ -29,6 +29,7 @@
             <a class="nav-link" href="{{ route('customer.cabins') }}">Cabins</a>
             <a class="nav-link" href="{{ route('customer.reservation') }}">Book</a>
 
+
             <div class="profile-container">
                 <i class="fas fa-user-circle" id="profile-icon" onclick="toggleDropdown(event)"></i>
                 <div class="dropdown-content" id="profileDropdown">
