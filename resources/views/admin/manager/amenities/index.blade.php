@@ -19,16 +19,16 @@
         <div class="button-wrapper">
           @if($amenity->is_active)
             <!-- Edit Button -->
-            <button type="button" class="archive-button" 
+            <button type="button" class="edit-button" 
                   onclick="openEditModal({{ $amenity->id }}, '{{ $amenity->name }}', {{ $amenity->price }}, '{{ $amenity->type }}')">
-              <i class="material-icons" style = "font-size:15px; py:0.5;">edit</i> Edit
+              <i class="material-icons" style = "font-size:15px; py:0.5; vertical-align:middle;">edit</i> Edit
           </button>
             <!-- Archive Button -->
             <form action="{{ route('amenitys.archive', $amenity->id) }}" method="POST" style="display:inline;">
               @csrf
               @method('PATCH')
               <button type="submit" class="archive-button">
-                <i class="material-icons" style = "font-size:15px; py:0.5;">archive</i>Archive
+                <i class="material-icons" style = "font-size:15px; py:0.5; vertical-align:middle;">archive</i>Archive
               </button>
               
             </form>
@@ -38,7 +38,7 @@
               @csrf
               @method('PATCH')
               <button type="submit" class="unarchive-button">
-                <i class="material-icons" style = "font-size:15px; py:0.5;">unarchive</i>Unarchive
+                <i class="material-icons" style = "font-size:15px; py:0.5; vertical-align:middle;">unarchive</i>Unarchive
               </button>
             </form>
           @endif

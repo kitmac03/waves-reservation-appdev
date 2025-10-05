@@ -240,13 +240,20 @@ td {
   transform: scale(1.1); /* slightly enlarge the icon */
 }
 
-.archive-button, .unarchive-button {
+.archive-button, .unarchive-button, .edit-button {
   border: none;
   background-color: #002044;
   color: white;
-  border-radius: 8px;
+  border-radius: 6px;
   font: 300 12px poppins;
   padding: 8px 16px 8px 16px;
+  min-width: 95px; /* Set minimum width */
+  display: inline-flex; /* Use inline-flex instead */
+
+}
+.archive-button .material-icons, .edit-button .material-icons, .unarchive-button .material-icons {
+  margin-right: 5px;
+  margin-top: 2px;
 }
 
 .add-items-container {

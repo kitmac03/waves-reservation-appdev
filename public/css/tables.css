@@ -223,16 +223,30 @@ td {
 }
 .edit-icon {
   color: #002044;
+  cursor: pointer; /* indicates it's clickable */
+  transition: color 0.2s ease, transform 0.2s ease;
 }
-.archive-button {
+
+.edit-icon:hover {
+  color: #0056b3; /* darker shade for hover */
+  transform: scale(1.1); /* slightly enlarge the icon */
+}
+
+.archive-button, .unarchive-button, .edit-button {
   border: none;
   background-color: #002044;
   color: white;
-  border-radius: 8px;
+  border-radius: 6px;
   font: 300 12px poppins;
   padding: 8px 16px 8px 16px;
-}
+  min-width: 95px; /* Set minimum width */
+  display: inline-flex; /* Use inline-flex instead */
 
+}
+.archive-button .material-icons, .edit-button .material-icons, .unarchive-button .material-icons {
+  margin-right: 5px;
+  margin-top: 3px;
+}
 .add-items-container {
   width: 86vw;
   display: flex;
