@@ -147,7 +147,61 @@
         <p>&copy; 2025 Waves Beach Resort. All rights reserved.</p>
     </footer>
 
+     <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeLogoutModal">&times;</span>
+            <div class="modal-header">
+                <h3>Are you sure you want to log out?</h3>
+            </div>
+            <div class="modal-footer">
+                <button class="btn secondary-btn" id="cancelLogout">Cancel</button>
+                <button class="btn primary-btn" id="confirmLogout">Logout</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
+
+         document.addEventListener('DOMContentLoaded', function () {
+            const logoutButton = document.getElementById('logoutButton');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogout = document.getElementById('cancelLogout');
+            const confirmLogout = document.getElementById('confirmLogout');
+            const closeLogoutBtn = document.getElementById('closeLogoutModal');
+
+            if (logoutButton && logoutModal && cancelLogout && confirmLogout && closeLogoutBtn) {
+                logoutButton.addEventListener('click', () => openModal('logoutModal'));
+                cancelLogout.addEventListener('click', () => closeModal('logoutModal'));
+                closeLogoutBtn.addEventListener('click', () => closeModal('logoutModal'));
+
+                confirmLogout.addEventListener('click', () => {
+                    document.getElementById('logoutForm').submit();
+                    closeModal('logoutModal');
+                });
+
+                window.addEventListener('click', function (event) {
+                    if (event.target === logoutModal) {
+                        closeModal('logoutModal');
+                    }
+                });
+            } else {
+                console.error('One or more logout modal elements not found.');
+            }
+        });
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'flex'; // This triggers centering based on your flex CSS
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'none';
+        }
+
+       
+
         // Toggle mobile menu
         function toggleMenu() {
             const navMenu = document.getElementById('navMenu');
