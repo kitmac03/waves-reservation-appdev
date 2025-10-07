@@ -67,8 +67,8 @@ Route::middleware('auth')->group(function () {
     ->name('password.update');
     Route::get('/customer/password', [PasswordController::class, 'index'])
     ->name('customer.password');
-    Route::get('/cabins', [CabinsController::class, 'showCabins'])
-    ->name('customer.cabins');
+    //Route::get('/cabins', [CabinsController::class, 'showCabins'])
+   // ->name('customer.cabins');
 
 
 });
