@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -15,7 +16,7 @@ class CleanOldReservations extends Command
     /**
      * The name and signature of the console command.
      *
-     * Run this command with:
+     * Run using:
      * php artisan reservations:cleanup
      */
     protected $signature = 'reservations:cleanup';
@@ -23,41 +24,43 @@ class CleanOldReservations extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Delete reservations (and related data) dated before October 5, 2025';
+    protected $description = 'Delete old reservations (and related data) before October 5, 2025 with total booking = 0';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $cutoffDate = '2025-10-05';
+        $cutoffDate = '2025-10-31';
+        $this->info("🧹 Cleaning up reservations before {$cutoffDate} with total booking = 0...");
 
-        $this->info("🧹 Cleaning up reservations before {$cutoffDate}...");
-
-        // Use transaction to ensure data integrity
         DB::beginTransaction();
 
         try {
-            // Get all old reservations
-            $oldReservations = Reservation::where('date', '<', $cutoffDate)->get();
+            // Get all reservations before cutoff where the total is 0
+            $oldReservations = Reservation::where('date', '<', $cutoffDate)
+                ->whereHas('bill', function ($q) {
+                    $q->where('grand_total', '=', 0);
+                })
+                ->get();
 
             $deletedCount = 0;
 
             foreach ($oldReservations as $reservation) {
-                // 1️⃣ Delete reserved amenities
+                // Delete reserved amenities
                 ReservedAmenity::where('res_num', $reservation->id)->delete();
 
-                // 2️⃣ Delete down payments
+                // Delete down payments
                 DownPayment::where('res_num', $reservation->id)->delete();
 
-                // 3️⃣ Delete related bills and balances
-                $bills = Bill::where('res_num', $reservation->id)->get();
+                // Delete related bills and balances
+                $bills = \App\Models\Bill::where('res_num', $reservation->id)->get();
                 foreach ($bills as $bill) {
                     Balance::where('bill_id', $bill->id)->delete();
                     $bill->delete();
                 }
 
-                // 4️⃣ Finally, delete the reservation itself
+                // Delete the reservation itself
                 $reservation->delete();
 
                 $deletedCount++;
@@ -65,13 +68,12 @@ class CleanOldReservations extends Command
 
             DB::commit();
 
-            $this->info("✅ Successfully deleted {$deletedCount} reservations and related records.");
-
+            $this->info("✅ Deleted {$deletedCount} old reservations with total booking = 0.");
             return Command::SUCCESS;
+
         } catch (\Exception $e) {
             DB::rollBack();
-
-            $this->error("❌ Error during cleanup: " . $e->getMessage());
+            $this->error("❌ Cleanup failed: " . $e->getMessage());
             return Command::FAILURE;
         }
     }
